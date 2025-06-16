@@ -3,7 +3,7 @@ const value = ref("");
 </script>
 
 <template>
-	<div>
+	<div class="container">
 		<h1>Home Page</h1>
 		<UInput
 			v-model="value"
@@ -11,7 +11,6 @@ const value = ref("");
 			variant="subtle"
 			size="xl"
 			trailing-icon="i-lucide-search"
-			loading
 			loading-icon="i-lucide-loader"
 		/>
 	</div>

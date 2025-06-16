@@ -6,6 +6,10 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 
 	css: ["~/assets/css/main.css"],
+
+	colorMode: {
+		preference: "light",
+	},
 	compatibilityDate: "2025-05-15",
 
 	vite: {

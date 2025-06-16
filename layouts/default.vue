@@ -18,7 +18,6 @@ const showMenu = computed(() => {
 	<div class="flex flex-col min-h-screen">
 		<AppHeader
 			:is-open="isOpen"
-			:is-mobile="isMobile"
 			@click="isOpen = !isOpen"
 		/>
 

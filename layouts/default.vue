@@ -16,28 +16,12 @@ const showMenu = computed(() => {
 
 <template>
 	<div class="flex flex-col h-screen">
-		<div
-			class="flex items-center p-3"
-			:class="{
-				'justify-between': isMobile,
-				'justify-center': !isMobile,
-			}"
-		>
-			<div>
-				<h1>LOGO</h1>
-			</div>
-
-			<button
-				v-if="isMobile"
-				class="self-end flex items-center justify-center "
-				@click="isOpen = !isOpen"
-			>
-				<UIcon
-					name="i-lucide-menu"
-					size="24"
-				/>
-			</button>
-		</div>
+		<AppHeader
+			v-if="isMobile"
+			:is-open="isOpen"
+			:is-mobile="isMobile"
+			@click="isOpen = !isOpen"
+		/>
 
 		<UNavigationMenu
 			v-if="showMenu"
@@ -47,8 +31,13 @@ const showMenu = computed(() => {
 			content-orientation="vertical"
 			:orientation="isMobile ? 'vertical' : 'horizontal'"
 		>
-			<template #colormode>
-				<AppColorMode />
+			<template
+				v-if="!isMobile"
+				#custom
+			>
+				<NuxtLink to="/profile">
+					<h1>Profile</h1>
+				</NuxtLink>
 			</template>
 		</UNavigationMenu>
 

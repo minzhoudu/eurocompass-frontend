@@ -23,12 +23,19 @@ export const useNavItems = () => {
 	],
 	[
 		{
-			slot: "colormode",
+			label: "EUROCOMPASS",
+			icon: "i-lucide-compass",
+			class: "logo",
 		},
+	],
+	[
 		{
 			label: "Settings",
 			icon: "i-lucide-settings",
 			to: "/settings",
+		},
+		{
+			slot: "custom",
 		},
 	],
 	]);

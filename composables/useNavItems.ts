@@ -23,7 +23,6 @@ export const useNavItems = () => {
 	],
 	[
 		{
-			label: "asd",
 			slot: "colormode",
 		},
 		{

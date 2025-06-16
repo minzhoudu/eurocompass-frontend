@@ -9,7 +9,7 @@ defineProps<{
 	<div
 		class="flex items-center p-3 bg-warning-300 justify-between md:justify-center"
 	>
-		<div class="flex items-center gap-2 text-xl font-bold tracking-wider">
+		<div class="flex items-center gap-2 text-xl font-bold tracking-wider pointer-events-none select-none">
 			<Icon name="i-lucide-compass" />
 			<h1>EUROCOMPASS</h1>
 		</div>

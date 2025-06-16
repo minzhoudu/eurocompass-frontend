@@ -24,7 +24,7 @@ const showMenu = computed(() => {
 		<UNavigationMenu
 			v-if="showMenu"
 			:items="items"
-			class="justify-around w-full bg-warning-300"
+			class="justify-around w-full bg-warning-300 pb-1"
 			color="neutral"
 			content-orientation="vertical"
 			:orientation="isMobile ? 'vertical' : 'horizontal'"

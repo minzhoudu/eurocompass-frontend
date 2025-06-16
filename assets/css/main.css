@@ -6,3 +6,8 @@
         @apply mx-auto
     }
 }
+
+.logo {
+    @apply pointer-events-none select-none;
+}
+

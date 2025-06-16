@@ -15,7 +15,7 @@ const showMenu = computed(() => {
 </script>
 
 <template>
-	<div class="flex flex-col h-screen">
+	<div class="flex flex-col min-h-screen">
 		<AppHeader
 			v-if="isMobile"
 			:is-open="isOpen"
@@ -26,10 +26,15 @@ const showMenu = computed(() => {
 		<UNavigationMenu
 			v-if="showMenu"
 			:items="items"
-			class="justify-evenly w-full"
+			class="justify-evenly w-full bg-warning-300"
 			color="neutral"
 			content-orientation="vertical"
 			:orientation="isMobile ? 'vertical' : 'horizontal'"
+			:ui="{
+				link: 'md:text-lg text-black data-[state=open]:text-black/50 hover:text-black/50',
+				linkLeadingIcon: 'text-black group-data-[state=open]:text-black/50 group-hover:text-black/50',
+				list: 'gap-2',
+			}"
 		>
 			<template
 				v-if="!isMobile"

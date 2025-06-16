@@ -33,6 +33,7 @@ const showMenu = computed(() => {
 				link: 'md:text-lg text-black data-[state=open]:text-black/50 hover:text-black/50',
 				linkLeadingIcon: 'text-black group-data-[state=open]:text-black/50 group-hover:text-black/50',
 				list: 'gap-2',
+				childItem: 'not-last:border-b not-last:border-b-white',
 				separator: 'bg-white',
 			}"
 		/>

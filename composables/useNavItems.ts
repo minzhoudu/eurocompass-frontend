@@ -23,9 +23,29 @@ export const useNavItems = () => {
 	],
 	[
 		{
-			label: "Settings",
-			icon: "i-lucide-settings",
-			to: "/settings",
+			label: "Pavle",
+			icon: "i-lucide-user",
+			avatar: {
+				src: "https://github.com/minzhoudu.png",
+				size: "sm",
+			},
+			children: [
+				{
+					label: "Profil",
+					icon: "i-lucide-user",
+					to: "/profil",
+				},
+				{
+					label: "Settings",
+					icon: "i-lucide-settings",
+					to: "/settings",
+				},
+				{
+					label: "Odjava",
+					icon: "i-lucide-log-out",
+					to: "/odjava",
+				},
+			],
 		},
 	],
 	]);

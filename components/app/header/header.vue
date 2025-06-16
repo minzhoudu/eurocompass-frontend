@@ -8,14 +8,15 @@ defineProps<{
 
 <template>
 	<div
-		class="flex items-center p-3"
+		class="flex items-center p-3 bg-warning-300"
 		:class="{
 			'justify-between': isMobile,
 			'justify-center': !isMobile,
 		}"
 	>
-		<div>
-			<h1>LOGO</h1>
+		<div class="flex items-center gap-2 text-xl font-bold tracking-wider">
+			<Icon name="i-lucide-compass" />
+			<h1>EUROCOMPASS</h1>
 		</div>
 
 		<div

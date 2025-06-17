@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { DateValue } from "@internationalized/date";
+import { getLocalTimeZone, type DateValue } from "@internationalized/date";
 
 const startValue = ref<DateValue>();
 
 const startLocations = ref([{ from: "Krusevac", to: "Beograd", search: "Krusevac Beograd" }, { from: "Krusevac", to: "Novi Sad", search: "Krusevac Novi Sad" }, { from: "Krusevac", to: "Subotica", search: "Krusevac Subotica" }]);
 const startLocation = ref({ from: "Krusevac", to: "Beograd", search: "Krusevac Beograd" });
 
-const isStartDateUnavailable = (date: DateValue) => {
-	// compare with today
+const { currentDate } = useCurrentDate();
 
-	return false;
+const isStartDateUnavailable = (date: DateValue) => {
+	return date.toDate(getLocalTimeZone()) < currentDate.value.toDate(getLocalTimeZone());
 };
 </script>
 

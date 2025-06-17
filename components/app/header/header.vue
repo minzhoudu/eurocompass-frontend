@@ -18,12 +18,14 @@ defineProps<{
 			class="items-center justify-center gap-4 flex md:hidden"
 		>
 			<button
-				class="flex items-center justify-center "
+				class="flex items-center justify-center transition-transform duration-300 ease-in-out"
+				:class="{ 'rotate-90': isOpen }"
 				@click="onClick"
 			>
 				<UIcon
-					name="i-lucide-menu"
+					:name="isOpen ? 'i-lucide-x' : 'i-lucide-menu'"
 					size="24"
+					class="transition-all duration-200 ease-in-out"
 				/>
 			</button>
 		</div>

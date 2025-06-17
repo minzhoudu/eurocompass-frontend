@@ -2,19 +2,20 @@
 import type { TableColumn } from "@nuxt/ui";
 
 type Reservation = {
+	id: number;
 	from: string;
 	to: string;
 	time: string;
 	actions: string;
 };
 
-const UButton = resolveComponent("UButton");
+const ReservationButton = resolveComponent("HomeReservationsReservationButton");
 const Cell = resolveComponent("HomeReservationsCell");
 
 const data = ref<Reservation[]>([
-	{ from: "Krusevac", to: "Beograd", time: "09:00", actions: "Rezervisi" },
-	{ from: "Krusevac", to: "Beograd", time: "10:00", actions: "Rezervisi" },
-	{ from: "Krusevac", to: "Beograd", time: "11:00", actions: "Rezervisi" },
+	{ id: 1, from: "Krusevac", to: "Beograd", time: "09:00", actions: "Rezervisi" },
+	{ id: 2, from: "Krusevac", to: "Beograd", time: "10:00", actions: "Rezervisi" },
+	{ id: 3, from: "Krusevac", to: "Beograd", time: "11:00", actions: "Rezervisi" },
 ]);
 
 const columns = ref<TableColumn<Reservation>[]>([
@@ -24,6 +25,7 @@ const columns = ref<TableColumn<Reservation>[]>([
 		cell: ({ cell }) => {
 			return h(Cell, {
 				label: cell.getValue(),
+				type: "start",
 			});
 		},
 	},
@@ -50,14 +52,10 @@ const columns = ref<TableColumn<Reservation>[]>([
 	{
 		accessorKey: "actions",
 		header: "",
-		cell: ({ cell }) => {
-			return h(UButton, {
+		cell: ({ cell, row }) => {
+			return h(ReservationButton, {
 				label: cell.getValue(),
-				variant: "solid",
-				color: "neutral",
-				size: "sm",
-				class: "py-2",
-				icon: "lucide:ticket",
+				reservationId: row.original.id,
 			});
 		},
 	},

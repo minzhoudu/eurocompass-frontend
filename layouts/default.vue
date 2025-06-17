@@ -1,17 +1,7 @@
 <script setup lang="ts">
-import { useMediaQuery } from "@vueuse/core";
-
-const isMobile = useMediaQuery("(max-width: 768px)", { ssrWidth: 768 });
 const isOpen = ref(false);
 
 const items = useNavItems();
-
-// const showMenu = computed(() => {
-// 	if (isMobile.value) {
-// 		return isOpen.value;
-// 	}
-// 	return true;
-// });
 </script>
 
 <template>
@@ -21,7 +11,7 @@ const items = useNavItems();
 			@click="isOpen = !isOpen"
 		/>
 
-		<!-- Desktop Navigation - Always visible -->
+		<!-- Desktop Navigation -->
 		<UNavigationMenu
 			:items="items"
 			class="justify-around w-full bg-warning-300 pb-1 hidden md:flex"
@@ -37,7 +27,7 @@ const items = useNavItems();
 			}"
 		/>
 
-		<!-- Mobile Navigation - Animated -->
+		<!-- Mobile Navigation -->
 		<Transition
 			name="mobile"
 		>
@@ -69,7 +59,6 @@ const items = useNavItems();
 </template>
 
 <style scoped>
-/* Mobile Navigation Animation */
 .mobile-nav-wrapper {
 	overflow: hidden;
 }

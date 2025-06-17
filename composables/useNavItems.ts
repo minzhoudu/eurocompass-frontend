@@ -11,7 +11,6 @@ export const useNavItems = () => {
 		{
 			label: "Rezervacije",
 			icon: "i-lucide-calendar",
-			to: "/rezervacije",
 			children: [
 				{
 					label: "Sve rezervacije",

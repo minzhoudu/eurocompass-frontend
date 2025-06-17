@@ -1,34 +1,54 @@
 <script setup lang="ts">
-const calendarValue = ref();
+import type { DateValue } from "@internationalized/date";
+
+const startValue = ref<DateValue>();
+
+const startLocations = ref([{ from: "Krusevac", to: "Beograd", search: "Krusevac Beograd" }, { from: "Krusevac", to: "Novi Sad", search: "Krusevac Novi Sad" }, { from: "Krusevac", to: "Subotica", search: "Krusevac Subotica" }]);
+const startLocation = ref({ from: "Krusevac", to: "Beograd", search: "Krusevac Beograd" });
+
+const isStartDateUnavailable = (date: DateValue) => {
+	// compare with today
+
+	return false;
+};
 </script>
 
 <template>
-	<div class="container flex flex-col justify-center gap-10">
-		<div class="w-fit mx-auto my-4 py-3 px-4 rounded-xl bg-warning-300">
-			Home page
-		</div>
+	<div class="container mt-10">
+		<div class="flex flex-col md:flex-row justify-center items-center gap-5 bg-warning-300 p-4 lg:rounded-xl">
+			<USelectMenu
+				v-model="startLocation"
+				:items="startLocations"
+				class="min-w-48 py-2"
+				color="neutral"
+				:filter-fields="['search']"
+			>
+				<template #default="{ modelValue }">
+					{{ modelValue?.from }}
+					<Icon
+						name="i-lucide:arrow-right"
+						size="14"
+					/>
+					{{ modelValue?.to }}
+				</template>
 
-		<div class="w-60 mx-auto">
-			<UCalendar
-				v-model="calendarValue"
-				initial-focus
-				color="warning"
-				range
-				:ui="{
-					headCell: 'text-warning-300',
-					cellTrigger: 'data-today:not-data-[selected]:text-warning-300 data-[selected]:bg-warning-300',
-				}"
+				<template #item="{ item }">
+					<div class="flex items-center gap-2">
+						{{ item.from }}
+						<Icon
+							name="i-lucide:arrow-right"
+							size="14"
+						/>
+						{{ item.to }}
+					</div>
+				</template>
+			</USelectMenu>
+
+			<AppDatePicker
+				v-model="startValue"
+				:is-date-unavailable="isStartDateUnavailable"
+				placeholder="Datum polaska"
 			/>
-
-			<h1 v-if="calendarValue">
-				Choosen date
-			</h1>
-
-			<div v-if="calendarValue">
-				Start: {{ calendarValue['start'] }}
-				<br>
-				End: {{ calendarValue['end'] }}
-			</div>
 		</div>
 	</div>
 </template>

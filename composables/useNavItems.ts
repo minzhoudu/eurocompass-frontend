@@ -9,15 +9,9 @@ export const useNavItems = () => {
 			to: "/",
 		},
 		{
-			label: "Rezervacije",
-			icon: "i-lucide-calendar",
-			children: [
-				{
-					label: "Sve rezervacije",
-					icon: "i-lucide-calendar",
-					to: "/rezervacije",
-				},
-			],
+			label: "Informacije",
+			icon: "i-lucide-info",
+			to: "/informacije",
 		},
 	],
 	[

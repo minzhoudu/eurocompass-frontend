@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMediaQuery } from "@vueuse/core";
 
-const isMobile = useMediaQuery("(max-width: 768px)", { ssrWidth: 769 });
+const isMobile = useMediaQuery("(max-width: 768px)", { ssrWidth: 768 });
 const isOpen = ref(false);
 
 const items = useNavItems();

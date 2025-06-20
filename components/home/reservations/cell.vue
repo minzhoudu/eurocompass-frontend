@@ -23,7 +23,7 @@ const icon = computed(() => {
 			:name="icon"
 			size="24"
 		/>
-		<h2 class="md:text-xl font-semibold">
+		<h2 class="text-xs sm:text-base md:text-xl font-semibold">
 			{{ label }}
 		</h2>
 	</div>

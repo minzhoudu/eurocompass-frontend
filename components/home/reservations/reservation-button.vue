@@ -17,7 +17,7 @@ defineProps<{
 			variant="solid"
 			color="neutral"
 			size="sm"
-			class="py-2 cursor-pointer"
+			class="md:py-2 cursor-pointer"
 			icon="lucide:ticket"
 		/>
 

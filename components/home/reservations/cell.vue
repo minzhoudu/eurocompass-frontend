@@ -18,14 +18,14 @@ const icon = computed(() => {
 </script>
 
 <template>
-	<div class="flex items-center gap-2">
+	<div class="flex items-center justify-center sm:justify-start gap-2">
 		<Icon
 			:name="icon"
 			size="24"
 		/>
-		<h3 class="md:text-xl">
+		<h2 class="md:text-xl font-semibold">
 			{{ label }}
-		</h3>
+		</h2>
 	</div>
 </template>
 <!-- lucide:clock -->

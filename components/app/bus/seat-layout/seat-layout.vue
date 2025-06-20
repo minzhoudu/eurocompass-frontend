@@ -1,135 +1,90 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import type { ReservationSlot } from "@/mock/seats";
+import { Icon } from "#components";
+import type { ReservationSlot } from "~/mock/seats";
 
-const props = defineProps<{
+const { seats } = defineProps<{
 	seats: ReservationSlot[];
-	rows?: number;
-	seatsPerRow?: number;
-	reservedSeats?: number[];
-	stairs?: number[];
 }>();
 
 const toast = useToast();
 
-const emit = defineEmits<{
-	(e: "update:selectedSeats", val: number[]): void;
-}>();
-
 const MAX_SELECTED_SEATS = 2;
-
-const rows = props.rows ?? 10;
-const seatsPerRow = props.seatsPerRow ?? 4;
-const reservedSeats = props.reservedSeats ?? [];
-const stairs = props.stairs ?? [];
 
 const selectedSeats = ref<number[]>([]);
 
-function toggleSeat(seatNumber?: number) {
-	if (!seatNumber) return;
+const handleClick = (seat: typeof seats[number]) => {
+	if (seat.type !== "FREE") return;
 
-	if (reservedSeats.includes(seatNumber)) return;
+	const index = selectedSeats.value.indexOf(seat.number);
 
-	if (selectedSeats.value.includes(seatNumber)) {
-		selectedSeats.value = selectedSeats.value.filter(s => s !== seatNumber);
+	if (index !== -1) {
+		selectedSeats.value.splice(index, 1);
 		return;
 	}
-
 	if (selectedSeats.value.length >= MAX_SELECTED_SEATS) {
 		toast.add({
-			title: `Maksimalan broj rezervisanih sedišta je ${MAX_SELECTED_SEATS}`,
+			title: "Maksimalan broj rezervacija je 2",
 			color: "error",
 		});
 		return;
 	}
 
-	selectedSeats.value.push(seatNumber);
-	emit("update:selectedSeats", selectedSeats.value);
-}
+	selectedSeats.value.push(seat.number);
+};
 
-const seatLayout = computed(() => {
-	const layout = [];
-	let seatNumber = 1;
-	let seatIndex = 1;
+const isSelected = (seat: ReservationSlot) => {
+	if (seat.type !== "FREE") return false;
 
-	for (let i = 0; i < rows; i++) {
-		const row = [];
+	return selectedSeats.value.includes(seat.number);
+};
 
-		for (let j = 0; j < seatsPerRow; j++) {
-			if (stairs.includes(seatIndex)) {
-				row.push({
-					type: "stairs",
-					index: seatIndex,
-				});
-			}
-			else {
-				row.push({
-					type: "seat",
-					number: seatNumber,
-					isReserved: reservedSeats.includes(seatNumber),
-					isSelected: selectedSeats.value.includes(seatNumber),
-					index: seatIndex,
-				});
-				seatNumber++;
-			}
-			seatIndex++;
-		}
-		layout.push(row);
-	}
+const isDisabled = (seat: ReservationSlot) => {
+	if (seat.type !== "FREE") return true;
 
-	return layout;
-});
-
-const getSeatLabel = (seatNumber?: number) => {
-	const seat = props.seats.find(seat => seat.number === seatNumber);
-
-	if (seat?.reservationData) {
-		return seat.reservationData.name;
-	}
-
-	return seatNumber?.toString() ?? "";
+	return selectedSeats.value.length >= MAX_SELECTED_SEATS;
 };
 </script>
 
 <template>
-	<div class="flex flex-col items-center gap-2">
-		<div
-			v-for="(row, rowIndex) in seatLayout"
-			:key="rowIndex"
-			class="flex gap-4"
+	<div class="grid grid-cols-5 gap-2 gap-x-0 place-items-center max-w-64 mx-auto">
+		<template
+			v-for="(seat, index) in seats"
+			:key="index"
 		>
-			<template
-				v-for="seat in row"
-				:key="seat.index"
+			<div
+				v-if="seat.type === 'FREE'"
+				class="cursor-pointer flex items-center justify-center w-10 h-10 rounded border hover:bg-primary-300 transition-all duration-300"
+				:class="{
+					'bg-primary-300 scale-105': isSelected(seat),
+					'opacity-50 !cursor-not-allowed hover:bg-white': isDisabled(seat) && !isSelected(seat),
+				}"
+				@click="handleClick(seat)"
 			>
-				<div
-					v-if="seat.type === 'stairs'"
-					class="w-10 h-10 flex items-center justify-center text-xl text-gray-400"
-				>
-					<Icon name="tabler:stairs-up" />
-				</div>
+				{{ seat.number }}
+			</div>
 
-				<UTooltip
-					v-else
-					:text="getSeatLabel(seat.number)"
-					:content="{ side: 'top' }"
-					:disabled="!seat.isReserved"
-				>
-					<button
-						:disabled="seat.isReserved"
-						class="w-10 h-10 rounded text-sm font-medium transition-all duration-200 cursor-pointer"
-						:class="{
-							'bg-error/70 text-white !cursor-not-allowed scale-95': seat.isReserved,
-							'bg-green-500 text-white scale-105': seat.isSelected,
-							'bg-white border border-gray-500 hover:bg-blue-100': !seat.isReserved && !seat.isSelected,
-							'!cursor-not-allowed': selectedSeats.length >= MAX_SELECTED_SEATS && !seat.isSelected,
-						}"
-						@click="toggleSeat(seat.number)"
-					>
-						{{ seat.number }}
-					</button>
-				</UTooltip>
-			</template>
-		</div>
+			<div
+				v-else-if="seat.type === 'OCCUPIED'"
+				class="cursor-not-allowed flex items-center justify-center w-10 h-10 bg-red-300 rounded text-white scale-95"
+				:title="seat.reservationData?.name"
+			>
+				{{ seat.number }}
+			</div>
+
+			<div
+				v-else-if="seat.type === 'STAIRS'"
+				class="flex items-center justify-center w-10 h-10 rounded"
+			>
+				<Icon
+					name="i-tabler:stairs-up"
+					class="text-gray-700"
+				/>
+			</div>
+
+			<div
+				v-else-if="seat.type === 'NOT'"
+				class="w-10 h-10 opacity-0"
+			/>
+		</template>
 	</div>
 </template>

@@ -5,6 +5,12 @@ export default defineNuxtConfig({
 	modules: ["@nuxt/eslint", "@nuxt/ui", "@nuxt/image"],
 	devtools: { enabled: true },
 
+	app: {
+		head: {
+			title: "Eurocompass",
+		},
+	},
+
 	css: ["~/assets/css/main.css"],
 
 	colorMode: {

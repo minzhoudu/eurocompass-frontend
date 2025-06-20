@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { DateValue } from "@internationalized/date";
-import { DateFormatter, getLocalTimeZone } from "@internationalized/date";
+import { DateFormatter, getLocalTimeZone, type DateValue } from "@internationalized/date";
 
 type DatePickerProps = {
 	modelValue?: DateValue;
@@ -30,7 +29,7 @@ const dateValue = computed({
 	<UPopover>
 		<UButton
 			color="neutral"
-			class="bg-white font-bold cursor-pointer md:py-2 md:px-4"
+			class="bg-white font-bold cursor-pointer md:py-2 md:px-4 min-w-48 justify-center"
 			variant="subtle"
 			icon="i-lucide-calendar"
 		>

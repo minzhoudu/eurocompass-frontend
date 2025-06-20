@@ -30,7 +30,7 @@ const dateValue = computed({
 	<UPopover>
 		<UButton
 			color="neutral"
-			class="bg-white font-bold cursor-pointer md:py-2 md:px-4"
+			class="bg-white font-bold cursor-pointer md:py-2 md:px-4 min-w-48 justify-center"
 			variant="subtle"
 			icon="i-lucide-calendar"
 		>

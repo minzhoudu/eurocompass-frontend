@@ -77,7 +77,7 @@ const columns = ref<TableColumn<Reservation>[]>([
 				thead: '[&>tr]:after:h-0 [&>tr]:after:bg-white',
 				tr: 'border-white text-center sm:text-left',
 				td: 'text-black/80 px-1 py-2 md:p-3 lg:p-4',
-				th: 'text-xs md:text-sm lg:text-lg font-bold bg-white md:first:rounded-l-lg md:last:rounded-r-lg py-1 md:py-2 px-1 md:px-4 text-center lg:text-left',
+				th: 'text-xs md:text-sm lg:text-lg font-bold bg-white md:first:rounded-l-lg md:last:rounded-r-lg py-1 md:py-2 px-1 lg:px-4 text-center lg:text-left',
 			}"
 		/>
 	</div>

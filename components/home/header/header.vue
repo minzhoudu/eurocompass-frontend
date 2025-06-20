@@ -3,7 +3,7 @@ import { getLocalTimeZone, type DateValue } from "@internationalized/date";
 
 const startValue = ref<DateValue>();
 
-const startLocations = ref([{ from: "Krusevac", to: "Beograd", search: "Krusevac Beograd" }, { from: "Krusevac", to: "Novi Sad", search: "Krusevac Novi Sad" }, { from: "Krusevac", to: "Subotica", search: "Krusevac Subotica" }]);
+const startLocations = ref([{ from: "Krusevac", to: "Beograd", search: "Krusevac Beograd" }, { from: "Krusevac", to: "Novi Sad", search: "Krusevac Novi Sad" }, { from: "Beograd", to: "Krusevac", search: "Beograd Krusevac" }]);
 const startLocation = ref({ from: "Krusevac", to: "Beograd", search: "Krusevac Beograd" });
 
 const { currentDate } = useCurrentDate();
@@ -23,12 +23,19 @@ const isStartDateUnavailable = (date: DateValue) => {
 			:filter-fields="['search']"
 		>
 			<template #default="{ modelValue }">
-				{{ modelValue?.from }}
+				<p class="font-bold">
+					{{ modelValue?.from }}
+				</p>
+
 				<Icon
 					name="i-lucide:arrow-right"
 					size="14"
+					class="font-bold"
 				/>
-				{{ modelValue?.to }}
+
+				<p class="font-bold">
+					{{ modelValue?.to }}
+				</p>
 			</template>
 
 			<template #item="{ item }">

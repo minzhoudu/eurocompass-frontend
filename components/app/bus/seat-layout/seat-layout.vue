@@ -2,26 +2,31 @@
 import { Icon } from "#components";
 import type { ReservationSlot } from "~/mock/seats";
 
-const { seats } = defineProps<{
+const { seats, selectedSeats } = defineProps<{
 	seats: ReservationSlot[];
+	selectedSeats: number[];
+}>();
+
+const emit = defineEmits<{
+	"update:selectedSeats": [value: number[]];
 }>();
 
 const toast = useToast();
 
 const MAX_SELECTED_SEATS = 2;
 
-const selectedSeats = ref<number[]>([]);
-
 const handleClick = (seat: typeof seats[number]) => {
 	if (seat.type !== "FREE") return;
 
-	const index = selectedSeats.value.indexOf(seat.number);
+	const index = selectedSeats.indexOf(seat.number);
+	const newSelectedSeats = [...selectedSeats];
 
 	if (index !== -1) {
-		selectedSeats.value.splice(index, 1);
+		newSelectedSeats.splice(index, 1);
+		emit("update:selectedSeats", newSelectedSeats);
 		return;
 	}
-	if (selectedSeats.value.length >= MAX_SELECTED_SEATS) {
+	if (selectedSeats.length >= MAX_SELECTED_SEATS) {
 		toast.add({
 			title: "Maksimalan broj rezervacija je 2",
 			color: "error",
@@ -29,19 +34,20 @@ const handleClick = (seat: typeof seats[number]) => {
 		return;
 	}
 
-	selectedSeats.value.push(seat.number);
+	newSelectedSeats.push(seat.number);
+	emit("update:selectedSeats", newSelectedSeats);
 };
 
 const isSelected = (seat: ReservationSlot) => {
 	if (seat.type !== "FREE") return false;
 
-	return selectedSeats.value.includes(seat.number);
+	return selectedSeats.includes(seat.number);
 };
 
 const isDisabled = (seat: ReservationSlot) => {
 	if (seat.type !== "FREE") return true;
 
-	return selectedSeats.value.length >= MAX_SELECTED_SEATS;
+	return selectedSeats.length >= MAX_SELECTED_SEATS;
 };
 </script>
 
@@ -53,29 +59,43 @@ const isDisabled = (seat: ReservationSlot) => {
 		>
 			<div
 				v-if="seat.type === 'FREE'"
-				class="cursor-pointer flex items-center justify-center w-10 h-10 rounded border hover:bg-primary-300 transition-all duration-300"
-				:class="{
-					'bg-primary-300 scale-105': isSelected(seat),
-					'opacity-50 !cursor-not-allowed hover:bg-white': isDisabled(seat) && !isSelected(seat),
-				}"
-				@click="handleClick(seat)"
+				class="relative flex items-center justify-center"
 			>
-				{{ seat.number }}
+				<Icon
+					name="ic:round-event-seat"
+					class="cursor-pointer flex items-center justify-center w-12 h-12 rounded border hover:bg-primary-300 transition-all duration-300"
+					:class="{
+						'bg-primary-300 scale-105': isSelected(seat),
+						'opacity-50 !cursor-not-allowed hover:!bg-current': isDisabled(seat) && !isSelected(seat),
+					}"
+					@click="handleClick(seat)"
+				/>
+
+				<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
 			</div>
 
-			<div
+			<UTooltip
 				v-else-if="seat.type === 'OCCUPIED'"
-				class="cursor-not-allowed flex items-center justify-center w-10 h-10 bg-red-300 rounded text-white scale-95"
-				:title="seat.reservationData?.name"
+				:text="seat.reservationData.name"
+				:content="{ side: 'top' }"
+				:delay-duration="0"
 			>
-				{{ seat.number }}
-			</div>
+				<div class="relative flex items-center justify-center">
+					<Icon
+						name="ic:round-event-seat"
+						class="cursor-not-allowed flex items-center justify-center w-12 h-12 bg-red-300 rounded text-white scale-95"
+					/>
+
+					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
+				</div>
+			</UTooltip>
 
 			<div
 				v-else-if="seat.type === 'STAIRS'"
-				class="flex items-center justify-center w-10 h-10 rounded"
+				class="flex items-center justify-center w-12 h-12"
 			>
 				<Icon
+					size="26"
 					name="i-tabler:stairs-up"
 					class="text-gray-700"
 				/>

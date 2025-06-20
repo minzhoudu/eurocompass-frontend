@@ -5,10 +5,14 @@ defineProps<{
 	label: string;
 	reservationId: number;
 }>();
+
+const isModalOpen = ref(false);
+const selectedSeats = ref<number[]>([]);
 </script>
 
 <template>
 	<UModal
+		v-model:open="isModalOpen"
 		title="Rezervacija"
 		description="Izaberite svoje sedište"
 	>
@@ -17,13 +21,14 @@ defineProps<{
 			variant="solid"
 			color="neutral"
 			size="sm"
-			class="py-2 cursor-pointer"
+			class="md:py-2 cursor-pointer"
 			icon="lucide:ticket"
 		/>
 
 		<template #body>
 			<div>
 				<AppBusSeatLayout
+					v-model:selected-seats="selectedSeats"
 					:seats="mockSeats"
 				/>
 			</div>
@@ -37,9 +42,13 @@ defineProps<{
 					label="Odustani"
 					variant="outline"
 					color="error"
+					class="cursor-pointer"
+					@click="isModalOpen = false"
 				/>
 				<UButton
 					label="Rezerviši"
+					class="cursor-pointer"
+					:disabled="selectedSeats.length === 0"
 				/>
 			</div>
 		</template>

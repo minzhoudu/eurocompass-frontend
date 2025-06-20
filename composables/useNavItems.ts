@@ -11,7 +11,6 @@ export const useNavItems = () => {
 		{
 			label: "Informacije",
 			icon: "i-lucide-info",
-			to: "/informacije",
 		},
 	],
 	[
@@ -26,17 +25,14 @@ export const useNavItems = () => {
 				{
 					label: "Profil",
 					icon: "i-lucide-user",
-					to: "/profil",
 				},
 				{
 					label: "Settings",
 					icon: "i-lucide-settings",
-					to: "/settings",
 				},
 				{
 					label: "Odjava",
 					icon: "i-lucide-log-out",
-					to: "/odjava",
 				},
 			],
 		},

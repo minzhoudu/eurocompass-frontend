@@ -7,6 +7,7 @@ defineProps<{
 }>();
 
 const isModalOpen = ref(false);
+const selectedSeats = ref<number[]>([]);
 </script>
 
 <template>
@@ -27,6 +28,7 @@ const isModalOpen = ref(false);
 		<template #body>
 			<div>
 				<AppBusSeatLayout
+					v-model:selected-seats="selectedSeats"
 					:seats="mockSeats"
 				/>
 			</div>
@@ -46,6 +48,7 @@ const isModalOpen = ref(false);
 				<UButton
 					label="Rezerviši"
 					class="cursor-pointer"
+					:disabled="selectedSeats.length === 0"
 				/>
 			</div>
 		</template>

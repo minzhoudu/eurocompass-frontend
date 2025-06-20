@@ -2,26 +2,31 @@
 import { Icon } from "#components";
 import type { ReservationSlot } from "~/mock/seats";
 
-const { seats } = defineProps<{
+const { seats, selectedSeats } = defineProps<{
 	seats: ReservationSlot[];
+	selectedSeats: number[];
+}>();
+
+const emit = defineEmits<{
+	"update:selectedSeats": [value: number[]];
 }>();
 
 const toast = useToast();
 
 const MAX_SELECTED_SEATS = 2;
 
-const selectedSeats = ref<number[]>([]);
-
 const handleClick = (seat: typeof seats[number]) => {
 	if (seat.type !== "FREE") return;
 
-	const index = selectedSeats.value.indexOf(seat.number);
+	const index = selectedSeats.indexOf(seat.number);
+	const newSelectedSeats = [...selectedSeats];
 
 	if (index !== -1) {
-		selectedSeats.value.splice(index, 1);
+		newSelectedSeats.splice(index, 1);
+		emit("update:selectedSeats", newSelectedSeats);
 		return;
 	}
-	if (selectedSeats.value.length >= MAX_SELECTED_SEATS) {
+	if (selectedSeats.length >= MAX_SELECTED_SEATS) {
 		toast.add({
 			title: "Maksimalan broj rezervacija je 2",
 			color: "error",
@@ -29,19 +34,20 @@ const handleClick = (seat: typeof seats[number]) => {
 		return;
 	}
 
-	selectedSeats.value.push(seat.number);
+	newSelectedSeats.push(seat.number);
+	emit("update:selectedSeats", newSelectedSeats);
 };
 
 const isSelected = (seat: ReservationSlot) => {
 	if (seat.type !== "FREE") return false;
 
-	return selectedSeats.value.includes(seat.number);
+	return selectedSeats.includes(seat.number);
 };
 
 const isDisabled = (seat: ReservationSlot) => {
 	if (seat.type !== "FREE") return true;
 
-	return selectedSeats.value.length >= MAX_SELECTED_SEATS;
+	return selectedSeats.length >= MAX_SELECTED_SEATS;
 };
 </script>
 

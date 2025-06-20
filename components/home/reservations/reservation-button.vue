@@ -8,6 +8,11 @@ defineProps<{
 
 const isModalOpen = ref(false);
 const selectedSeats = ref<number[]>([]);
+
+const handleCancel = () => {
+	isModalOpen.value = false;
+	selectedSeats.value = [];
+};
 </script>
 
 <template>
@@ -43,7 +48,7 @@ const selectedSeats = ref<number[]>([]);
 					variant="outline"
 					color="error"
 					class="cursor-pointer"
-					@click="isModalOpen = false"
+					@click="handleCancel"
 				/>
 				<UButton
 					label="Rezerviši"

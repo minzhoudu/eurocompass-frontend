@@ -23,9 +23,9 @@ const icon = computed(() => {
 			:name="icon"
 			size="24"
 		/>
-		<h3 class="md:text-xl font-semibold">
+		<h2 class="md:text-xl font-semibold">
 			{{ label }}
-		</h3>
+		</h2>
 	</div>
 </template>
 <!-- lucide:clock -->

@@ -11,6 +11,7 @@ type Reservation = {
 
 const ReservationButton = resolveComponent("HomeReservationsReservationButton");
 const Cell = resolveComponent("HomeReservationsCell");
+const UButton = resolveComponent("UButton");
 
 const data = ref<Reservation[]>([
 	{ id: 1, from: "Krusevac", to: "Beograd", time: "09:00", actions: "Rezervisi" },
@@ -41,7 +42,22 @@ const columns = ref<TableColumn<Reservation>[]>([
 	},
 	{
 		accessorKey: "time",
-		header: "Vreme",
+		header: ({ column }) => {
+			const isSorted = column.getIsSorted();
+
+			return h(UButton, {
+				color: "neutral",
+				variant: "ghost",
+				label: "Vreme",
+				icon: isSorted
+					? isSorted === "asc"
+						? "i-lucide-arrow-up-narrow-wide"
+						: "i-lucide-arrow-down-wide-narrow"
+					: "i-lucide-arrow-up-down",
+				class: "-mx-2.5 text-xs md:text-sm lg:text-lg font-bold cursor-pointer",
+				onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
+			});
+		},
 		cell: ({ cell }) => {
 			return h(Cell, {
 				label: cell.getValue(),
@@ -51,7 +67,9 @@ const columns = ref<TableColumn<Reservation>[]>([
 	},
 	{
 		accessorKey: "actions",
-		header: "",
+		header: () => {
+			return h("div");
+		},
 		cell: ({ cell, row }) => {
 			return h(ReservationButton, {
 				label: cell.getValue(),

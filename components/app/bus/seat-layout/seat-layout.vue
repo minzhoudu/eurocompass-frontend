@@ -59,14 +59,19 @@ const isDisabled = (seat: ReservationSlot) => {
 		>
 			<div
 				v-if="seat.type === 'FREE'"
-				class="cursor-pointer flex items-center justify-center w-10 h-10 rounded border hover:bg-primary-300 transition-all duration-300"
-				:class="{
-					'bg-primary-300 scale-105': isSelected(seat),
-					'opacity-50 !cursor-not-allowed hover:bg-white': isDisabled(seat) && !isSelected(seat),
-				}"
-				@click="handleClick(seat)"
+				class="relative flex items-center justify-center"
 			>
-				{{ seat.number }}
+				<Icon
+					name="ic:round-event-seat"
+					class="cursor-pointer flex items-center justify-center w-12 h-12 rounded border hover:bg-primary-300 transition-all duration-300"
+					:class="{
+						'bg-primary-300 scale-105': isSelected(seat),
+						'opacity-50 !cursor-not-allowed hover:!bg-current': isDisabled(seat) && !isSelected(seat),
+					}"
+					@click="handleClick(seat)"
+				/>
+
+				<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
 			</div>
 
 			<UTooltip
@@ -75,19 +80,22 @@ const isDisabled = (seat: ReservationSlot) => {
 				:content="{ side: 'top' }"
 				:delay-duration="0"
 			>
-				<div
-					class="cursor-not-allowed flex items-center justify-center w-10 h-10 bg-red-300 rounded text-white scale-95"
-					:title="seat.reservationData?.name"
-				>
-					{{ seat.number }}
+				<div class="relative flex items-center justify-center">
+					<Icon
+						name="ic:round-event-seat"
+						class="cursor-not-allowed flex items-center justify-center w-12 h-12 bg-red-300 rounded text-white scale-95"
+					/>
+
+					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
 				</div>
 			</UTooltip>
 
 			<div
 				v-else-if="seat.type === 'STAIRS'"
-				class="flex items-center justify-center w-10 h-10 rounded"
+				class="flex items-center justify-center w-12 h-12"
 			>
 				<Icon
+					size="26"
 					name="i-tabler:stairs-up"
 					class="text-gray-700"
 				/>

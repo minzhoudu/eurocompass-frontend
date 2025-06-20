@@ -63,13 +63,19 @@ const isDisabled = (seat: ReservationSlot) => {
 				{{ seat.number }}
 			</div>
 
-			<div
+			<UTooltip
 				v-else-if="seat.type === 'OCCUPIED'"
-				class="cursor-not-allowed flex items-center justify-center w-10 h-10 bg-red-300 rounded text-white scale-95"
-				:title="seat.reservationData?.name"
+				:text="seat.reservationData.name"
+				:content="{ side: 'top' }"
+				:delay-duration="0"
 			>
-				{{ seat.number }}
-			</div>
+				<div
+					class="cursor-not-allowed flex items-center justify-center w-10 h-10 bg-red-300 rounded text-white scale-95"
+					:title="seat.reservationData?.name"
+				>
+					{{ seat.number }}
+				</div>
+			</UTooltip>
 
 			<div
 				v-else-if="seat.type === 'STAIRS'"

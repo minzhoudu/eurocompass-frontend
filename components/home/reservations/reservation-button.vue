@@ -5,10 +5,13 @@ defineProps<{
 	label: string;
 	reservationId: number;
 }>();
+
+const isModalOpen = ref(false);
 </script>
 
 <template>
 	<UModal
+		v-model:open="isModalOpen"
 		title="Rezervacija"
 		description="Izaberite svoje sedište"
 	>
@@ -37,9 +40,12 @@ defineProps<{
 					label="Odustani"
 					variant="outline"
 					color="error"
+					class="cursor-pointer"
+					@click="isModalOpen = false"
 				/>
 				<UButton
 					label="Rezerviši"
+					class="cursor-pointer"
 				/>
 			</div>
 		</template>

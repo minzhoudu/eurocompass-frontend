@@ -3,8 +3,11 @@ export type ObjectId = string; // MongoDB ObjectId represented as string in JSON
 export type ReservationType = "NOT" | "OCCUPIED" | "FREE" | "STAIRS";
 
 export type ReservationSlot = {
-	type: "OCCUPIED" | "FREE";
-	reservationData?: ReservationData;
+	type: "FREE";
+	number: number;
+} | {
+	type: "OCCUPIED";
+	reservationData: ReservationData;
 	number: number;
 } | {
 	type: "NOT" | "STAIRS";

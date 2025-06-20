@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { DateValue } from "@internationalized/date";
-import { DateFormatter, getLocalTimeZone } from "@internationalized/date";
+import { DateFormatter, getLocalTimeZone, type DateValue } from "@internationalized/date";
 
 type DatePickerProps = {
 	modelValue?: DateValue;

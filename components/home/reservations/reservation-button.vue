@@ -1,18 +1,10 @@
 <script setup lang="ts">
 import { mockSeats } from "@/mock/seats";
 
-const props = defineProps<{
+defineProps<{
 	label: string;
 	reservationId: number;
 }>();
-
-const handleSeatChange = (seats: number[]) => {
-	console.log({ reservationId: props.reservationId, seats: toRaw(seats) });
-};
-
-const rows = Math.ceil(mockSeats.length / 4);
-const reservedSeats = mockSeats.filter(seat => seat.type === "OCCUPIED").map(seat => seat.number);
-const stairs = mockSeats.filter(seat => seat.type === "STAIRS").map(seat => seat.number);
 </script>
 
 <template>
@@ -33,11 +25,6 @@ const stairs = mockSeats.filter(seat => seat.type === "STAIRS").map(seat => seat
 			<div>
 				<AppBusSeatLayout
 					:seats="mockSeats"
-					:rows="rows"
-					:seats-per-row="4"
-					:reserved-seats="reservedSeats"
-					:stairs="stairs"
-					@update:selected-seats="handleSeatChange"
 				/>
 			</div>
 		</template>

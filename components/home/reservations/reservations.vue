@@ -9,23 +9,13 @@ const props = defineProps<{
 	selectedLocation: Location;
 }>();
 
-const body = ref({
-	date: props.selectedDate.toString(),
-	routeId: props.selectedLocation.id,
-});
-
-watch(
-	() => props.selectedDate,
-	() => {
-		body.value.date = props.selectedDate.toString();
-		body.value.routeId = props.selectedLocation.id;
-	},
-);
-
 const { data: rides, pending } = await useFetch<Ride[]>("apis/rides/getride", {
-	key: "rides",
+	key: `rides-${props.selectedDate.toString()}-${props.selectedLocation.id}`,
 	method: "POST",
-	body,
+	body: {
+		date: props.selectedDate.toString(),
+		routeId: props.selectedLocation.id,
+	},
 });
 
 const data = computed(() => {

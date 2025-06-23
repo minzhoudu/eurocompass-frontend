@@ -5,7 +5,6 @@ import type { Location } from "./types";
 const startValue = ref<DateValue>();
 
 const { data: locations, error } = await useFetch<Location[]>("/apis/routes", {
-	key: "locations",
 	onRequestError: (error) => {
 		console.error({
 			message: error.error.message,

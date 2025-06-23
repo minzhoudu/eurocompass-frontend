@@ -36,7 +36,7 @@ const handleCancel = () => {
 			<div>
 				<AppBusSeatLayout
 					v-model:selected-seats="selectedSeats"
-					:seats="ride.buses[selectedBus].reservationSlots"
+					:rows="ride.buses[selectedBus].reservationSeatsRows"
 				/>
 			</div>
 		</template>

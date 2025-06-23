@@ -22,19 +22,16 @@ watch(
 	},
 );
 
-const { data: rides, pending } = await useFetch<Ride[]>("http://172.104.249.149:5533/rides/getride", {
+const { data: rides, pending } = await useFetch<Ride[]>("apis/rides/getride", {
 	key: "rides",
 	method: "POST",
 	body,
-	cache: "no-cache",
 });
 
 const data = computed(() => {
 	if (!rides.value) return [];
 
-	const data = JSON.parse(rides.value as unknown as string);
-
-	return data.map((ride: Ride) => {
+	return rides.value.map((ride: Ride) => {
 		return {
 			id: ride.id,
 			from: props.selectedLocation.from,
@@ -106,8 +103,8 @@ const columns = ref<TableColumn<Reservation>[]>([
 			return h("div");
 		},
 		cell: ({ cell, row }) => {
-			const parsedRides = JSON.parse(rides.value as unknown as string);
-			const currentRide = parsedRides.find((ride: Ride) => ride.id === row.original.id);
+			const currentRide = rides.value?.find((ride: Ride) => ride.id === row.original.id);
+
 			return h(ReservationButton, {
 				label: cell.getValue(),
 				ride: currentRide,

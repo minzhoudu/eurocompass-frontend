@@ -1,12 +1,19 @@
+export enum ReservationSeatsType {
+	FREE = "FREE",
+	OCCUPIED = "OCCUPIED",
+	NOT = "NOT",
+	STAIRS = "STAIRS",
+}
+
 export type ReservationSlot = {
-	type: "FREE";
+	type: ReservationSeatsType.FREE;
 	number: number;
 } | {
-	type: "OCCUPIED";
+	type: ReservationSeatsType.OCCUPIED;
 	reservationData: ReservationData;
 	number: number;
 } | {
-	type: "NOT" | "STAIRS";
+	type: ReservationSeatsType.NOT | ReservationSeatsType.STAIRS;
 };
 
 export type ReservationData = {
@@ -15,9 +22,13 @@ export type ReservationData = {
 	phone?: string;
 };
 
+export type ReservationSeatsRow = {
+	reservationSlots: ReservationSlot[];
+};
+
 export type Bus = {
 	busNumber: number;
-	reservationSlots: ReservationSlot[];
+	reservationSeatsRows: ReservationSeatsRow[];
 };
 
 export type Ride = {

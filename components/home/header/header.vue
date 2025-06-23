@@ -23,7 +23,7 @@ const isStartDateUnavailable = (date: DateValue) => {
 };
 
 const emit = defineEmits<{
-	(e: "date-selected", date?: DateValue, location?: Location): void;
+	(e: "data-selected", date?: DateValue, location?: Location): void;
 }>();
 </script>
 
@@ -36,6 +36,7 @@ const emit = defineEmits<{
 			class="min-w-48 py-2"
 			color="neutral"
 			:filter-fields="['name']"
+			@update:model-value="emit('data-selected', startValue, $event)"
 		>
 			<template #default="{ modelValue }">
 				<HomeHeaderSelectedItem :item="modelValue" />
@@ -51,7 +52,7 @@ const emit = defineEmits<{
 			v-model="startValue"
 			:is-date-unavailable="isStartDateUnavailable"
 			placeholder="Datum polaska"
-			@update:model-value="emit('date-selected', $event, selectedLocation)"
+			@update:model-value="emit('data-selected', $event, selectedLocation)"
 		/>
 
 		<div v-if="error">

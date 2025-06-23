@@ -19,7 +19,7 @@ const handleDateSelected = (date?: DateValue, location?: Location) => {
 
 <template>
 	<div class="container mt-10 flex flex-col gap-10">
-		<HomeHeader @date-selected="handleDateSelected" />
+		<HomeHeader @data-selected="handleDateSelected" />
 
 		<Transition>
 			<HomeReservations

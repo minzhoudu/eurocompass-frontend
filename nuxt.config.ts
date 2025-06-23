@@ -16,6 +16,12 @@ export default defineNuxtConfig({
 	colorMode: {
 		preference: "light",
 	},
+
+	routeRules: {
+		"/apis/**": {
+			proxy: "http://172.104.249.149:5533/**",
+		},
+	},
 	compatibilityDate: "2025-05-15",
 
 	vite: {

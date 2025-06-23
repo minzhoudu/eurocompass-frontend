@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="md:w-2/3 mx-auto mt-4 flex flex-col gap-4"
+		class="md:w-2/3 mx-auto mt-4 flex flex-col gap-4 pb-4"
 	>
 		<USkeleton class="h-12 w-full bg-neutral-200" />
 

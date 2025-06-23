@@ -1,23 +1,53 @@
 <script setup lang="ts">
+import type { DateValue } from "@internationalized/date";
 import type { TableColumn } from "@nuxt/ui";
+import type { Location } from "../header/types";
+import type { Reservation, Ride } from "./types";
 
-type Reservation = {
-	id: number;
-	from: string;
-	to: string;
-	time: string;
-	actions: string;
-};
+const props = defineProps<{
+	selectedDate: DateValue;
+	selectedLocation: Location;
+}>();
+
+const body = ref({
+	date: props.selectedDate.toString(),
+	routeId: props.selectedLocation.id,
+});
+
+watch(
+	() => props.selectedDate,
+	() => {
+		body.value.date = props.selectedDate.toString();
+		body.value.routeId = props.selectedLocation.id;
+	},
+);
+
+const { data: rides, pending } = await useFetch<Ride[]>("http://172.104.249.149:5533/rides/getride", {
+	key: "rides",
+	method: "POST",
+	body,
+	cache: "no-cache",
+});
+
+const data = computed(() => {
+	if (!rides.value) return [];
+
+	const data = JSON.parse(rides.value as unknown as string);
+
+	return data.map((ride: Ride) => {
+		return {
+			id: ride.id,
+			from: props.selectedLocation.from,
+			to: props.selectedLocation.to,
+			time: ride.departure.toString(),
+			actions: "Rezervisi",
+		};
+	});
+});
 
 const ReservationButton = resolveComponent("HomeReservationsReservationButton");
 const Cell = resolveComponent("HomeReservationsCell");
 const UButton = resolveComponent("UButton");
-
-const data = ref<Reservation[]>([
-	{ id: 1, from: "Krusevac", to: "Beograd", time: "09:00", actions: "Rezervisi" },
-	{ id: 2, from: "Krusevac", to: "Beograd", time: "10:00", actions: "Rezervisi" },
-	{ id: 3, from: "Krusevac", to: "Beograd", time: "11:00", actions: "Rezervisi" },
-]);
 
 const columns = ref<TableColumn<Reservation>[]>([
 	{
@@ -59,8 +89,13 @@ const columns = ref<TableColumn<Reservation>[]>([
 			});
 		},
 		cell: ({ cell }) => {
+			const time = new Date(cell.getValue() as string).toLocaleTimeString("sr-RS", {
+				hour: "2-digit",
+				minute: "2-digit",
+			});
+
 			return h(Cell, {
-				label: cell.getValue(),
+				label: time,
 				type: "time",
 			});
 		},
@@ -71,9 +106,11 @@ const columns = ref<TableColumn<Reservation>[]>([
 			return h("div");
 		},
 		cell: ({ cell, row }) => {
+			const parsedRides = JSON.parse(rides.value as unknown as string);
+			const currentRide = parsedRides.find((ride: Ride) => ride.id === row.original.id);
 			return h(ReservationButton, {
 				label: cell.getValue(),
-				reservationId: row.original.id,
+				ride: currentRide,
 			});
 		},
 	},
@@ -81,12 +118,20 @@ const columns = ref<TableColumn<Reservation>[]>([
 </script>
 
 <template>
-	<div class="bg-warning-300  pt-4 pb-2 lg:rounded-xl">
-		<h1 class="md:text-2xl font-bold text-center">
-			Vožnje za odabrani datum
+	<div
+		class="bg-warning-300  pt-4 pb-2 lg:rounded-xl"
+	>
+		<h1
+			class="md:text-2xl font-bold text-center"
+			:class="{
+				'animate-pulse': pending,
+			}"
+		>
+			{{ pending ? "Učitavanje polazaka..." : "Vožnje za odabrani datum" }}
 		</h1>
 
 		<UTable
+			v-if="!pending"
 			:data="data"
 			:columns="columns"
 			class="md:w-2/3 mx-auto mt-4"
@@ -98,5 +143,7 @@ const columns = ref<TableColumn<Reservation>[]>([
 				th: 'text-xs md:text-sm lg:text-lg font-bold bg-white md:first:rounded-l-lg md:last:rounded-r-lg py-1 md:py-2 px-1 lg:px-4 text-center lg:text-left',
 			}"
 		/>
+
+		<HomeReservationsTableSkeleton v-else />
 	</div>
 </template>

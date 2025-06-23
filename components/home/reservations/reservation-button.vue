@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { mockSeats } from "@/mock/seats";
+import type { Ride } from "./types";
 
 defineProps<{
 	label: string;
-	reservationId: number;
+	ride: Ride;
 }>();
 
 const isModalOpen = ref(false);
 const selectedSeats = ref<number[]>([]);
+
+const selectedBus = ref(0);
 
 const handleCancel = () => {
 	isModalOpen.value = false;
@@ -34,7 +36,7 @@ const handleCancel = () => {
 			<div>
 				<AppBusSeatLayout
 					v-model:selected-seats="selectedSeats"
-					:seats="mockSeats"
+					:seats="ride.buses[selectedBus].reservationSlots"
 				/>
 			</div>
 		</template>

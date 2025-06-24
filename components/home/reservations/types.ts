@@ -23,7 +23,8 @@ export type ReservationData = {
 };
 
 export type ReservationSeatsRow = {
-	reservationSlots: ReservationSlot[];
+	reservationSlots: ReservationSlot[] | null;
+	dividerText?: string;
 };
 
 export type Bus = {

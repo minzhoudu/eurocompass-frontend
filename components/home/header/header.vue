@@ -25,12 +25,16 @@ const isStartDateUnavailable = (date: DateValue) => {
 const emit = defineEmits<{
 	(e: "data-selected", date?: DateValue, location?: Location): void;
 }>();
+
+const { isFeatureEnabled } = usePostHogFeatureFlag();
+
+const isHeaderActionsEnabled = isFeatureEnabled("header-actions");
 </script>
 
 <template>
 	<div class="flex flex-col md:flex-row justify-center items-center gap-5 bg-warning-300 p-4 lg:rounded-xl">
 		<USelectMenu
-			v-if="!error"
+			v-if="isHeaderActionsEnabled && !error"
 			v-model="selectedLocation"
 			:items="locations ?? []"
 			class="min-w-48 py-2"

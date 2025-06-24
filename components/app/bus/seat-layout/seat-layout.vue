@@ -53,6 +53,8 @@ const isDisabled = (seat: ReservationSlot) => {
 
 <template>
 	<div class="grid grid-cols-5 gap-2 gap-x-0 place-items-center max-w-64 mx-auto">
+		<AppBusSeatLayoutDevider text="Gornji sprat" />
+
 		<template
 			v-for="(row, rowIndex) in rows"
 			:key="rowIndex"
@@ -67,7 +69,7 @@ const isDisabled = (seat: ReservationSlot) => {
 				>
 					<Icon
 						name="ic:round-event-seat"
-						class="cursor-pointer flex items-center justify-center w-12 h-12 rounded border hover:bg-primary-300 transition-all duration-300"
+						class="cursor-pointer flex items-center justify-center w-12 h-12 rounded border sm:hover:bg-primary-300 transition-all duration-300"
 						:class="{
 							'bg-primary-300 scale-105': isSelected(seat),
 							'opacity-50 !cursor-not-allowed hover:!bg-current': isDisabled(seat) && !isSelected(seat),
@@ -110,6 +112,11 @@ const isDisabled = (seat: ReservationSlot) => {
 					class="w-10 h-10 opacity-0"
 				/>
 			</div>
+
+			<AppBusSeatLayoutDevider
+				v-if="row.dividerText"
+				:text="row.dividerText"
+			/>
 		</template>
 	</div>
 </template>

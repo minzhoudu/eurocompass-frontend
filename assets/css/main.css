@@ -6,3 +6,12 @@
         @apply mx-auto
     }
 }
+
+:root {
+    --color-primary: #3f3d56
+}
+
+
+@theme {
+    --color-primary: var(--color-primary);
+}

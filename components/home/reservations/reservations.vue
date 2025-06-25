@@ -10,12 +10,11 @@ const props = defineProps<{
 }>();
 
 const { data: rides, pending } = await useFetch<Ride[]>("apis/rides/getride", {
-	key: `rides-${props.selectedDate.toString()}-${props.selectedLocation.id}`,
 	method: "POST",
-	body: {
+	body: computed(() => ({
 		date: props.selectedDate.toString(),
 		routeId: props.selectedLocation.id,
-	},
+	})),
 });
 
 const data = computed(() => {

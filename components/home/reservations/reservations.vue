@@ -10,12 +10,11 @@ const props = defineProps<{
 }>();
 
 const { data: rides, pending } = await useFetch<Ride[]>("apis/rides/getride", {
-	key: `rides-${props.selectedDate.toString()}-${props.selectedLocation.id}`,
 	method: "POST",
-	body: {
+	body: computed(() => ({
 		date: props.selectedDate.toString(),
 		routeId: props.selectedLocation.id,
-	},
+	})),
 });
 
 const data = computed(() => {
@@ -102,6 +101,10 @@ const columns = ref<TableColumn<Reservation>[]>([
 		},
 	},
 ]);
+
+const getRowId = (row: Reservation) => {
+	return row.id;
+};
 </script>
 
 <template>
@@ -119,6 +122,8 @@ const columns = ref<TableColumn<Reservation>[]>([
 
 		<UTable
 			v-if="!pending"
+			:sorting="[{ id: 'time', desc: false }]"
+			:get-row-id="getRowId"
 			:data="data"
 			:columns="columns"
 			class="md:w-2/3 mx-auto mt-4"

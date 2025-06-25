@@ -3,8 +3,13 @@ import { DateFormatter, getLocalTimeZone, type DateValue } from "@internationali
 
 type DatePickerProps = {
 	modelValue?: DateValue;
-	isDateUnavailable?: (date: DateValue) => boolean;
 	placeholder?: string;
+};
+
+const { currentDate } = useCurrentDate();
+
+const isDateUnavailable = (date: DateValue) => {
+	return date.toDate(getLocalTimeZone()) < currentDate.value.toDate(getLocalTimeZone()) || date.toDate(getLocalTimeZone()) > currentDate.value.add({ days: 30 }).toDate(getLocalTimeZone()); ;
 };
 
 const props = withDefaults(defineProps<DatePickerProps>(), {
@@ -19,14 +24,21 @@ const df = new DateFormatter("sr-RS", {
 	dateStyle: "full",
 });
 
+const isPopoverOpen = ref(false);
+
 const dateValue = computed({
 	get: () => props.modelValue,
-	set: value => emit("update:modelValue", value),
+	set: (value) => {
+		emit("update:modelValue", value);
+		isPopoverOpen.value = false;
+	},
 });
 </script>
 
 <template>
-	<UPopover>
+	<UPopover
+		v-model:open="isPopoverOpen"
+	>
 		<UButton
 			color="neutral"
 			class="bg-white font-bold cursor-pointer md:py-2 md:px-4 min-w-48 justify-center"

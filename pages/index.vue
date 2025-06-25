@@ -18,31 +18,42 @@ const handleDateSelected = (date?: DateValue, location?: Location) => {
 </script>
 
 <template>
-	<div class="container mt-10 flex flex-col gap-10">
-		<HomeHeader @data-selected="handleDateSelected" />
+	<div class="flex flex-col gap-10">
+		<div class="container mt-10 flex flex-col gap-10">
+			<HomeHeader @data-selected="handleDateSelected" />
 
-		<Transition>
-			<HomeReservations
-				v-if="selectedDate && selectedLocation"
-				:key="`${selectedDate?.toString()}-${selectedLocation?.id}`"
-				:selected-date="selectedDate"
-				:selected-location="selectedLocation"
-			/>
-		</Transition>
+			<Transition>
+				<HomeReservations
+					v-if="selectedDate && selectedLocation"
+					:selected-date="selectedDate"
+					:selected-location="selectedLocation"
+				/>
+			</Transition>
+		</div>
+
+		<HomeHero />
 	</div>
 </template>
 
 <style scoped>
-.v-enter-active {
-	transition: opacity 0.5s ease;
-	transition-delay: 0.5s;
-}
+.v-enter-active,
 .v-leave-active {
-  transition: opacity 0.5s ease;
+  transition: all 0.5s ease-out;
+  overflow: hidden;
+}
+
+.v-enter-active {
+  transition-delay: 0.5s;
+}
+
+.v-leave-active {
+  transition-timing-function: ease-in;
 }
 
 .v-enter-from,
 .v-leave-to {
+  height: 0;
   opacity: 0;
+  transform: translateY(-10px);
 }
 </style>

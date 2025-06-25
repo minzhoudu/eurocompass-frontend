@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getLocalTimeZone, type DateValue } from "@internationalized/date";
+import type { DateValue } from "@internationalized/date";
 import type { Location } from "./types";
 
 const startValue = ref<DateValue>();
@@ -15,12 +15,6 @@ const { data: locations, error } = await useFetch<Location[]>("/apis/routes", {
 });
 
 const selectedLocation = ref<Location | undefined>(locations.value?.[0]);
-
-const { currentDate } = useCurrentDate();
-
-const isStartDateUnavailable = (date: DateValue) => {
-	return date.toDate(getLocalTimeZone()) < currentDate.value.toDate(getLocalTimeZone());
-};
 
 const emit = defineEmits<{
 	(e: "data-selected", date?: DateValue, location?: Location): void;
@@ -50,7 +44,6 @@ const emit = defineEmits<{
 		<AppDatePicker
 			v-if="!error"
 			v-model="startValue"
-			:is-date-unavailable="isStartDateUnavailable"
 			placeholder="Datum polaska"
 			@update:model-value="emit('data-selected', $event, selectedLocation)"
 		/>

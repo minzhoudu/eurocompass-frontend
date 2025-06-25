@@ -3,8 +3,13 @@ import { DateFormatter, getLocalTimeZone, type DateValue } from "@internationali
 
 type DatePickerProps = {
 	modelValue?: DateValue;
-	isDateUnavailable?: (date: DateValue) => boolean;
 	placeholder?: string;
+};
+
+const { currentDate } = useCurrentDate();
+
+const isDateUnavailable = (date: DateValue) => {
+	return date.toDate(getLocalTimeZone()) < currentDate.value.toDate(getLocalTimeZone()) || date.toDate(getLocalTimeZone()) > currentDate.value.add({ days: 30 }).toDate(getLocalTimeZone()); ;
 };
 
 const props = withDefaults(defineProps<DatePickerProps>(), {

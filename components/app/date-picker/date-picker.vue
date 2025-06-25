@@ -24,14 +24,21 @@ const df = new DateFormatter("sr-RS", {
 	dateStyle: "full",
 });
 
+const isPopoverOpen = ref(false);
+
 const dateValue = computed({
 	get: () => props.modelValue,
-	set: value => emit("update:modelValue", value),
+	set: (value) => {
+		emit("update:modelValue", value);
+		isPopoverOpen.value = false;
+	},
 });
 </script>
 
 <template>
-	<UPopover>
+	<UPopover
+		v-model:open="isPopoverOpen"
+	>
 		<UButton
 			color="neutral"
 			class="bg-white font-bold cursor-pointer md:py-2 md:px-4 min-w-48 justify-center"

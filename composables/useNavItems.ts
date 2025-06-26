@@ -1,6 +1,8 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
 
 export const useNavItems = () => {
+	const isAdmin = true;
+
 	return ref<NavigationMenuItem[][]>([[
 
 		{
@@ -19,9 +21,17 @@ export const useNavItems = () => {
 			icon: "i-lucide-user",
 			avatar: {
 				src: "https://github.com/minzhoudu.png",
+				alt: "P",
 				size: "sm",
 			},
 			children: [
+				...(isAdmin
+					? [{
+							label: "Admin Panel",
+							icon: "i-lucide-shield",
+							to: "/admin",
+						}]
+					: []),
 				{
 					label: "Profil",
 					icon: "i-lucide-user",

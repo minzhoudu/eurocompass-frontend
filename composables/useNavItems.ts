@@ -21,6 +21,7 @@ export const useNavItems = () => {
 			icon: "i-lucide-user",
 			avatar: {
 				src: "https://github.com/minzhoudu.png",
+				alt: "P",
 				size: "sm",
 			},
 			children: [

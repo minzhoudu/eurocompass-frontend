@@ -10,11 +10,17 @@ export const useUserStore = defineStore("user", () => {
 
 	const fetchUser = async () => {
 		try {
-			const { data } = await useFetch<User>("/apis/users/me", { credentials: "include" });
-			user.value = data.value;
+			if (import.meta.server) {
+				const { data } = await useFetch<User>("/apis/users/me", { credentials: "include" });
+				user.value = data.value;
+
+				return;
+			}
+
+			const data = await $fetch<User>("/apis/users/me", { credentials: "include" });
+			user.value = data;
 		}
-		catch (e) {
-			console.error(e);
+		catch {
 			user.value = null;
 		}
 	};

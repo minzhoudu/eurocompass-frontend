@@ -48,7 +48,7 @@ async function onSubmit(_event: FormSubmitEvent<LoginCredentialsSchema>) {
 }
 
 const googleLogin = () => {
-	window.location.href = 'http://localhost:8082/auth/google/login'
+	window.location.href = 'https://eurocompass.grimsoulcalculator.com/auth/google/login'
 }
 
 </script>

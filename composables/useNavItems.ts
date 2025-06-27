@@ -2,10 +2,10 @@ import type { NavigationMenuItem } from "@nuxt/ui";
 import { useUserStore } from "@/stores/auth";
 
 export const useNavItems = () => {
+	const route = useRoute();
+
 	const userStore = useUserStore();
-
 	const isAdmin = computed(() => userStore.user?.role === "ADMIN");
-
 	const isLoggedIn = computed(() => !!userStore.user);
 
 	return computed<NavigationMenuItem[][]>(() => {
@@ -39,6 +39,7 @@ export const useNavItems = () => {
 									label: "Admin Panel",
 									icon: "i-lucide-shield",
 									to: "/admin",
+									active: route.path.startsWith("/admin"),
 								},
 							]
 						: []),

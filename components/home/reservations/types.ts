@@ -46,3 +46,8 @@ export type Reservation = {
 	time: string;
 	actions: string;
 };
+
+export type SelectedSeats = {
+	seats: number[];
+	busNumber: number;
+};

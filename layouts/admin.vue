@@ -21,27 +21,15 @@ defineShortcuts({
 		<USlideover
 			v-model:open="isNavOpen"
 			title="Admin Panel"
+			description="Upravljački centar"
 			side="left"
-			:close="false"
+			close-icon="tabler:arrow-autofit-left-filled"
 			:ui="{
 				content: 'w-80',
 				body: 'sm:p-2',
+				title: 'text-2xl font-bold',
 			}"
 		>
-			<template #header>
-				<div class="flex justify-between items-center w-full">
-					<h1 class="text-2xl font-bold">
-						Admin Panel
-					</h1>
-					<UButton
-						icon="tabler:arrow-autofit-left-filled"
-						color="neutral"
-						variant="subtle"
-						@click="isNavOpen = false"
-					/>
-				</div>
-			</template>
-
 			<template #body>
 				<UNavigationMenu
 					orientation="vertical"

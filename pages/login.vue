@@ -2,6 +2,10 @@
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
 
+definePageMeta({
+	layout: "login",
+});
+
 const loginCredentialsSchema = z.object({
 	email: z.string().email("Invalid email"),
 	password: z.string().min(8, "Must be at least 8 characters"),

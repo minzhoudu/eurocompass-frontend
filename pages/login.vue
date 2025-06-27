@@ -46,6 +46,11 @@ async function onSubmit(_event: FormSubmitEvent<LoginCredentialsSchema>) {
 		});
 	}
 }
+
+const googleLogin = () => {
+	window.location.href = 'http://localhost:8082/auth/google/login'
+}
+
 </script>
 
 <template>
@@ -77,5 +82,9 @@ async function onSubmit(_event: FormSubmitEvent<LoginCredentialsSchema>) {
 				Submit
 			</UButton>
 		</UForm>
+
+		<UButton @click="googleLogin">
+			Google Login
+		</UButton>
 	</div>
 </template>

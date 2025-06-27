@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { Icon } from "#components";
 import type { ReservationSeatsRow, ReservationSlot } from "~/components/home/reservations/types";
+import { isDisabled, isSelected } from "~/utils/bus/seat-layout";
 
-const { rows, selectedSeats } = defineProps<{
+const { rows, selectedSeats, maxSeatsReached } = defineProps<{
 	rows: ReservationSeatsRow[];
 	selectedSeats: number[];
+	maxSeatsReached: boolean;
 }>();
 
 const emit = defineEmits<{
 	"update:selectedSeats": [value: number[]];
 }>();
 
-const toast = useToast();
-
-const MAX_SELECTED_SEATS = 2;
-
-const handleClick = (seat: ReservationSlot) => {
+const handleSelectSeat = (seat: ReservationSlot) => {
 	if (seat.type !== "FREE") return;
 
 	const index = selectedSeats.indexOf(seat.number);
@@ -26,28 +24,9 @@ const handleClick = (seat: ReservationSlot) => {
 		emit("update:selectedSeats", newSelectedSeats);
 		return;
 	}
-	if (selectedSeats.length >= MAX_SELECTED_SEATS) {
-		toast.add({
-			title: "Maksimalan broj rezervacija je 2",
-			color: "error",
-		});
-		return;
-	}
 
 	newSelectedSeats.push(seat.number);
 	emit("update:selectedSeats", newSelectedSeats);
-};
-
-const isSelected = (seat: ReservationSlot) => {
-	if (seat.type !== "FREE") return false;
-
-	return selectedSeats.includes(seat.number);
-};
-
-const isDisabled = (seat: ReservationSlot) => {
-	if (seat.type !== "FREE") return true;
-
-	return selectedSeats.length >= MAX_SELECTED_SEATS;
 };
 </script>
 
@@ -71,10 +50,10 @@ const isDisabled = (seat: ReservationSlot) => {
 						name="ic:round-event-seat"
 						class="cursor-pointer flex items-center justify-center w-12 h-12 rounded border sm:hover:bg-primary-300 transition-all duration-300"
 						:class="{
-							'bg-primary-300 scale-105': isSelected(seat),
-							'opacity-50 !cursor-not-allowed hover:!bg-current': isDisabled(seat) && !isSelected(seat),
+							'bg-primary-300 scale-105': isSelected(seat, selectedSeats),
+							'opacity-50 !cursor-not-allowed hover:!bg-current': isDisabled(seat, maxSeatsReached, selectedSeats) && !isSelected(seat, selectedSeats),
 						}"
-						@click="handleClick(seat)"
+						@click="handleSelectSeat(seat)"
 					/>
 
 					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>

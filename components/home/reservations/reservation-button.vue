@@ -1,19 +1,56 @@
 <script setup lang="ts">
-import type { Ride } from "./types";
+import type { TabsItem } from "@nuxt/ui";
+import type { Ride, SelectedSeats } from "./types";
+import { getSelectedSeatsForBus, getTotalSelectedSeats } from "~/utils/bus/reservation";
 
-defineProps<{
+const props = defineProps<{
 	label: string;
 	ride: Ride;
 }>();
 
 const isModalOpen = ref(false);
-const selectedSeats = ref<number[]>([]);
+const selectedSeats = ref<SelectedSeats[]>([]);
 
-const selectedBus = ref(0);
+const toast = useToast();
+const MAX_SELECTED_SEATS = 2;
 
 const handleCancel = () => {
 	isModalOpen.value = false;
 	selectedSeats.value = [];
+};
+
+const tabItems = computed<TabsItem[]>(() => {
+	return props.ride.buses.map(bus => ({
+		label: `Kola ${bus.busNumber}`,
+		value: bus.busNumber,
+	}));
+});
+
+const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
+	const existingIndex = selectedSeats.value.findIndex(item => item.busNumber === busNumber);
+	const currentBusSeats = existingIndex !== -1 ? selectedSeats.value[existingIndex].seats : [];
+	const otherBusesTotalSeats = getTotalSelectedSeats(selectedSeats.value) - currentBusSeats.length;
+
+	// Check if the new selection would exceed the maximum
+	if (seats.length + otherBusesTotalSeats > MAX_SELECTED_SEATS) {
+		toast.add({
+			title: "Maksimalan broj rezervacija je 2",
+			color: "error",
+		});
+		return;
+	}
+
+	if (existingIndex !== -1) {
+		if (seats.length === 0) {
+			selectedSeats.value.splice(existingIndex, 1);
+		}
+		else {
+			selectedSeats.value[existingIndex].seats = seats;
+		}
+	}
+	else if (seats.length > 0) {
+		selectedSeats.value.push({ busNumber, seats });
+	}
 };
 </script>
 
@@ -33,12 +70,22 @@ const handleCancel = () => {
 		/>
 
 		<template #body>
-			<div>
-				<AppBusSeatLayout
-					v-model:selected-seats="selectedSeats"
-					:rows="ride.buses[selectedBus].reservationSeatsRows"
-				/>
-			</div>
+			<UTabs
+				:default-value="ride.buses[0].busNumber"
+				:items="tabItems"
+				:ui="{
+					list: tabItems.length > 1 ? '' : 'max-w-1/2',
+				}"
+			>
+				<template #content="{ item }">
+					<AppBusSeatLayout
+						:selected-seats="getSelectedSeatsForBus(selectedSeats, item.value as number)"
+						:rows="ride.buses.find(bus => bus.busNumber === item.value)?.reservationSeatsRows ?? []"
+						:max-seats-reached="getTotalSelectedSeats(selectedSeats) >= MAX_SELECTED_SEATS"
+						@update:selected-seats="(seats) => updateSelectedSeatsForBus(item.value as number, seats)"
+					/>
+				</template>
+			</UTabs>
 		</template>
 
 		<template
@@ -55,7 +102,7 @@ const handleCancel = () => {
 				<UButton
 					label="Rezerviši"
 					class="cursor-pointer"
-					:disabled="selectedSeats.length === 0"
+					:disabled="getTotalSelectedSeats(selectedSeats) === 0"
 				/>
 			</div>
 		</template>

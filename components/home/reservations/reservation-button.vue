@@ -75,13 +75,13 @@ const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
 		<template #body>
 			<div
 				v-if="!authStore.user"
-				class="mb-4 text-center flex flex-col gap-2 justify-center items-center bg-warning-300 p-4 rounded-lg w-full"
+				class="mb-4 text-center flex flex-col gap-2 justify-center items-center bg-warning-300 p-4 rounded-lg"
 			>
 				<h2 class="text-2xl font-semibold text-primary">
-					Prijavite se
+					Prijavi se
 				</h2>
 
-				<p class="font-semibold w-10/12 text-left text-primary/70">
+				<p class="font-semibold w-10/12 text-left text-primary/70 text-sm md:text-base">
 					Da biste rezervisali sedište, morate biti prijavljeni na svoj nalog.
 				</p>
 

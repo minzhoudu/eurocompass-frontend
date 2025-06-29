@@ -6,6 +6,8 @@ type User = {
 };
 
 export const useAuthStore = defineStore("user", () => {
+	const config = useRuntimeConfig();
+
 	const user = ref<User | null>(null);
 
 	const fetchUser = async () => {
@@ -25,5 +27,19 @@ export const useAuthStore = defineStore("user", () => {
 		}
 	};
 
-	return { user, fetchUser };
+	const googleLogin = () => {
+		window.location.href = config.public.GOOGLE_LOGIN_URL;
+	};
+
+	const logOut = async () => {
+		try {
+			await $fetch("/apis/auth/logout", { credentials: "include" });
+			user.value = null;
+		}
+		catch (error) {
+			console.error(error);
+		}
+	};
+
+	return { user, fetchUser, logOut, googleLogin };
 });

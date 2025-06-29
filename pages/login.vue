@@ -1,15 +1,11 @@
 <script setup lang="ts">
-const config = useRuntimeConfig();
-
-const googleLogin = () => {
-	window.location.href = config.public.GOOGLE_LOGIN_URL;
-};
+const authStore = useAuthStore();
 
 const loginProviders = [
 	{
 		label: "Google",
 		icon: "flat-color-icons:google",
-		click: googleLogin,
+		click: authStore.googleLogin,
 	},
 ];
 

@@ -54,7 +54,8 @@ export const useNavItems = () => {
 						{
 							label: "Odjava",
 							icon: "i-lucide-log-out",
-						// to: "/logout",
+							onSelect: authStore.logOut,
+							class: "cursor-pointer",
 						},
 					],
 				}]

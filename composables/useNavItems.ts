@@ -5,6 +5,7 @@ export const useNavItems = () => {
 	const route = useRoute();
 
 	const userStore = useUserStore();
+	const isLoggedIn = computed(() => !!userStore.user);
 	const isAdmin = computed(() => userStore.user?.role === "ADMIN");
 
 	return computed<NavigationMenuItem[][]>(() => {
@@ -20,42 +21,48 @@ export const useNavItems = () => {
 			},
 		];
 
-		const userMenu: NavigationMenuItem[] = [{
-			label: userStore.user?.name || "Profil",
-			icon: "i-lucide-user",
-			avatar: {
-				src: userStore.user?.avatar,
-				alt: userStore.user?.name?.[0] || "U",
-				size: "sm",
-			},
-			children: [
-				...(isAdmin.value
-					? [
-							{
-								label: "Admin Panel",
-								icon: "i-lucide-shield",
-								to: "/admin",
-								active: route.path.startsWith("/admin"),
-							},
-						]
-					: []),
-				{
-					label: "Profil",
+		const userMenu: NavigationMenuItem[] = isLoggedIn.value
+			? [{
+					label: userStore.user?.name || "Profil",
 					icon: "i-lucide-user",
-					// to: "/profile",
-				},
-				{
-					label: "Settings",
-					icon: "i-lucide-settings",
-					// to: "/settings",
-				},
-				{
-					label: "Odjava",
-					icon: "i-lucide-log-out",
-					// to: "/logout",
-				},
-			],
-		}];
+					avatar: {
+						src: userStore.user?.avatar,
+						alt: userStore.user?.name?.[0] || "U",
+						size: "sm",
+					},
+					children: [
+						...(isAdmin.value
+							? [
+									{
+										label: "Admin Panel",
+										icon: "i-lucide-shield",
+										to: "/admin",
+										active: route.path.startsWith("/admin"),
+									},
+								]
+							: []),
+						{
+							label: "Profil",
+							icon: "i-lucide-user",
+						// to: "/profile",
+						},
+						{
+							label: "Settings",
+							icon: "i-lucide-settings",
+						// to: "/settings",
+						},
+						{
+							label: "Odjava",
+							icon: "i-lucide-log-out",
+						// to: "/logout",
+						},
+					],
+				}]
+			: [{
+					label: "Prijavi se",
+					icon: "i-lucide-log-in",
+					to: "/login",
+				}];
 
 		return [mainMenu, userMenu];
 	});

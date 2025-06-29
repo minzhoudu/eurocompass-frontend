@@ -18,9 +18,15 @@ export default defineNuxtConfig({
 		preference: "light",
 	},
 
+	runtimeConfig: {
+		public: {
+			GOOGLE_LOGIN_URL: process.env.PUBLIC_GOOGLE_LOGIN_URL,
+		},
+	},
+
 	routeRules: {
 		"/apis/**": {
-			proxy: "http://172.104.249.149:5533/**",
+			proxy: "https://eurocompass.grimsoulcalculator.com/**",
 		},
 	},
 	compatibilityDate: "2025-05-15",

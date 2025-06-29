@@ -1,7 +1,7 @@
 export default defineNuxtPlugin(async () => {
-	const userStore = useUserStore();
+	const authStore = useAuthStore();
 
-	if (!userStore.user) {
-		await userStore.fetchUser();
+	if (!authStore.user) {
+		await authStore.fetchUser();
 	}
 });

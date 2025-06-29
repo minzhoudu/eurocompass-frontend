@@ -1,12 +1,12 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
-import { useUserStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/auth";
 
 export const useNavItems = () => {
 	const route = useRoute();
 
-	const userStore = useUserStore();
-	const isLoggedIn = computed(() => !!userStore.user);
-	const isAdmin = computed(() => userStore.user?.role === "ADMIN");
+	const authStore = useAuthStore();
+	const isLoggedIn = computed(() => !!authStore.user);
+	const isAdmin = computed(() => authStore.user?.role === "ADMIN");
 
 	return computed<NavigationMenuItem[][]>(() => {
 		const mainMenu: NavigationMenuItem[] = [
@@ -23,11 +23,11 @@ export const useNavItems = () => {
 
 		const userMenu: NavigationMenuItem[] = isLoggedIn.value
 			? [{
-					label: userStore.user?.name || "Profil",
+					label: authStore.user?.name || "Profil",
 					icon: "i-lucide-user",
 					avatar: {
-						src: userStore.user?.avatar,
-						alt: userStore.user?.name?.[0] || "U",
+						src: authStore.user?.avatar,
+						alt: authStore.user?.name?.[0] || "U",
 						size: "sm",
 					},
 					children: [

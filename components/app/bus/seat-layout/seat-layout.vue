@@ -3,17 +3,30 @@ import { Icon } from "#components";
 import type { ReservationSeatsRow, ReservationSlot } from "~/components/home/reservations/types";
 import { isDisabled, isSelected } from "~/utils/bus/seat-layout";
 
-const { rows, selectedSeats, maxSeatsReached } = defineProps<{
+const { rows, selectedSeats, maxSeatsReached, disabled } = defineProps<{
 	rows: ReservationSeatsRow[];
 	selectedSeats: number[];
 	maxSeatsReached: boolean;
+	disabled: boolean;
 }>();
 
 const emit = defineEmits<{
 	"update:selectedSeats": [value: number[]];
 }>();
 
+const toast = useToast();
+
 const handleSelectSeat = (seat: ReservationSlot) => {
+	if (disabled) {
+		toast.add({
+			title: "Niste prijavljeni",
+			description: "Da biste rezervisali sedište, morate biti prijavljeni na svoj nalog.",
+			color: "warning",
+			icon: "i-lucide-alert-circle",
+		});
+		return;
+	};
+
 	if (seat.type !== "FREE") return;
 
 	const index = selectedSeats.indexOf(seat.number);
@@ -51,7 +64,7 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 						class="cursor-pointer flex items-center justify-center w-12 h-12 rounded border sm:hover:bg-primary-300 transition-all duration-300"
 						:class="{
 							'bg-primary-300 scale-105': isSelected(seat, selectedSeats),
-							'opacity-50 !cursor-not-allowed hover:!bg-current': isDisabled(seat, maxSeatsReached, selectedSeats) && !isSelected(seat, selectedSeats),
+							'opacity-50 !cursor-not-allowed hover:!bg-current': isDisabled(seat, maxSeatsReached, selectedSeats) && !isSelected(seat, selectedSeats) || disabled,
 						}"
 						@click="handleSelectSeat(seat)"
 					/>

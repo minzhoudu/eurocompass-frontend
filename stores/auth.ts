@@ -5,7 +5,7 @@ type User = {
 	avatar?: string;
 };
 
-export const useUserStore = defineStore("user", () => {
+export const useAuthStore = defineStore("user", () => {
 	const user = ref<User | null>(null);
 
 	const fetchUser = async () => {

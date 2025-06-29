@@ -1,90 +1,52 @@
 <script setup lang="ts">
-import * as z from "zod";
-import type { FormSubmitEvent } from "@nuxt/ui";
-
-const loginCredentialsSchema = z.object({
-	email: z.string().email("Invalid email"),
-	password: z.string().min(8, "Must be at least 8 characters"),
-});
-
-type LoginCredentialsSchema = z.output<typeof loginCredentialsSchema>;
-
-const state = reactive<Partial<LoginCredentialsSchema>>({
-	email: undefined,
-	password: undefined,
-});
-
-const userStore = useUserStore();
-
-const toast = useToast();
-async function onSubmit(_event: FormSubmitEvent<LoginCredentialsSchema>) {
-	try {
-		await $fetch("/apis/users/test", {
-			credentials: "include",
-		});
-
-		await userStore.fetchUser();
-
-		if (userStore.user) {
-			toast.add({
-				title: "Uspešno prijavljivanje",
-				description: `Zdravo, ${userStore.user.name || "korisniče"}!`,
-				color: "success",
-			});
-			navigateTo("/");
-		}
-		else {
-			throw new Error("Korisnik nije pronađen.");
-		}
-	}
-	catch (error) {
-		console.error(error);
-		toast.add({
-			title: "Greška",
-			description: "Došlo je do greške prilikom prijave. Pokušajte ponovno.",
-			color: "error",
-		});
-	}
-}
+const config = useRuntimeConfig();
 
 const googleLogin = () => {
-	window.location.href = 'https://eurocompass.grimsoulcalculator.com/auth/google/login'
-}
+	window.location.href = config.public.GOOGLE_LOGIN_URL;
+};
 
+const loginProviders = [
+	{
+		label: "Google",
+		icon: "flat-color-icons:google",
+		click: googleLogin,
+	},
+];
+
+const isSingleProvider = computed(() => loginProviders.length === 1);
 </script>
 
 <template>
-	<div class="flex flex-col items-center mt-20">
-		<UForm
-			:schema="loginCredentialsSchema"
-			:state="state"
-			class="space-y-4"
-			@submit="onSubmit"
-		>
-			<UFormField
-				label="Email"
-				name="email"
+	<div class="container h-[calc(100vh-10rem)] flex items-center justify-center">
+		<UCard class="bg-warning-300 divide-white w-full max-w-[700px]">
+			<template #header>
+				<div class="flex flex-col items-center">
+					<h2 class="text-xl md:text-2xl font-bold">
+						Login
+					</h2>
+				</div>
+			</template>
+
+			<div
+				class="grid gap-4 place-items-center"
+				:class="{ 'grid-cols-2': !isSingleProvider }"
 			>
-				<UInput v-model="state.email" />
-			</UFormField>
+				<UButton
+					v-for="provider in loginProviders"
+					:key="provider.label"
+					class="cursor-pointer px-5 py-2"
+					:icon="provider.icon"
+					@click="provider.click"
+				>
+					Google Login
+				</UButton>
+			</div>
 
-			<UFormField
-				label="Password"
-				name="password"
-			>
-				<UInput
-					v-model="state.password"
-					type="password"
-				/>
-			</UFormField>
-
-			<UButton type="submit">
-				Submit
-			</UButton>
-		</UForm>
-
-		<UButton @click="googleLogin">
-			Google Login
-		</UButton>
+			<template #footer>
+				<p class="text-center text-sm text-gray-500">
+					Trenutno je dostupan samo Google login.
+				</p>
+			</template>
+		</UCard>
 	</div>
 </template>

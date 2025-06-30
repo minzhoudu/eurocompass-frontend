@@ -2,7 +2,7 @@ type User = {
 	id: string;
 	name: string;
 	role: "ADMIN" | "USER";
-	avatar?: string;
+	picture?: string;
 };
 
 export const useAuthStore = defineStore("user", () => {

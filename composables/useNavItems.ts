@@ -26,7 +26,7 @@ export const useNavItems = () => {
 					label: authStore.user?.name || "Profil",
 					icon: "i-lucide-user",
 					avatar: {
-						src: authStore.user?.avatar,
+						src: authStore.user?.picture,
 						alt: authStore.user?.name?.[0] || "U",
 						size: "sm",
 					},

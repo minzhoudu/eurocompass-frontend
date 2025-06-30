@@ -26,7 +26,7 @@ export default defineNuxtConfig({
 
 	routeRules: {
 		"/apis/**": {
-			proxy: "https://eurocompass.grimsoulcalculator.com/**",
+			proxy: process.env.PUBLIC_API_HOST,
 		},
 	},
 	compatibilityDate: "2025-05-15",

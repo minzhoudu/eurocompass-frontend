@@ -27,7 +27,16 @@ defineProps<{
 				<p class="text-lg lg:text-xl">
 					Registracija:
 				</p>
-				<span class="text-primary text-xl lg:text-2xl rounded-sm px-2 border">{{ bus.registration }}</span>
+
+				<div class="flex items-center gap-2 rounded-sm pr-2 border h-full">
+					<div class="w-7 h-8 bg-blue-600 flex items-end justify-center px-4">
+						<p class="text-xs font-bold text-white">
+							SRB
+						</p>
+					</div>
+
+					<span class="text-primary text-xl lg:text-2xl tracking-wider">{{ bus.registration }}</span>
+				</div>
 			</div>
 
 			<div class="flex items-center gap-2 text-lg lg:text-xl">

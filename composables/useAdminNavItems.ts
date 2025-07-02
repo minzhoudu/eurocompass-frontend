@@ -10,7 +10,7 @@ export const useAdminNavItems = () => {
 		{
 			label: "Autobusi",
 			icon: "i-lucide-bus",
-			to: "/admin/autobusi",
+			to: "/admin/buses",
 		},
 	]);
 

@@ -27,8 +27,8 @@ export const useNavItems = () => {
 					icon: "i-lucide-user",
 					avatar: {
 						src: authStore.user?.picture,
-						alt: authStore.user?.name?.[0] || "U",
 						size: "sm",
+						icon: "i-lucide-user",
 					},
 					children: [
 						...(isAdmin.value

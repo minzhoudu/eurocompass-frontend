@@ -49,7 +49,7 @@ defineShortcuts({
 					icon="tabler:arrow-autofit-right-filled"
 					color="neutral"
 					variant="subtle"
-					class="absolute bottom-4 left-4"
+					class="absolute top-4 left-4"
 				/>
 			</UTooltip>
 		</USlideover>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from "@nuxt/ui";
+import type { BreadcrumbItem, FormSubmitEvent } from "@nuxt/ui";
 import { z } from "zod";
 
 import type { ExtendedBusInfo } from "~/components/buses/types";
@@ -7,6 +7,19 @@ import type { ExtendedBusInfo } from "~/components/buses/types";
 const route = useRoute();
 
 const { data: bus, pending } = await useLazyFetch<ExtendedBusInfo>(`/apis/buses/${route.params.busId}`);
+
+const breadcrumbs = computed<BreadcrumbItem[]>(() => {
+	return [
+		{
+			label: "Lista autobusa",
+			to: "/admin/buses",
+			icon: "tabler:arrow-back-up",
+		},
+		{
+			label: bus.value?.name ?? "",
+		},
+	];
+});
 
 const schema = z.object({
 	name: z.string().min(1),
@@ -30,32 +43,46 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-	<div class="container mt-10">
+	<div class="container mt-10 flex justify-center">
 		<template v-if="bus && !pending">
-			<UForm
-				:schema="schema"
-				:state="state"
-				class="space-y-4"
-				@submit="onSubmit"
-			>
-				<UFormField
-					label="Ime"
-					name="name"
-				>
-					<UInput v-model="state.name" />
-				</UFormField>
+			<div class="flex flex-col gap-10">
+				<UBreadcrumb
+					:items="breadcrumbs"
+					class="place-self-start"
+				/>
 
-				<UFormField
-					label="Registracija"
-					name="registration"
-				>
-					<UInput v-model="state.registration" />
-				</UFormField>
+				<div class="flex flex-col md:flex-row gap-20 items-center">
+					<UForm
+						:schema="schema"
+						:state="state"
+						class="space-y-4"
+						@submit="onSubmit"
+					>
+						<UFormField
+							label="Ime"
+							name="name"
+						>
+							<UInput v-model="state.name" />
+						</UFormField>
 
-				<UButton type="submit">
-					Submit
-				</UButton>
-			</UForm>
+						<UFormField
+							label="Registracija"
+							name="registration"
+						>
+							<UInput v-model="state.registration" />
+						</UFormField>
+
+						<UButton
+							type="submit"
+							class="cursor-pointer"
+						>
+							Sačuvaj promene
+						</UButton>
+					</UForm>
+
+					<BusesSeatLayout :rows="bus.layout.seatRows" />
+				</div>
+			</div>
 		</template>
 
 		<template v-else>

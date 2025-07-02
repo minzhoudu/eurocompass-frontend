@@ -1,8 +1,0 @@
-<template>
-	<div>
-		<h1 class="text-2xl font-bold mb-4">
-			Autobusi Management
-		</h1>
-		<p>This is the autobusi management page.</p>
-	</div>
-</template>

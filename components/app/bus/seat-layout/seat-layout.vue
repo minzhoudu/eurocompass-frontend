@@ -45,8 +45,6 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 
 <template>
 	<div class="grid grid-cols-5 gap-2 gap-x-0 place-items-center max-w-64 mx-auto">
-		<AppBusSeatLayoutDevider text="Gornji sprat" />
-
 		<template
 			v-for="(row, rowIndex) in rows"
 			:key="rowIndex"

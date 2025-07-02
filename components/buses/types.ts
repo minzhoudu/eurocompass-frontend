@@ -6,9 +6,9 @@ export type BaseBusInfo = {
 };
 
 export enum Type {
-	Free = "FREE",
-	Not = "NOT",
-	Stairs = "STAIRS",
+	FREE = "FREE",
+	NOT = "NOT",
+	STAIRS = "STAIRS",
 }
 
 export type Slot = {
@@ -18,7 +18,7 @@ export type Slot = {
 
 export type SeatRow = {
 	slots: Slot[];
-	dividerText?: string;
+	deviderText?: string;
 };
 
 export type Layout = {

@@ -5,6 +5,12 @@ const props = defineProps<{
 	busId: string;
 }>();
 
+const toast = useToast();
+
+const emit = defineEmits<{
+	(e: "bus:deleted"): void;
+}>();
+
 const actionItems: DropdownMenuItem[] = [
 	{
 		label: "Izmeni",
@@ -15,8 +21,30 @@ const actionItems: DropdownMenuItem[] = [
 		label: "Ukloni",
 		icon: "material-symbols:delete-outline",
 		color: "error",
-		onSelect: () => {
-			console.log(`Uklonjen je autobus ${props.busId}`);
+		onSelect: async () => {
+			try {
+				await $fetch(`/apis/buses/${props.busId}`, {
+					method: "DELETE",
+				});
+
+				toast.add({
+					title: "Autobus je uspešno uklonjen!",
+					color: "success",
+					icon: "i-heroicons-check-circle",
+				});
+
+				emit("bus:deleted");
+			}
+			catch (error) {
+				console.error(error);
+
+				toast.add({
+					title: "Greška!",
+					description: "Došlo je do greške prilikom uklanjanja autobusa!",
+					color: "error",
+					icon: "i-heroicons-x-circle",
+				});
+			}
 		},
 	},
 ];

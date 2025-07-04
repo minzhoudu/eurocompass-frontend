@@ -13,22 +13,22 @@ export const isDisabled = (seat: ReservationSlot, maxSeatsReached: boolean, sele
 	return maxSeatsReached && !isSelected(seat, selectedSeats);
 };
 
-export const createDevider = (deviderText: string) => {
+export const createDivider = (dividerText: string) => {
 	return {
 		slots: [],
-		deviderText,
+		dividerText,
 	};
 };
 
-export const handleUpdateDevider = (rows: SeatRow[], deviderText: string, options?: { firstRow: boolean }) => {
-	const deviderSlot = createDevider(deviderText);
+export const handleUpdateDivider = (rows: SeatRow[], dividerText: string, options?: { firstRow: boolean }) => {
+	const dividerSlot = createDivider(dividerText);
 
 	if (options?.firstRow) {
-		rows.unshift(deviderSlot);
+		rows.unshift(dividerSlot);
 		return;
 	}
 
-	rows.push(deviderSlot);
+	rows.push(dividerSlot);
 };
 
 const createRow = (seatsPerRow = 5) => ({
@@ -69,6 +69,10 @@ export const renumberSeats = (rows: SeatRow[]) => {
 	let seatNumber = 1;
 
 	rows.forEach((row) => {
+		if (row.dividerText) {
+			return;
+		}
+
 		row.slots.forEach((seat) => {
 			if (seat.type === Type.FREE) {
 				seat.number = seatNumber++;
@@ -78,4 +82,16 @@ export const renumberSeats = (rows: SeatRow[]) => {
 			}
 		});
 	});
+};
+
+export const getTotalSeats = (rows: SeatRow[]) => {
+	return rows.reduce((acc, row) => {
+		if (row.dividerText) {
+			return acc;
+		}
+
+		const freeSeats = row.slots.filter(slot => slot.type === Type.FREE).length;
+
+		return acc + freeSeats;
+	}, 0);
 };

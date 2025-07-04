@@ -103,7 +103,7 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 				/>
 			</div>
 
-			<AppBusSeatLayoutDevider
+			<AppBusSeatLayoutDivider
 				v-if="row.dividerText"
 				:text="row.dividerText"
 			/>

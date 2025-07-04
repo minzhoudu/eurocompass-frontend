@@ -5,7 +5,7 @@ import type { ExtendedBusInfo } from "~/components/buses/types";
 
 const route = useRoute();
 
-const { data: bus } = await useLazyFetch<ExtendedBusInfo>(`/apis/buses/${route.params.busId}`);
+const { data: bus, pending } = await useLazyFetch<ExtendedBusInfo>(`/apis/buses/${route.params.busId}`);
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 	return [
@@ -23,16 +23,26 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 
 <template>
 	<div class="container mt-10 flex justify-center">
-		<div class="flex flex-col gap-10">
+		<div
+			v-if="bus"
+			class="flex flex-col gap-10"
+		>
 			<UBreadcrumb
 				:items="breadcrumbs"
 				class="place-self-start"
 			/>
 
 			<BusesEditBus
-				v-if="bus"
+
 				:bus="bus"
 			/>
 		</div>
+
+		<USkeleton
+			v-if="pending"
+			class="h-32 w-full flex items-center justify-center font-bold text-xl md:text-2xl"
+		>
+			Učitavanje podataka...
+		</USkeleton>
 	</div>
 </template>

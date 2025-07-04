@@ -91,6 +91,11 @@ const isLastRowDivider = computed(() => {
 const isFirstRowDivider = computed(() => {
 	return rows.value[0].dividerText !== undefined;
 });
+
+const removeDevider = (dividerIndex: number) => {
+	handleDeleteDivider(rows.value, dividerIndex);
+	totalRows.value--;
+};
 </script>
 
 <template>
@@ -141,7 +146,7 @@ const isFirstRowDivider = computed(() => {
 				:is-first-row-divider="isFirstRowDivider"
 				@update:type="(type, rowIndex, seatIndex) => handleUpdateType(rows, type, rowIndex, seatIndex)"
 				@update:total-rows="totalRows++"
-				@delete:divider="dividerIndex => handleDeleteDivider(rows, dividerIndex)"
+				@delete:divider="dividerIndex => removeDevider(dividerIndex)"
 			/>
 		</div>
 	</div>

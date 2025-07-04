@@ -13,6 +13,7 @@ const emit = defineEmits<{
 	(e: "update:type", type: Type, rowIndex: number, seatIndex: number): void;
 	(e: "update:divider", text: string): void;
 	(e: "update:total-rows"): void;
+	(e: "delete:divider", dividerIndex: number): void;
 }>();
 </script>
 
@@ -100,6 +101,8 @@ const emit = defineEmits<{
 			<AppBusSeatLayoutDivider
 				v-if="row.dividerText"
 				:text="row.dividerText"
+				:divider-index="rowIndex"
+				@delete:divider="emit('delete:divider', rowIndex)"
 			/>
 		</template>
 

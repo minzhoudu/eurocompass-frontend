@@ -95,3 +95,7 @@ export const getTotalSeats = (rows: SeatRow[]) => {
 		return acc + freeSeats;
 	}, 0);
 };
+
+export function handleDeleteDivider(rows: SeatRow[], dividerIndex: number) {
+	rows.splice(dividerIndex, 1);
+}

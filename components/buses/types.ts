@@ -18,7 +18,7 @@ export type Slot = {
 
 export type SeatRow = {
 	slots: Slot[];
-	deviderText?: string;
+	dividerText?: string;
 };
 
 export type Layout = {

@@ -31,6 +31,8 @@ const rows = ref<SeatRow[]>([
 	},
 ]);
 
+const toast = useToast();
+
 const totalRows = ref(rows.value.length);
 
 const schema = z.object({
@@ -45,21 +47,46 @@ const state = reactive({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+	const totalSeats = rows.value.reduce((acc, row) => {
+		const freeSeats = row.slots.filter(slot => slot.type === Type.FREE).length;
+
+		return acc + freeSeats;
+	}, 0);
+
 	const payload = {
 		name: event.data.name,
 		registration: event.data.registration,
-		rows: toRaw(rows.value),
+		layout: {
+			seatRows: rows.value,
+			totalSeats,
+		},
 	};
 
-	console.log(payload);
+	try {
+		await $fetch("/apis/buses", {
+			method: "POST",
+			body: payload,
+		});
+
+		toast.add({
+			title: "Autobus je uspešno kreiran!",
+			color: "success",
+			icon: "i-heroicons-check-circle",
+		});
+
+		navigateTo("/admin/buses");
+	}
+	catch (error) {
+		console.error(error);
+	}
 }
 
-const isLastRowDevider = computed(() => {
-	return rows.value[rows.value.length - 1].deviderText !== undefined;
+const isLastRowDivider = computed(() => {
+	return rows.value[rows.value.length - 1].dividerText !== undefined;
 });
 
-const isFirstRowDevider = computed(() => {
-	return rows.value[0].deviderText !== undefined;
+const isFirstRowDivider = computed(() => {
+	return rows.value[0].dividerText !== undefined;
 });
 </script>
 
@@ -107,8 +134,8 @@ const isFirstRowDevider = computed(() => {
 			<BusesSeatLayout
 				:rows="rows"
 				:total-rows="totalRows"
-				:is-last-row-devider="isLastRowDevider"
-				:is-first-row-devider="isFirstRowDevider"
+				:is-last-row-divider="isLastRowDivider"
+				:is-first-row-divider="isFirstRowDivider"
 				@update:type="(type, rowIndex, seatIndex) => handleUpdateType(rows, type, rowIndex, seatIndex)"
 				@update:total-rows="totalRows++"
 			/>

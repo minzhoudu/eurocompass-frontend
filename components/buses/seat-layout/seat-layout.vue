@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { type SeatRow, Type } from "../types";
-import { handleUpdateDevider } from "~/utils/bus/seat-layout";
+import { handleUpdateDivider } from "~/utils/bus/seat-layout";
 
 defineProps<{
 	rows: SeatRow[];
 	totalRows: number;
-	isLastRowDevider: boolean;
-	isFirstRowDevider: boolean;
+	isLastRowDivider: boolean;
+	isFirstRowDivider: boolean;
 }>();
 
 const emit = defineEmits<{
 	(e: "update:type", type: Type, rowIndex: number, seatIndex: number): void;
-	(e: "update:devider", text: string): void;
+	(e: "update:divider", text: string): void;
 	(e: "update:total-rows"): void;
 }>();
 </script>
@@ -19,10 +19,10 @@ const emit = defineEmits<{
 <template>
 	<div class="grid grid-cols-5 gap-2 gap-x-0 place-items-center max-w-64 mx-auto">
 		<div
-			v-if="!isFirstRowDevider"
+			v-if="!isFirstRowDivider"
 			class="col-span-5 flex items-center justify-center"
 		>
-			<BusesSeatLayoutDeviderModal @update:devider="(text) => { handleUpdateDevider(rows, text, { firstRow: true }); emit('update:total-rows') }" />
+			<BusesSeatLayoutDividerModal @update:divider="(text) => { handleUpdateDivider(rows, text, { firstRow: true }); emit('update:total-rows') }" />
 		</div>
 
 		<template
@@ -97,17 +97,17 @@ const emit = defineEmits<{
 				</UPopover>
 			</div>
 
-			<AppBusSeatLayoutDevider
-				v-if="row.deviderText"
-				:text="row.deviderText"
+			<AppBusSeatLayoutDivider
+				v-if="row.dividerText"
+				:text="row.dividerText"
 			/>
 		</template>
 
 		<div
-			v-if="!isLastRowDevider"
+			v-if="!isLastRowDivider"
 			class="col-span-5 flex items-center justify-center"
 		>
-			<BusesSeatLayoutDeviderModal @update:devider="(text) => { handleUpdateDevider(rows, text); emit('update:total-rows') }" />
+			<BusesSeatLayoutDividerModal @update:divider="(text) => { handleUpdateDivider(rows, text); emit('update:total-rows') }" />
 		</div>
 	</div>
 </template>

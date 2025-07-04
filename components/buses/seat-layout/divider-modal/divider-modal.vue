@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const deviderText = ref("");
+const dividerText = ref("");
 
 const open = ref(false);
 
 const emit = defineEmits<{
-	(e: "update:devider", text: string): void;
+	(e: "update:divider", text: string): void;
 }>();
 </script>
 
@@ -25,15 +25,15 @@ const emit = defineEmits<{
 		<template #body>
 			<div class="flex gap-2 p-5">
 				<UInput
-					v-model="deviderText"
+					v-model="dividerText"
 					class="w-full"
 				/>
 
 				<UButton
 					label="Sačuvaj"
 					class="cursor-pointer"
-					:disabled="!deviderText"
-					@click="emit('update:devider', deviderText); open = false; deviderText = ''"
+					:disabled="!dividerText"
+					@click="emit('update:divider', dividerText); open = false; dividerText = ''"
 				/>
 			</div>
 		</template>

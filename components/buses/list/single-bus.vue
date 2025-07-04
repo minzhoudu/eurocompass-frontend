@@ -4,6 +4,10 @@ import type { BaseBusInfo } from "../types";
 defineProps<{
 	bus: BaseBusInfo;
 }>();
+
+const emit = defineEmits<{
+	(e: "bus:deleted"): void;
+}>();
 </script>
 
 <template>
@@ -18,7 +22,10 @@ defineProps<{
 					{{ bus.name }}
 				</h2>
 
-				<BusesListActionsMenu :bus-id="bus.id" />
+				<BusesListActionsMenu
+					:bus-id="bus.id"
+					@bus:deleted="emit('bus:deleted')"
+				/>
 			</div>
 		</template>
 

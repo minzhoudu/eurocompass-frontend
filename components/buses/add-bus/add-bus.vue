@@ -78,6 +78,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 	}
 	catch (error) {
 		console.error(error);
+
+		toast.add({
+			title: "Greška!",
+			description: "Došlo je do greške prilikom kreiranja autobusa!",
+			color: "error",
+			icon: "i-heroicons-x-circle",
+		});
 	}
 }
 

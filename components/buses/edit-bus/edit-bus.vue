@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
 import type { ExtendedBusInfo, SeatRow } from "../types";
-import { getTotalSeats, handleUpdateTotalRows, handleUpdateType } from "~/utils/bus/seat-layout";
+import { getTotalSeats, handleDeleteDivider, handleUpdateTotalRows, handleUpdateType } from "~/utils/bus/seat-layout";
 
 const props = defineProps<{
 	bus: ExtendedBusInfo;
@@ -70,6 +70,11 @@ const isLastRowDivider = computed(() => {
 const isFirstRowDivider = computed(() => {
 	return rows.value[0].dividerText !== undefined;
 });
+
+const removeDevider = (dividerIndex: number) => {
+	handleDeleteDivider(rows.value, dividerIndex);
+	totalRows.value--;
+};
 </script>
 
 <template>
@@ -120,6 +125,7 @@ const isFirstRowDivider = computed(() => {
 				:is-first-row-divider="isFirstRowDivider"
 				@update:type="(type, rowIndex, seatIndex) => handleUpdateType(rows, type, rowIndex, seatIndex)"
 				@update:total-rows="totalRows++"
+				@delete:divider="dividerIndex => removeDevider(dividerIndex)"
 			/>
 		</div>
 	</div>

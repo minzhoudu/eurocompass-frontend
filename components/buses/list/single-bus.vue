@@ -42,7 +42,7 @@ const emit = defineEmits<{
 						</p>
 					</div>
 
-					<span class="text-primary text-xl lg:text-2xl tracking-wider">{{ bus.registration }}</span>
+					<span class="text-primary text-lg tracking-wide">{{ bus.registration }}</span>
 				</div>
 			</div>
 

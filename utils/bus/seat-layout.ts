@@ -69,6 +69,10 @@ export const renumberSeats = (rows: SeatRow[]) => {
 	let seatNumber = 1;
 
 	rows.forEach((row) => {
+		if (row.dividerText) {
+			return;
+		}
+
 		row.slots.forEach((seat) => {
 			if (seat.type === Type.FREE) {
 				seat.number = seatNumber++;
@@ -78,4 +82,16 @@ export const renumberSeats = (rows: SeatRow[]) => {
 			}
 		});
 	});
+};
+
+export const getTotalSeats = (rows: SeatRow[]) => {
+	return rows.reduce((acc, row) => {
+		if (row.dividerText) {
+			return acc;
+		}
+
+		const freeSeats = row.slots.filter(slot => slot.type === Type.FREE).length;
+
+		return acc + freeSeats;
+	}, 0);
 };

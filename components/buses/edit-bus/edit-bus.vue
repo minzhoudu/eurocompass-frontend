@@ -1,39 +1,15 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { z } from "zod";
-import { Type, type SeatRow } from "../types";
+import * as z from "zod";
+import type { ExtendedBusInfo, SeatRow } from "../types";
 import { getTotalSeats, handleUpdateTotalRows, handleUpdateType } from "~/utils/bus/seat-layout";
 
-const rows = ref<SeatRow[]>([
-	{
-		slots: [
-			{
-				type: Type.FREE,
-				number: 1,
-			},
-			{
-				type: Type.FREE,
-				number: 2,
-			},
-			{
-				type: Type.FREE,
-				number: 3,
-			},
-			{
-				type: Type.FREE,
-				number: 4,
-			},
-			{
-				type: Type.FREE,
-				number: 5,
-			},
-		],
-	},
-]);
+const props = defineProps<{
+	bus: ExtendedBusInfo;
+}>();
 
-const toast = useToast();
-
-const totalRows = ref(rows.value.length);
+const rows = ref<SeatRow[]>(props.bus.layout.seatRows);
+const totalRows = ref(props.bus.layout.seatRows.length);
 
 const schema = z.object({
 	name: z.string().min(1, "Morate uneti naziv autobusa!"),
@@ -42,14 +18,17 @@ const schema = z.object({
 type Schema = z.output<typeof schema>;
 
 const state = reactive({
-	name: "",
-	registration: "",
+	name: props.bus.name,
+	registration: props.bus.registration,
 });
+
+const toast = useToast();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
 	const totalSeats = getTotalSeats(rows.value);
 
 	const payload = {
+		id: props.bus.id,
 		name: event.data.name,
 		registration: event.data.registration,
 		layout: {
@@ -59,13 +38,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 	};
 
 	try {
-		await $fetch("/apis/buses", {
+		await $fetch(`/apis/buses/edit`, {
 			method: "POST",
 			body: payload,
 		});
 
 		toast.add({
-			title: "Autobus je uspešno kreiran!",
+			title: "Uspešno ste sačuvali promene!",
 			color: "success",
 			icon: "i-heroicons-check-circle",
 		});
@@ -77,7 +56,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
 		toast.add({
 			title: "Greška!",
-			description: "Došlo je do greške prilikom kreiranja autobusa!",
+			description: "Došlo je do greške prilikom čuvanja promena!",
 			color: "error",
 			icon: "i-heroicons-x-circle",
 		});
@@ -119,7 +98,7 @@ const isFirstRowDivider = computed(() => {
 				type="submit"
 				class="cursor-pointer w-full justify-center"
 			>
-				Dodaj autobus
+				Sačuvaj promene
 			</UButton>
 		</UForm>
 

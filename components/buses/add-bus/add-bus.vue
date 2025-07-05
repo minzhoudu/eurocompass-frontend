@@ -33,6 +33,8 @@ const rows = ref<SeatRow[]>([
 
 const toast = useToast();
 
+const isPendingSubmit = ref(false);
+
 const totalRows = ref(rows.value.length);
 
 const schema = z.object({
@@ -47,6 +49,8 @@ const state = reactive({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+	isPendingSubmit.value = true;
+
 	const totalSeats = getTotalSeats(rows.value);
 
 	const payload = {
@@ -81,6 +85,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 			color: "error",
 			icon: "i-heroicons-x-circle",
 		});
+	}
+	finally {
+		isPendingSubmit.value = false;
 	}
 }
 
@@ -123,6 +130,7 @@ const removeDevider = (dividerIndex: number) => {
 			<UButton
 				type="submit"
 				class="cursor-pointer w-full justify-center"
+				:loading="isPendingSubmit"
 			>
 				Dodaj autobus
 			</UButton>

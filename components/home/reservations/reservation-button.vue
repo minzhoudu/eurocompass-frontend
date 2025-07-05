@@ -29,6 +29,10 @@ const tabItems = computed<TabsItem[]>(() => {
 	}));
 });
 
+const emit = defineEmits<{
+	(e: "reservation:success"): void;
+}>();
+
 const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
 	const existingIndex = selectedSeats.value.findIndex(item => item.busNumber === busNumber);
 	const currentBusSeats = existingIndex !== -1 ? selectedSeats.value[existingIndex].seats : [];
@@ -81,6 +85,7 @@ const handleReserve = async () => {
 			color: "success",
 		});
 
+		emit("reservation:success");
 		handleCancel();
 	}
 	catch {

@@ -70,21 +70,17 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
 				</div>
 
-				<UTooltip
+				<div
 					v-else-if="seat.type === 'OCCUPIED'"
-					:text="seat.reservationData.name"
-					:content="{ side: 'top' }"
-					:delay-duration="0"
+					class="relative flex items-center justify-center"
 				>
-					<div class="relative flex items-center justify-center">
-						<Icon
-							name="ic:round-event-seat"
-							class="cursor-not-allowed flex items-center justify-center w-12 h-12 bg-red-300 rounded text-white scale-95"
-						/>
+					<Icon
+						name="ic:round-event-seat"
+						class="cursor-not-allowed flex items-center justify-center w-12 h-12 bg-red-300 rounded text-white scale-95"
+					/>
 
-						<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
-					</div>
-				</UTooltip>
+					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
+				</div>
 
 				<div
 					v-else-if="seat.type === 'STAIRS'"

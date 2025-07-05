@@ -34,7 +34,6 @@ const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
 	const currentBusSeats = existingIndex !== -1 ? selectedSeats.value[existingIndex].seats : [];
 	const otherBusesTotalSeats = getTotalSelectedSeats(selectedSeats.value) - currentBusSeats.length;
 
-	// Check if the new selection would exceed the maximum
 	if (seats.length + otherBusesTotalSeats > MAX_SELECTED_SEATS) {
 		toast.add({
 			title: "Maksimalan broj rezervacija je 2",
@@ -53,6 +52,43 @@ const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
 	}
 	else if (seats.length > 0) {
 		selectedSeats.value.push({ busNumber, seats });
+	}
+};
+
+const handleReserve = async () => {
+	const seatsNotChosen = selectedSeats.value.length === 0;
+
+	if (seatsNotChosen) {
+		toast.add({
+			title: "Morate izabrati sedišta",
+			color: "error",
+		});
+
+		return;
+	}
+
+	try {
+		await $fetch("/apis/users/reserve", {
+			method: "POST",
+			body: {
+				reservations: selectedSeats.value,
+				rideId: props.ride.id,
+			},
+		});
+
+		toast.add({
+			title: "Rezervacija je uspešna",
+			color: "success",
+		});
+
+		handleCancel();
+	}
+	catch {
+		toast.add({
+			title: "Greška prilikom rezervacije",
+			description: "Molimo pokušajte ponovo kasnije",
+			color: "error",
+		});
 	}
 };
 </script>
@@ -127,6 +163,7 @@ const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
 					label="Rezerviši"
 					class="cursor-pointer"
 					:disabled="getTotalSelectedSeats(selectedSeats) === 0 || !authStore.user"
+					@click="handleReserve"
 				/>
 			</div>
 		</template>

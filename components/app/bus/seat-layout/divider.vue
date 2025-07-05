@@ -1,8 +1,11 @@
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
 	text: string;
 	dividerIndex: number;
-}>();
+	deleteButton?: boolean;
+}>(), {
+	deleteButton: false,
+});
 
 const showDeleteButton = ref(false);
 
@@ -14,9 +17,9 @@ const emit = defineEmits<{
 <template>
 	<div
 		class="w-full col-span-5 flex items-center justify-center gap-2 p-2 h-10"
-		@click="showDeleteButton = !showDeleteButton"
-		@mouseenter="showDeleteButton = true"
-		@mouseleave="showDeleteButton = false"
+		@click="deleteButton ? showDeleteButton = !showDeleteButton : null"
+		@mouseenter="deleteButton ? showDeleteButton = true : null"
+		@mouseleave="deleteButton ? showDeleteButton = false : null"
 	>
 		<div class="bg-black h-0.5 w-full" />
 
@@ -26,6 +29,7 @@ const emit = defineEmits<{
 		>{{ text }}</span>
 
 		<UButton
+			v-if="deleteButton"
 			icon="tabler:trash"
 			size="xs"
 			color="error"

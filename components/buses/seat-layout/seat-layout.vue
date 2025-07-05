@@ -100,6 +100,7 @@ const emit = defineEmits<{
 
 			<AppBusSeatLayoutDivider
 				v-if="row.dividerText"
+				:delete-button="true"
 				:text="row.dividerText"
 				:divider-index="rowIndex"
 				@delete:divider="emit('delete:divider', rowIndex)"

@@ -76,7 +76,7 @@ const handleDeleteBus = async () => {
 				icon="material-symbols:delete-outline"
 				color="error"
 				variant="ghost"
-				class="cursor-pointer w-full"
+				class="cursor-pointer w-full px-0"
 				@click="isDeleteModalOpen = true"
 			/>
 		</template>

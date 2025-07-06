@@ -3,6 +3,8 @@ import { Icon } from "#components";
 import type { ReservationSeatsRow, ReservationSlot } from "~/components/home/reservations/types";
 import { isDisabled, isSelected } from "~/utils/bus/seat-layout";
 
+const authStore = useAuthStore();
+
 const { rows, selectedSeats, maxSeatsReached, disabled } = defineProps<{
 	rows: ReservationSeatsRow[];
 	selectedSeats: number[];
@@ -76,7 +78,11 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 				>
 					<Icon
 						name="ic:round-event-seat"
-						class="cursor-not-allowed flex items-center justify-center w-12 h-12 bg-red-300 rounded text-white scale-95"
+						class="cursor-not-allowed flex items-center justify-center w-12 h-12 rounded text-white scale-95"
+						:class="{
+							'bg-secondary-500': seat.reservationData.userId === authStore.user?.id,
+							'bg-red-300': seat.reservationData.userId !== authStore.user?.id,
+						}"
 					/>
 
 					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>

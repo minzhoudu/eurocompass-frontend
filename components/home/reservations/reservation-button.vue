@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TabsItem } from "@nuxt/ui";
-import type { Ride, SelectedSeats } from "./types";
+import type { Ride } from "./types";
 import { getSelectedSeatsForBus, getTotalSelectedSeats } from "~/utils/bus/reservation";
 
 const props = defineProps<{
@@ -10,16 +10,7 @@ const props = defineProps<{
 
 const authStore = useAuthStore();
 
-const isModalOpen = ref(false);
-const selectedSeats = ref<SelectedSeats[]>([]);
-
-const toast = useToast();
-const MAX_SELECTED_SEATS = 2;
-
-const handleCancel = () => {
-	isModalOpen.value = false;
-	selectedSeats.value = [];
-};
+const { isModalOpen, selectedSeats, reserveSeats, handleCancelReservation, MAX_SELECTED_SEATS, updateSelectedSeatsForBus } = useReservations(props.ride.id);
 
 const tabItems = computed<TabsItem[]>(() => {
 	return props.ride.buses.map(bus => ({
@@ -33,70 +24,9 @@ const emit = defineEmits<{
 	(e: "reservation:success"): void;
 }>();
 
-const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
-	const existingIndex = selectedSeats.value.findIndex(item => item.busNumber === busNumber);
-	const currentBusSeats = existingIndex !== -1 ? selectedSeats.value[existingIndex].seats : [];
-	const otherBusesTotalSeats = getTotalSelectedSeats(selectedSeats.value) - currentBusSeats.length;
-
-	if (seats.length + otherBusesTotalSeats > MAX_SELECTED_SEATS) {
-		toast.add({
-			title: "Maksimalan broj rezervacija je 2",
-			color: "error",
-		});
-		return;
-	}
-
-	if (existingIndex !== -1) {
-		if (seats.length === 0) {
-			selectedSeats.value.splice(existingIndex, 1);
-		}
-		else {
-			selectedSeats.value[existingIndex].seats = seats;
-		}
-	}
-	else if (seats.length > 0) {
-		selectedSeats.value.push({ busNumber, seats });
-	}
-};
-
 const handleReserve = async () => {
-	const seatsNotChosen = selectedSeats.value.length === 0;
-
-	if (seatsNotChosen) {
-		toast.add({
-			title: "Morate izabrati sedišta",
-			color: "error",
-		});
-
-		return;
-	}
-
-	try {
-		await $fetch("/apis/users/reserve", {
-			method: "POST",
-			body: {
-				reservations: selectedSeats.value,
-				rideId: props.ride.id,
-			},
-		});
-
-		toast.add({
-			title: "Rezervacija je uspešna",
-			color: "success",
-		});
-
-		handleCancel();
-	}
-	catch {
-		toast.add({
-			title: "Greška prilikom rezervacije",
-			description: "Molimo pokušajte ponovo kasnije",
-			color: "error",
-		});
-	}
-	finally {
-		emit("reservation:success");
-	}
+	await reserveSeats();
+	emit("reservation:success");
 };
 </script>
 
@@ -148,8 +78,8 @@ const handleReserve = async () => {
 						:disabled="!!item.disabled"
 						:selected-seats="getSelectedSeatsForBus(selectedSeats, item.value as number)"
 						:rows="ride.buses.find(bus => bus.busNumber === item.value)?.reservationSeatsRows ?? []"
-						:max-seats-reached="getTotalSelectedSeats(selectedSeats) >= MAX_SELECTED_SEATS"
-						@update:selected-seats="(seats) => updateSelectedSeatsForBus(item.value as number, seats)"
+						:max-seats-reached="getTotalSelectedSeats(selectedSeats, ride.buses, authStore.user?.id) >= MAX_SELECTED_SEATS"
+						@update:selected-seats="(seats) => updateSelectedSeatsForBus(ride.buses, item.value as number, seats, authStore.user?.id)"
 					/>
 				</template>
 			</UTabs>
@@ -164,12 +94,12 @@ const handleReserve = async () => {
 					variant="outline"
 					color="error"
 					class="cursor-pointer"
-					@click="handleCancel"
+					@click="handleCancelReservation"
 				/>
 				<UButton
 					label="Rezerviši"
 					class="cursor-pointer"
-					:disabled="getTotalSelectedSeats(selectedSeats) === 0 || !authStore.user"
+					:disabled="getTotalSelectedSeats(selectedSeats, ride.buses, authStore.user?.id) === 0 || !authStore.user"
 					@click="handleReserve"
 				/>
 			</div>

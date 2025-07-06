@@ -17,9 +17,10 @@ export type ReservationSlot = {
 };
 
 export type ReservationData = {
-	id?: string;
+	userId?: string;
 	name: string;
-	phone?: string;
+	lastName?: string;
+	phone: string;
 };
 
 export type ReservationSeatsRow = {

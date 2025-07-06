@@ -13,7 +13,7 @@ const emit = defineEmits<{
 <template>
 	<UCard
 		:ui="{
-			header: 'bg-warning-300',
+			header: 'bg-warning-300 rounded-t-lg',
 		}"
 	>
 		<template #header>

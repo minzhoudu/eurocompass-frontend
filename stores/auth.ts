@@ -1,6 +1,8 @@
 type User = {
 	id: string;
 	name: string;
+	lastName?: string;
+	phone?: string;
 	role: "ADMIN" | "USER";
 	picture?: string;
 };

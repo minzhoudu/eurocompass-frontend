@@ -9,7 +9,7 @@ const props = defineProps<{
 	selectedLocation: Location;
 }>();
 
-const { data: rides, pending } = await useFetch<Ride[]>("apis/rides/getride", {
+const { data: rides, pending, refresh: refreshRides } = await useFetch<Ride[]>("apis/rides/getride", {
 	method: "POST",
 	body: computed(() => ({
 		date: props.selectedDate.toString(),
@@ -95,8 +95,11 @@ const columns = ref<TableColumn<Reservation>[]>([
 			const currentRide = rides.value?.find((ride: Ride) => ride.id === row.original.id);
 
 			return h(ReservationButton, {
-				label: cell.getValue(),
-				ride: currentRide,
+				"label": cell.getValue(),
+				"ride": currentRide,
+				"onReservation:success": () => {
+					refreshRides();
+				},
 			});
 		},
 	},

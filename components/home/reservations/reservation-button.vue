@@ -85,7 +85,6 @@ const handleReserve = async () => {
 			color: "success",
 		});
 
-		emit("reservation:success");
 		handleCancel();
 	}
 	catch {
@@ -94,6 +93,9 @@ const handleReserve = async () => {
 			description: "Molimo pokušajte ponovo kasnije",
 			color: "error",
 		});
+	}
+	finally {
+		emit("reservation:success");
 	}
 };
 </script>

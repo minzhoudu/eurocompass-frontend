@@ -33,7 +33,7 @@ const mapTimetable = (timetable: Timetable): TreeItem[] => {
 
 	for (const [key, value] of Object.entries(timetable)) {
 		timetableItems.push({
-			label: new Date(key).toLocaleDateString("sr-Latn-RS", { day: "2-digit", month: "short", year: "numeric" }),
+			label: key,
 			icon: "material-symbols:calendar-month-rounded",
 			children: value.map(ride => ({
 				label: new Date(ride.departure).toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" }),

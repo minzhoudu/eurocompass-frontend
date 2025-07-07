@@ -8,7 +8,7 @@ const { data: buses, pending: busesPending } = await useLazyFetch<BaseBusInfo[]>
 </script>
 
 <template>
-	<div class="flex items-center flex-col gap-10 w-full">
+	<div class="flex items-center flex-col gap-10 lg:gap-30 w-full">
 		<div class="bg-warning-300 px-5 py-2 rounded-lg">
 			<h1 class="text-2xl font-bold">
 				Podešavanje linija

@@ -7,10 +7,6 @@ export const useReservations = (rideId: string) => {
 	const isModalOpen = ref(false);
 	const selectedSeats = ref<SelectedSeats[]>([]);
 
-	watch(selectedSeats, (newVal) => {
-		console.log(newVal);
-	});
-
 	const toast = useToast();
 
 	const handleCancelReservation = () => {

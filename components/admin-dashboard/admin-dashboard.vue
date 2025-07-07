@@ -17,6 +17,7 @@ const { data: buses, pending: busesPending } = await useLazyFetch<BaseBusInfo[]>
 				v-model:expanded="expandedRoutes"
 				:items="getTreeItems(route)"
 				class="border rounded-lg w-full lg:w-[500px]"
+				:ui="{ listWithChildren: 'border-warning-300' }"
 			>
 				<template #bus-item="{ item }: { item: {bus: ExtendedBus} }">
 					<UTooltip

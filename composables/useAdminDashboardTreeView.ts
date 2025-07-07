@@ -61,10 +61,6 @@ export const useAdminDashboardTreeView = async () => {
 
 	const expandedRoutes = ref<string[]>([]);
 
-	watchEffect(() => {
-		console.log(expandedRoutes.value);
-	});
-
 	const getTreeItems = (route: Route): TreeItem[] => {
 		if (!route) return [];
 

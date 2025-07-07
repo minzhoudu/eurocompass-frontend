@@ -29,13 +29,14 @@ export type ReservationSeatsRow = {
 };
 
 export type Bus = {
+	id: string;
 	busNumber: number;
 	reservationSeatsRows: ReservationSeatsRow[];
 };
 
 export type Ride = {
 	buses: Bus[];
-	departure: number;
+	departure: Date;
 	id: string;
 	routeId: string;
 };

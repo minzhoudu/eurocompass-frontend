@@ -1,0 +1,71 @@
+<script setup lang="ts">
+import type { BaseBusInfo } from "../buses/types";
+import type { ExtendedBus } from "~/composables/useAdminDashboardTreeView";
+
+const { routesWithRides, getTreeItems, refetchGetRides, expandedRoutes } = await useAdminDashboardTreeView();
+
+const { data: buses, pending: busesPending } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
+</script>
+
+<template>
+	<div class="grid grid-cols-1 lg:grid-cols-2 w-full lg:justify-around gap-x-5 lg:gap-x-0 gap-y-10 lg:gap-y-30 lg:justify-items-center">
+		<div
+			v-for="route in routesWithRides"
+			:key="route.id"
+		>
+			<UTree
+				v-model:expanded="expandedRoutes"
+				:items="getTreeItems(route)"
+				class="border rounded-lg w-full lg:w-[500px]"
+			>
+				<template #bus-item="{ item }: { item: {bus: ExtendedBus} }">
+					<UTooltip
+						:content="{ side: 'top' }"
+						:delay-duration="0"
+						:ui="{
+							content: 'bg-primary',
+						}"
+					>
+						<div class="flex flex-col gap-2 w-full">
+							<div class="bg-primary text-white/90 px-2 py-1 rounded flex justify-between items-center lg:gap-5 font-bold">
+								<Icon
+									name="lucide:bus"
+									size="20"
+								/>
+
+								<p>
+									{{ item.bus.name }}
+								</p>
+								<p>Slobodnih mesta - {{ item.bus.freeSeats }}</p>
+
+								<UButton
+									size="xs"
+									class="py-0.5 cursor-pointer"
+									variant="outline"
+									color="neutral"
+									icon="material-symbols:delete-outline"
+								/>
+							</div>
+						</div>
+
+						<template #content>
+							<div class="flex flex-col gap-2 text-white/90 px-2 py-1 rounded">
+								<p>Registracija: <span class="font-bold">{{ item.bus.registration }}</span></p>
+							</div>
+						</template>
+					</UTooltip>
+				</template>
+
+				<template #add-bus-item="{ item }: { item: { rideId: string } }">
+					<AdminDashboardAddBusSelector
+						v-if="buses"
+						:buses="buses"
+						:buses-loading="busesPending"
+						:ride-id="item.rideId"
+						@bus-added="refetchGetRides"
+					/>
+				</template>
+			</UTree>
+		</div>
+	</div>
+</template>

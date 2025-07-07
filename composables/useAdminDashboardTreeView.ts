@@ -39,7 +39,7 @@ const mapTimetable = (timetable: Timetable, routeId: string): TreeItem[] => {
 			icon: "material-symbols:calendar-month-rounded",
 			children: value.map(ride => ({
 				label: new Date(ride.departure).toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" }),
-				class: "font-semibold",
+				class: "font-semibold border-t border-black/30",
 				icon: "material-symbols:alarm",
 				children: [...ride.buses.map(bus => ({
 					bus,

@@ -67,6 +67,8 @@ export const useAdminDashboardTreeView = async () => {
 	const getTreeItems = (route: Route): TreeItem[] => {
 		if (!route) return [];
 
+		expandedRoutes.value.push(`${route.from} - ${route.to}`);
+
 		return [{
 			label: route.from + " - " + route.to,
 			class: "bg-warning-300 rounded-lg py-2 font-semibold md:text-lg",

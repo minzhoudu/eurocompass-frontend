@@ -15,6 +15,7 @@ const busItems = computed(() => {
 });
 
 const selectedBus = ref<{ label: string; value: string }>();
+const loadingAddBus = ref(false);
 
 const toast = useToast();
 
@@ -24,6 +25,7 @@ const emit = defineEmits<{
 
 const handleAddBus = async () => {
 	try {
+		loadingAddBus.value = true;
 		await $fetch("/apis/rides/addBus", {
 			method: "post",
 			body: {
@@ -40,6 +42,8 @@ const handleAddBus = async () => {
 		emit("busAdded");
 	}
 	catch (error) {
+		loadingAddBus.value = false;
+
 		console.error(error);
 
 		toast.add({
@@ -63,6 +67,7 @@ const handleAddBus = async () => {
 
 		<UButton
 			:disabled="!selectedBus"
+			:loading="loadingAddBus"
 			@click="handleAddBus"
 		>
 			Dodaj

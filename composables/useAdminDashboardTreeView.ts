@@ -13,7 +13,8 @@ export type ExtendedRide = Ride & {
 };
 
 type Timetable = {
-	[key: string]: ExtendedRide[];
+	date: string;
+	rides: ExtendedRide[];
 };
 
 type Route = {
@@ -21,23 +22,24 @@ type Route = {
 	from: string;
 	to: string;
 	searchableName: string;
-	timetable: Timetable;
+	timetable: Timetable[] | null;
 };
 
 type Routes = {
 	routes: Route[];
 };
 
-const mapTimetable = (timetable: Timetable, routeId: string): TreeItem[] => {
-	const timetableItems: TreeItem[] = [];
+const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[] => {
+	if (!timetable) return [];
 
-	for (const [key, value] of Object.entries(timetable)) {
-		timetableItems.push({
-			value: `${key}-${routeId}`,
-			label: key,
+	return timetable.map((table) => {
+		return {
+			value: `${table.date}-${routeId}`,
+			label: table.date,
 			class: "font-bold",
 			icon: "material-symbols:calendar-month-rounded",
-			children: value.map(ride => ({
+			children: table.rides.map(ride => ({
+				value: ride.id,
 				label: new Date(ride.departure).toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" }),
 				class: "font-semibold border-t border-black/30",
 				icon: "material-symbols:alarm",
@@ -50,10 +52,8 @@ const mapTimetable = (timetable: Timetable, routeId: string): TreeItem[] => {
 					slot: "add-bus-item",
 				}],
 			})),
-		});
-	}
-
-	return timetableItems;
+		};
+	});
 };
 
 export const useAdminDashboardTreeView = async () => {
@@ -67,7 +67,10 @@ export const useAdminDashboardTreeView = async () => {
 	const getTreeItems = (route: Route): TreeItem[] => {
 		if (!route) return [];
 
+		expandedRoutes.value.push(`${route.from} - ${route.to}`);
+
 		return [{
+			value: route.from + " - " + route.to,
 			label: route.from + " - " + route.to,
 			class: "bg-warning-300 rounded-lg py-2 font-semibold md:text-lg",
 			icon: "material-symbols:location-on-rounded",

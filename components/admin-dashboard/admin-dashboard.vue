@@ -41,7 +41,7 @@ const { data: buses, pending: busesPending, error: busInfoError } = await useLaz
 					<UTree
 						v-model:expanded="expandedRoutes"
 						:items="getTreeItems(route)"
-						class="border rounded-lg w-full lg:w-[500px]"
+						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>
 						<template #bus-item="{ item }: { item: {bus: ExtendedBus} }">
@@ -97,3 +97,23 @@ const { data: buses, pending: busesPending, error: busInfoError } = await useLaz
 		</div>
 	</template>
 </template>
+
+<style>
+.scroll-bar{
+	overflow-y: auto;
+	scrollbar-color: yellow;
+}
+
+.scroll-bar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scroll-bar::-webkit-scrollbar-track {
+  border-radius: 11px;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb {
+  background: #314158;
+  border-radius: 11px;
+}
+</style>

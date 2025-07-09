@@ -1,12 +1,6 @@
-<svg
-    width='100%'
-    height='100%'
-    id='svg'
-    viewBox='0 0 1440 390'
-    xmlns='http://www.w3.org/2000/svg'
-    className='transition duration-300 ease-in-out delay-150'
->
-    <style>
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="100%" height="100%" id="svg" viewBox="-0.912 85.822 1440.912 225.734" xmlns="http://www.w3.org/2000/svg" classname="transition duration-300 ease-in-out delay-150">
+  <style>
         {`
         .path-0 {
         animation: pathAnim-0 20s linear infinite;
@@ -78,20 +72,6 @@
         }
         `}
     </style>
-    <path
-        d='M 0,400 L 0,250 C 209.06666666666666,258.8 418.1333333333333,267.6 563,257 C 707.8666666666667,246.4 788.5333333333333,216.4 924,187 C 1059.4666666666667,157.6 1249.7333333333333,128.8 1440,100 L 1440,400 L 0,400 Z'
-        stroke='none'
-        strokeWidth='0'
-        fill='#fff312c5'
-        fillOpacity='0.53'
-        className='transition-all duration-300 ease-in-out delay-550 path-0'
-    />
-    <path
-        d='M 0,400 L 0,383 C 204.93333333333334,363.5333333333333 409.8666666666667,344.06666666666666 555,339 C 700.1333333333333,333.93333333333334 785.4666666666667,343.26666666666665 923,328 C 1060.5333333333333,312.73333333333335 1250.2666666666667,272.8666666666667 1440,233 L 1440,400 L 0,400 Z'
-        stroke='none'
-        strokeWidth='0'
-        fill='#fff312c5'
-        fillOpacity='1'
-        className='transition-all duration-300 ease-in-out delay-550 path-1'
-    />
+  <path d="M 0 400 L 0 250 C 209.067 258.8 417.394 256.702 562.261 246.102 C 707.128 235.502 755.586 244.841 917.671 222.2 C 1079.756 199.559 1285.337 149.602 1440.591 166.387 L 1440 400 L 0 400 Z" stroke="none" strokewidth="0" fill="#fff312c5" fillopacity="0.53" classname="transition-all duration-300 ease-in-out delay-550 path-0"/>
+  <path d="M 0 400 L 1.292 288.061 C 206.225 268.595 420.811 303.284 565.944 298.217 C 711.077 293.15 815.956 258.653 934.753 254.456 C 1053.55 250.259 1235.49 182.124 1440 233 L 1440 400 L 0 400 Z" stroke="none" strokewidth="0" fill="#fff312c5" fillopacity="1" classname="transition-all duration-300 ease-in-out delay-550 path-1"/>
 </svg>

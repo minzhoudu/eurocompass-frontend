@@ -5,7 +5,7 @@ const items = useNavItems();
 </script>
 
 <template>
-	<div class="flex flex-col min-h-screen">
+	<div class="flex flex-col min-h-screen relative">
 		<AppHeader
 			:is-open="isOpen"
 			@click="isOpen = !isOpen"

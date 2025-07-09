@@ -114,14 +114,7 @@ const getRowId = (row: Reservation) => {
 	<div
 		class="bg-warning-300  pt-4 pb-2 lg:rounded-xl"
 	>
-		<h1
-			class="md:text-2xl font-bold text-center"
-			:class="{
-				'animate-pulse': pending,
-			}"
-		>
-			{{ pending ? "Učitavanje polazaka..." : "Vožnje za odabrani datum" }}
-		</h1>
+		<HomeReservationsTableHeader :pending="pending" />
 
 		<UTable
 			v-if="!pending"

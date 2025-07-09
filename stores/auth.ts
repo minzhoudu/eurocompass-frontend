@@ -39,6 +39,7 @@ export const useAuthStore = defineStore("user", () => {
 		try {
 			await $fetch("/apis/auth/logout", { credentials: "include" });
 			user.value = null;
+			navigateTo("/login");
 		}
 		catch (error) {
 			console.error(error);

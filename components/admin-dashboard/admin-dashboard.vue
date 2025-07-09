@@ -2,9 +2,9 @@
 import type { BaseBusInfo } from "../buses/types";
 import type { ExtendedBus } from "~/composables/useAdminDashboardTreeView";
 
-const { routesWithRides, getTreeItems, refetchGetRides, expandedRoutes, getRidesError } = await useAdminDashboardTreeView();
+const { routesWithRides, getTreeItems, refetchGetRides, expandedRoutes, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
 
-const { data: buses, pending: busesPending, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
+const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
 </script>
 
 <template>
@@ -33,7 +33,18 @@ const { data: buses, pending: busesPending, error: busInfoError } = await useLaz
 				</h1>
 			</div>
 
-			<div class="grid grid-cols-1 lg:grid-cols-2 w-full lg:justify-around gap-x-5 lg:gap-x-0 gap-y-10 lg:gap-y-30 lg:justify-items-center">
+			<div
+				v-if="busesLoading || getRidesLoading"
+				class="flex flex-col gap-10 lg:flex-row w-full h-96 lg:h-40 lg:px-10"
+			>
+				<USkeleton class="flex-1 h-40" />
+				<USkeleton class="flex-1 h-40" />
+			</div>
+
+			<div
+				v-else
+				class="grid grid-cols-1 lg:grid-cols-2 w-full lg:justify-around gap-x-5 lg:gap-x-0 gap-y-10 lg:gap-y-30 lg:justify-items-center"
+			>
 				<div
 					v-for="route in routesWithRides"
 					:key="route.id"
@@ -86,7 +97,7 @@ const { data: buses, pending: busesPending, error: busInfoError } = await useLaz
 							<AdminDashboardAddBusSelector
 								v-if="buses"
 								:buses="buses"
-								:buses-loading="busesPending"
+								:buses-loading="busesLoading"
 								:ride-id="item.rideId"
 								@bus-added="refetchGetRides"
 							/>

@@ -1,4 +1,4 @@
-type User = {
+export type User = {
 	id: string;
 	name: string;
 	lastName?: string;
@@ -49,6 +49,8 @@ export const useAuthStore = defineStore("user", () => {
 	const updateUser = async (data: Partial<User>) => {
 		try {
 			await $fetch("/apis/users/updateInfo", { credentials: "include", method: "POST", body: data });
+
+			await fetchUser();
 
 			toast.add({ title: "Uspešno", description: "Podaci su sačuvani.", color: "success" });
 		}

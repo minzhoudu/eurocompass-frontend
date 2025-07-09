@@ -44,7 +44,7 @@ export const useNavItems = () => {
 						{
 							label: "Profil",
 							icon: "i-lucide-user",
-						// to: "/profile",
+							to: "/profile",
 						},
 						{
 							label: "Settings",

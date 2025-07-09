@@ -10,6 +10,8 @@ type User = {
 export const useAuthStore = defineStore("user", () => {
 	const config = useRuntimeConfig();
 
+	const toast = useToast();
+
 	const user = ref<User | null>(null);
 
 	const fetchUser = async () => {
@@ -43,5 +45,18 @@ export const useAuthStore = defineStore("user", () => {
 		}
 	};
 
-	return { user, fetchUser, logOut, googleLogin };
+	const updateUser = async (data: Partial<User>) => {
+		try {
+			await $fetch("/apis/users/updateInfo", { credentials: "include", method: "POST", body: data });
+
+			toast.add({ title: "Uspešno", description: "Podaci su sačuvani.", color: "success" });
+		}
+		catch (error) {
+			console.error(error);
+
+			toast.add({ title: "Greška", description: "Došlo je do greške prilikom čuvanja podataka.", color: "error" });
+		}
+	};
+
+	return { user, fetchUser, logOut, googleLogin, updateUser };
 });

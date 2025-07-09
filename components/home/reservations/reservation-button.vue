@@ -16,8 +16,12 @@ const tabItems = computed<TabsItem[]>(() => {
 	return props.ride.buses.map(bus => ({
 		label: `Kola ${bus.busNumber}`,
 		value: bus.busNumber,
-		disabled: !authStore.user,
+		disabled: !authStore.user || !authStore.user.phone,
 	}));
+});
+
+const isReservationDisabled = computed(() => {
+	return getTotalSelectedSeats(selectedSeats.value, props.ride.buses, authStore.user?.id) === 0 || !authStore.user || !authStore.user.phone;
 });
 
 const emit = defineEmits<{
@@ -46,25 +50,7 @@ const handleReserve = async () => {
 		/>
 
 		<template #body>
-			<div
-				v-if="!authStore.user"
-				class="mb-4 text-center flex flex-col gap-2 justify-center items-center bg-warning-300 p-4 rounded-lg"
-			>
-				<h2 class="text-2xl font-semibold text-primary">
-					Prijavi se
-				</h2>
-
-				<p class="font-semibold w-10/12 text-left text-primary/70 text-sm md:text-base">
-					Da biste rezervisali sedište, morate biti prijavljeni na svoj nalog.
-				</p>
-
-				<UButton
-					label="Prijavi se"
-					icon="lucide:log-in"
-					class="bg-white text-black hover:bg-white/80 transition-all duration-300 px-4 py-2"
-					to="/login"
-				/>
-			</div>
+			<HomeReservationsModalBanner :user="authStore.user" />
 
 			<UTabs
 				:default-value="ride.buses[0].busNumber"
@@ -99,7 +85,7 @@ const handleReserve = async () => {
 				<UButton
 					label="Rezerviši"
 					class="cursor-pointer"
-					:disabled="getTotalSelectedSeats(selectedSeats, ride.buses, authStore.user?.id) === 0 || !authStore.user"
+					:disabled="isReservationDisabled"
 					@click="handleReserve"
 				/>
 			</div>

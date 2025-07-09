@@ -59,6 +59,10 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 export const useAdminDashboardTreeView = async () => {
 	const { data: routesWithRides, error: getRidesError, pending: getRidesLoading, refresh: refetchGetRides } = await useLazyFetch("/apis/admin/getRides", {
 		method: "post",
+		body: {
+			from: null,
+			to: null,
+		},
 		transform: (data: Routes) => data.routes,
 	});
 

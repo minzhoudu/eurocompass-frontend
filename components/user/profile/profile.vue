@@ -4,6 +4,8 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 
 const authStore = useAuthStore();
 
+const isMissingInformationAlertOpen = computed(() => !authStore.user?.phone);
+
 const schema = z.object({
 	name: z.string().min(1, "Ime je obavezno"),
 	lastName: z.string().min(1, "Prezime je obavezno"),
@@ -35,6 +37,16 @@ const handleCancel = () => {
 
 <template>
 	<div class="container mt-10">
+		<UAlert
+			v-if="isMissingInformationAlertOpen"
+			v-model:open="isMissingInformationAlertOpen"
+			variant="subtle"
+			:close="true"
+			title="Molimo vas da popunite svoj broj telefona kako biste mogli da rezervišete karte."
+			color="error"
+			class="mb-10 text-center"
+		/>
+
 		<UCard class="md:w-2/3 lg:w-1/2 mx-auto">
 			<template #header>
 				<div class="flex items-center gap-6">
@@ -120,7 +132,7 @@ const handleCancel = () => {
 							class="cursor-pointer"
 							@click="handleCancel"
 						>
-							Otkaži promene
+							Resetuj promene
 						</UButton>
 					</div>
 				</UForm>

@@ -16,18 +16,8 @@ const emit = defineEmits<{
 	"update:selectedSeats": [value: number[]];
 }>();
 
-const toast = useToast();
-
 const handleSelectSeat = (seat: ReservationSlot) => {
-	if (disabled) {
-		toast.add({
-			title: "Niste prijavljeni",
-			description: "Da biste rezervisali sedište, morate biti prijavljeni na svoj nalog.",
-			color: "warning",
-			icon: "i-lucide-alert-circle",
-		});
-		return;
-	};
+	if (disabled) return;
 
 	if (seat.type !== "FREE") return;
 

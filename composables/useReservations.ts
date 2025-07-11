@@ -43,8 +43,7 @@ export const useReservations = (rideId: string) => {
 			handleCancelReservation();
 		}
 		catch (error) {
-			// TODO Change the status code when backend fixes it
-			if (error instanceof Error && "status" in error && error.status === 500) {
+			if (error instanceof Error && "status" in error && error.status === 418) {
 				toast.add({
 					title: "Sedište je već rezervisano",
 					description: "Jedno ili više sedišta koje ste izabrali je u međuvremenu rezervisano, molimo izaberite drugo sedište.",

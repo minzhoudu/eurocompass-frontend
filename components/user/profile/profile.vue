@@ -4,7 +4,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 
 const authStore = useAuthStore();
 
-const isMissingInformationAlertOpen = computed(() => !authStore.user?.phone);
+const isMissingInformationAlertOpen = ref(!authStore.user?.phone);
 
 const schema = z.object({
 	name: z.string().min(1, "Ime je obavezno"),
@@ -26,6 +26,7 @@ const isPhoneValid = computed(() => schema.shape.phone.safeParse(state.phone).su
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
 	await authStore.updateUser(event.data);
+	isMissingInformationAlertOpen.value = false;
 }
 
 const handleCancel = () => {

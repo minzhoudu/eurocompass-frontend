@@ -70,8 +70,8 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 						name="ic:round-event-seat"
 						class="cursor-not-allowed flex items-center justify-center w-12 h-12 rounded text-white scale-95"
 						:class="{
-							'bg-secondary-500': seat.reservationData.userId === authStore.user?.id,
-							'bg-red-300': seat.reservationData.userId !== authStore.user?.id,
+							'bg-secondary-500': authStore.user?.id && seat.reservationData?.userId === authStore.user?.id,
+							'bg-red-300': !authStore.user?.id || seat.reservationData?.userId !== authStore.user?.id,
 						}"
 					/>
 

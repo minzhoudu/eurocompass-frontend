@@ -10,7 +10,7 @@ export type ReservationSlot = {
 	number: number;
 } | {
 	type: ReservationSeatsType.OCCUPIED;
-	reservationData: ReservationData;
+	reservationData?: ReservationData;
 	number: number;
 } | {
 	type: ReservationSeatsType.NOT | ReservationSeatsType.STAIRS;

@@ -11,10 +11,12 @@ export const getTotalSelectedSeats = (selectedSeats: SelectedSeats[], buses: Bus
 };
 
 const getUsersReservedSeats = (buses: Bus[], userId?: string) => {
+	if (!userId) return 0;
+
 	return buses.reduce((acc, bus) => {
 		const busReservedSeats = bus.reservationSeatsRows.reduce((rowAcc, row) => {
 			const rowReservedSeats = row.reservationSlots?.reduce((slotAcc, slot) => {
-				const isUserSeatReserved = slot.type === ReservationSeatsType.OCCUPIED && slot.reservationData.userId === userId;
+				const isUserSeatReserved = slot.type === ReservationSeatsType.OCCUPIED && slot.reservationData?.userId === userId;
 				return slotAcc + (isUserSeatReserved ? 1 : 0);
 			}, 0) || 0;
 			return rowAcc + rowReservedSeats;

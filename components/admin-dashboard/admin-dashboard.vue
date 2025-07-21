@@ -2,7 +2,7 @@
 import type { BaseBusInfo } from "../buses/types";
 import type { ExtendedBus } from "~/composables/useAdminDashboardTreeView";
 
-const { routesWithRides, getTreeItems, refetchGetRides, expandedRoutes, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
+const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
 
 const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
 </script>
@@ -50,7 +50,6 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 					:key="route.id"
 				>
 					<UTree
-						v-model:expanded="expandedRoutes"
 						:items="getTreeItems(route)"
 						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"

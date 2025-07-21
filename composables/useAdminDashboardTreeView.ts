@@ -66,24 +66,21 @@ export const useAdminDashboardTreeView = async () => {
 		transform: (data: Routes) => data.routes,
 	});
 
-	const expandedRoutes = ref<string[]>([]);
-
 	const getTreeItems = (route: Route): TreeItem[] => {
 		if (!route) return [];
 
-		expandedRoutes.value.push(`${route.from} - ${route.to}`);
-
 		return [{
+			defaultExpanded: true,
 			value: route.from + " - " + route.to,
 			label: route.from + " - " + route.to,
 			class: "bg-warning-300 rounded-lg py-4 font-semibold md:text-lg",
 			icon: "material-symbols:location-on-rounded",
 			children: mapTimetable(route.timetable, route.id),
+
 		}];
 	};
 
 	return {
-		expandedRoutes,
 		routesWithRides,
 		getRidesError,
 		getRidesLoading,

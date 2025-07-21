@@ -16,10 +16,10 @@ defineProps<{
 
 	<AppBanner
 		v-else-if="user && !user.phone"
-		title="Popuni broj telefona"
-		description="Da biste rezervisali sedište, morate popuniti svoj broj telefona."
+		title="Popunite broj telefona"
+		description="Da biste rezervisali sedište, morate popuniti svoj broj telefona na profilu."
 		navigate-to="/user/profile"
-		button-label="Profil"
+		button-label="Idi na profil"
 		button-icon="lucide:user"
 	/>
 </template>

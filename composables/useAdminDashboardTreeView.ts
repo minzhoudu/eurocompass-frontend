@@ -36,18 +36,18 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 		return {
 			value: `${table.date}-${routeId}`,
 			label: table.date,
-			class: "font-bold",
+			class: "font-bold py-4",
 			icon: "material-symbols:calendar-month-rounded",
 			children: table.rides.map(ride => ({
 				value: ride.id,
 				label: new Date(ride.departure).toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" }),
-				class: "font-semibold border-t border-black/30",
+				class: "font-semibold border-t border-black/30 py-3",
 				icon: "material-symbols:alarm",
 				children: [...ride.buses.map(bus => ({
+					rideId: ride.id,
 					bus,
 					slot: "bus-item",
 				})), {
-					label: "Dodaj autobus",
 					rideId: ride.id,
 					slot: "add-bus-item",
 				}],
@@ -76,7 +76,7 @@ export const useAdminDashboardTreeView = async () => {
 		return [{
 			value: route.from + " - " + route.to,
 			label: route.from + " - " + route.to,
-			class: "bg-warning-300 rounded-lg py-2 font-semibold md:text-lg",
+			class: "bg-warning-300 rounded-lg py-4 font-semibold md:text-lg",
 			icon: "material-symbols:location-on-rounded",
 			children: mapTimetable(route.timetable, route.id),
 		}];

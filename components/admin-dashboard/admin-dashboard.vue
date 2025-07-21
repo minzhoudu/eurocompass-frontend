@@ -55,7 +55,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>
-						<template #bus-item="{ item }: { item: {bus: ExtendedBus} }">
+						<template #bus-item="{ item }: { item: {bus: ExtendedBus, rideId: string} }">
 							<UTooltip
 								:content="{ side: 'top' }"
 								:delay-duration="0"
@@ -64,7 +64,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 								}"
 							>
 								<div class="flex flex-col gap-2 w-full">
-									<div class="bg-primary text-white/90 px-2 py-1 rounded flex justify-between items-center lg:gap-5 font-bold">
+									<div class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-5 font-bold">
 										<Icon
 											name="lucide:bus"
 											size="20"
@@ -75,13 +75,24 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 										</p>
 										<p>Slobodnih mesta - {{ item.bus.freeSeats }}</p>
 
-										<UButton
-											size="xs"
-											class="py-0.5 cursor-pointer"
-											variant="outline"
-											color="neutral"
-											icon="material-symbols:delete-outline"
-										/>
+										<div
+											v-if="buses && item.bus"
+											class="flex gap-1"
+										>
+											<AdminDashboardChangeBusSelector
+												:buses="buses"
+												:current-bus="item.bus"
+												:ride-id="item.rideId"
+												@bus-changed="refetchGetRides"
+											/>
+
+											<UButton
+												size="xs"
+												class="py-0.5 cursor-pointer text-white hover:text-error border"
+												variant="solid"
+												icon="material-symbols:delete-outline"
+											/>
+										</div>
 									</div>
 								</div>
 

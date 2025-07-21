@@ -47,7 +47,7 @@ const removeBusFromRide = async () => {
 <template>
 	<UModal
 		title="Brisanje autobusa"
-		description="Da li ste sigurni da želite da obrišete ovaj autobus?"
+		description="Da li ste sigurni da želite da obrišete ovaj autobus? Sve rezervacije za ovaj autobus na ovoj vožnji će biti obrisane."
 		:ui="{
 			body: 'p-2 sm:p-3',
 		}"

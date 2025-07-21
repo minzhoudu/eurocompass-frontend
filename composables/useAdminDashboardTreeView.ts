@@ -1,7 +1,7 @@
 import type { TreeItem } from "@nuxt/ui";
 import type { Bus, Ride } from "~/components/home/reservations/types";
 
-export type ExtendedBus = Bus & {
+export type ExtendedBus = Omit<Bus, "id"> & {
 	busId: string | null;
 	freeSeats: number;
 	name: string;

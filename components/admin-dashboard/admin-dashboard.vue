@@ -64,7 +64,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 								}"
 							>
 								<div class="flex flex-col gap-2 w-full">
-									<div class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-5 font-bold">
+									<div class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-5 font-bold flex-wrap">
 										<Icon
 											name="lucide:bus"
 											size="20"
@@ -76,7 +76,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 										<p>Slobodnih mesta - {{ item.bus.freeSeats }}</p>
 
 										<div
-											v-if="buses && item.bus"
+											v-if="buses && item.bus && item.bus.busId"
 											class="flex gap-1"
 										>
 											<AdminDashboardChangeBusSelector
@@ -86,11 +86,10 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 												@bus-changed="refetchGetRides"
 											/>
 
-											<UButton
-												size="xs"
-												class="py-0.5 cursor-pointer text-white hover:text-error border"
-												variant="solid"
-												icon="material-symbols:delete-outline"
+											<AdminDashboardRemoveBusModal
+												:bus-id="item.bus.busId"
+												:ride-id="item.rideId"
+												@bus-removed="refetchGetRides"
 											/>
 										</div>
 									</div>

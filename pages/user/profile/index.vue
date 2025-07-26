@@ -39,7 +39,7 @@ const handleTabChange = (value: string | number) => {
 			v-model="activeTab"
 			:items="items"
 			:ui="{
-				list: 'w-1/2 mx-auto',
+				list: 'lg:w-1/2 mx-auto',
 			}"
 			@update:model-value="handleTabChange"
 		>
@@ -48,7 +48,7 @@ const handleTabChange = (value: string | number) => {
 			</template>
 
 			<template #reservations>
-				<UserReservations />
+				<UserReservationList />
 			</template>
 		</UTabs>
 	</div>

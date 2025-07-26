@@ -5,6 +5,8 @@ import type { ExtendedBus } from "~/composables/useAdminDashboardTreeView";
 const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
 
 const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
+
+const expandedRoutes = ref<string[]>([]);
 </script>
 
 <template>
@@ -50,6 +52,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 					:key="route.id"
 				>
 					<UTree
+						v-model:expanded="expandedRoutes"
 						:items="getTreeItems(route)"
 						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
@@ -63,7 +66,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 								}"
 							>
 								<div class="flex flex-col gap-2 w-full">
-									<div class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-5 font-bold flex-wrap">
+									<div class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-4 font-bold flex-wrap md:flex-nowrap">
 										<Icon
 											name="lucide:bus"
 											size="20"

@@ -67,7 +67,7 @@ const changeBus = async () => {
 			<div class="flex gap-2 w-full">
 				<USelectMenu
 					v-model="selectedBus"
-					:default-value="{ label: currentBus.name, value: currentBus.id }"
+					:default-value="{ label: currentBus.name, value: currentBus.busId as string }"
 					:items="buses.map((bus) => ({
 						label: bus.name,
 						value: bus.id,
@@ -82,6 +82,7 @@ const changeBus = async () => {
 					variant="solid"
 					icon="tabler:switch-2"
 					:loading="isLoading"
+					:disabled="currentBus.busId === selectedBus.value"
 					@click="changeBus"
 				/>
 			</div>

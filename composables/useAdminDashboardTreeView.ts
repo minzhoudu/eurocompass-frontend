@@ -1,6 +1,13 @@
 import type { TreeItem } from "@nuxt/ui";
 import type { Bus, Ride } from "~/components/home/reservations/types";
 
+export type Orphan = {
+	userId: string;
+	name: string;
+	lastName: string;
+	phone: string;
+};
+
 export type ExtendedBus = Omit<Bus, "id"> & {
 	busId: string | null;
 	freeSeats: number;
@@ -10,6 +17,7 @@ export type ExtendedBus = Omit<Bus, "id"> & {
 
 export type ExtendedRide = Ride & {
 	buses: ExtendedBus[];
+	orphans: Orphan[];
 };
 
 type Timetable = {
@@ -43,6 +51,10 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 				label: new Date(ride.departure).toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" }),
 				class: "font-semibold border-t border-black/30 py-3",
 				icon: "material-symbols:alarm",
+				slot: "ride-item",
+				orphans: ride.orphans,
+				rideId: ride.id,
+				buses: ride.buses,
 				children: [...ride.buses.map(bus => ({
 					rideId: ride.id,
 					bus,

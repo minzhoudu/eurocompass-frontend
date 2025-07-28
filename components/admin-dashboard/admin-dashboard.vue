@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { BaseBusInfo } from "../buses/types";
-import type { ExtendedBus } from "~/composables/useAdminDashboardTreeView";
+import type { Bus } from "../home/reservations/types";
+import type { ExtendedBus, Orphan } from "~/composables/useAdminDashboardTreeView";
 
 const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
 
@@ -103,6 +104,17 @@ const expandedRoutes = ref<string[]>([]);
 									</div>
 								</template>
 							</UTooltip>
+						</template>
+
+						<template #ride-item="{ item }: { item: { label: string, icon: string, orphans: Orphan[], rideId: string, buses: Bus[] } }">
+							<AdminDashboardRideItem
+								:icon="item.icon"
+								:label="item.label"
+								:orphans="item.orphans"
+								:buses="item.buses"
+								:ride-id="item.rideId"
+								:expanded-routes="expandedRoutes"
+							/>
 						</template>
 
 						<template #add-bus-item="{ item }: { item: { rideId: string } }">

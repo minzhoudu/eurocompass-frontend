@@ -1,3 +1,9 @@
+type UserReservation = {
+	rideId: string;
+	busNumber: number;
+	seat: number;
+};
+
 export type User = {
 	id: string;
 	name: string;
@@ -5,6 +11,7 @@ export type User = {
 	phone?: string;
 	role: "ADMIN" | "USER";
 	picture?: string;
+	reservations: UserReservation[] | null;
 };
 
 export const useAuthStore = defineStore("user", () => {

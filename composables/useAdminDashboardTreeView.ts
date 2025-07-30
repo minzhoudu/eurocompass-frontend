@@ -1,7 +1,14 @@
 import type { TreeItem } from "@nuxt/ui";
 import type { Bus, Ride } from "~/components/home/reservations/types";
 
-export type ExtendedBus = Bus & {
+export type Orphan = {
+	userId: string;
+	name: string;
+	lastName: string;
+	phone: string;
+};
+
+export type ExtendedBus = Omit<Bus, "id"> & {
 	busId: string | null;
 	freeSeats: number;
 	name: string;
@@ -10,6 +17,7 @@ export type ExtendedBus = Bus & {
 
 export type ExtendedRide = Ride & {
 	buses: ExtendedBus[];
+	orphans: Orphan[];
 };
 
 type Timetable = {
@@ -36,18 +44,22 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 		return {
 			value: `${table.date}-${routeId}`,
 			label: table.date,
-			class: "font-bold",
+			class: "font-bold py-4",
 			icon: "material-symbols:calendar-month-rounded",
 			children: table.rides.map(ride => ({
 				value: ride.id,
 				label: new Date(ride.departure).toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" }),
-				class: "font-semibold border-t border-black/30",
+				class: "font-semibold border-t border-black/30 py-3",
 				icon: "material-symbols:alarm",
+				slot: "ride-item",
+				orphans: ride.orphans,
+				rideId: ride.id,
+				buses: ride.buses,
 				children: [...ride.buses.map(bus => ({
+					rideId: ride.id,
 					bus,
 					slot: "bus-item",
 				})), {
-					label: "Dodaj autobus",
 					rideId: ride.id,
 					slot: "add-bus-item",
 				}],
@@ -66,24 +78,21 @@ export const useAdminDashboardTreeView = async () => {
 		transform: (data: Routes) => data.routes,
 	});
 
-	const expandedRoutes = ref<string[]>([]);
-
 	const getTreeItems = (route: Route): TreeItem[] => {
 		if (!route) return [];
 
-		expandedRoutes.value.push(`${route.from} - ${route.to}`);
-
 		return [{
+			defaultExpanded: true,
 			value: route.from + " - " + route.to,
 			label: route.from + " - " + route.to,
-			class: "bg-warning-300 rounded-lg py-2 font-semibold md:text-lg",
+			class: "bg-warning-300 rounded-lg py-4 font-semibold md:text-lg",
 			icon: "material-symbols:location-on-rounded",
 			children: mapTimetable(route.timetable, route.id),
+
 		}];
 	};
 
 	return {
-		expandedRoutes,
 		routesWithRides,
 		getRidesError,
 		getRidesLoading,

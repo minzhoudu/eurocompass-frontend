@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { BaseBusInfo } from "../buses/types";
-import type { ExtendedBus } from "~/composables/useAdminDashboardTreeView";
+import type { Bus } from "../home/reservations/types";
+import type { ExtendedBus, Orphan } from "~/composables/useAdminDashboardTreeView";
 
-const { routesWithRides, getTreeItems, refetchGetRides, expandedRoutes, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
+const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
 
 const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
+
+const expandedRoutes = ref<string[]>([]);
 </script>
 
 <template>
@@ -55,7 +58,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>
-						<template #bus-item="{ item }: { item: {bus: ExtendedBus} }">
+						<template #bus-item="{ item }: { item: {bus: ExtendedBus, rideId: string} }">
 							<UTooltip
 								:content="{ side: 'top' }"
 								:delay-duration="0"
@@ -64,7 +67,7 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 								}"
 							>
 								<div class="flex flex-col gap-2 w-full">
-									<div class="bg-primary text-white/90 px-2 py-1 rounded flex justify-between items-center lg:gap-5 font-bold">
+									<div class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-4 font-bold flex-wrap md:flex-nowrap">
 										<Icon
 											name="lucide:bus"
 											size="20"
@@ -75,13 +78,23 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 										</p>
 										<p>Slobodnih mesta - {{ item.bus.freeSeats }}</p>
 
-										<UButton
-											size="xs"
-											class="py-0.5 cursor-pointer"
-											variant="outline"
-											color="neutral"
-											icon="material-symbols:delete-outline"
-										/>
+										<div
+											v-if="buses && item.bus && item.bus.busId"
+											class="flex gap-1"
+										>
+											<AdminDashboardChangeBusSelector
+												:buses="buses"
+												:current-bus="item.bus"
+												:ride-id="item.rideId"
+												@bus-changed="refetchGetRides"
+											/>
+
+											<AdminDashboardRemoveBusModal
+												:bus-id="item.bus.busId"
+												:ride-id="item.rideId"
+												@bus-removed="refetchGetRides"
+											/>
+										</div>
 									</div>
 								</div>
 
@@ -91,6 +104,17 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 									</div>
 								</template>
 							</UTooltip>
+						</template>
+
+						<template #ride-item="{ item }: { item: { label: string, icon: string, orphans: Orphan[], rideId: string, buses: Bus[] } }">
+							<AdminDashboardRideItem
+								:icon="item.icon"
+								:label="item.label"
+								:orphans="item.orphans"
+								:buses="item.buses"
+								:ride-id="item.rideId"
+								:expanded-routes="expandedRoutes"
+							/>
 						</template>
 
 						<template #add-bus-item="{ item }: { item: { rideId: string } }">

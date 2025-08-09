@@ -11,23 +11,10 @@ const expandedRoutes = ref<string[]>([]);
 </script>
 
 <template>
-	<template v-if="busInfoError || getRidesError">
-		<div class="flex flex-col items-center w-full bg-warning-300 text-error font-semibold py-3">
-			<h1 class="text-lg">
-				Došlo je do greške pri dobavljanju informacija o {{ busInfoError ? "autobusima"
-					: "polascima" }}. Pokušajte ponovo.
-			</h1>
-			<p class="text-error/90">
-				Ako se greška ponovi, molimo prijavite problem.
-			</p>
-
-			<UButton
-				label="Pokušajte ponovo"
-				class="cursor-pointer mt-4"
-				@click="() => $router.go(0)"
-			/>
-		</div>
-	</template>
+	<AdminDashboardError
+		v-if="busInfoError || getRidesError"
+		:is-info-error="!!busInfoError"
+	/>
 
 	<template v-else>
 		<div class="flex items-center flex-col gap-10 lg:gap-30 w-full">
@@ -37,13 +24,7 @@ const expandedRoutes = ref<string[]>([]);
 				</h1>
 			</div>
 
-			<div
-				v-if="busesLoading || getRidesLoading"
-				class="flex flex-col gap-10 lg:flex-row w-full h-96 lg:h-40 lg:px-10"
-			>
-				<USkeleton class="flex-1 h-40" />
-				<USkeleton class="flex-1 h-40" />
-			</div>
+			<AdminDashboardLoading v-if="busesLoading || getRidesLoading" />
 
 			<div
 				v-else

@@ -11,6 +11,11 @@ const props = defineProps<{
 	buses: Bus[];
 	rideId: string;
 	expandedRoutes: string[];
+	totalFreeSeats: number;
+}>();
+
+const emit = defineEmits<{
+	(e: "orphan-assigned"): void;
 }>();
 
 const tabItems = computed<TabsItem[]>(() => {
@@ -19,6 +24,7 @@ const tabItems = computed<TabsItem[]>(() => {
 		value: bus.busNumber,
 	}));
 });
+const seatSelectionModalOpen = ref(false);
 
 const { selectedSeats } = useReservations(props.rideId);
 const selectSeat = (seats: number[], busNumber: number) => {
@@ -30,24 +36,39 @@ const selectSeat = (seats: number[], busNumber: number) => {
 	}];
 };
 
-const reserveSeat = (busNumber: number, orphan: Orphan) => {
+const toast = useToast();
+
+const reserveSeat = async (busNumber: number, orphan: Orphan) => {
 	const seatNumber = selectedSeats.value.find(seat => seat.busNumber === busNumber)?.seats[0];
-	const name = orphan.name;
-	const lastName = orphan.lastName;
-	const phone = orphan.phone;
 
 	const reservation = {
 		rideId: props.rideId,
-		name,
-		lastName,
-		phone,
-		reservations: {
-			busNumber,
-			seats: [seatNumber],
-		},
+		orphan: orphan,
+		busNumber: busNumber,
+		seat: seatNumber,
 	};
 
-	console.log(reservation);
+	try {
+		await $fetch("/apis/admin/assignOrphan", {
+			method: "post",
+			body: reservation,
+		});
+
+		emit("orphan-assigned");
+
+		toast.add({
+			title: "Sedište je uspešno dodato.",
+			color: "success",
+		});
+	}
+	catch {
+		toast.add({
+			title: "Greška prilikom dodavanja sedišta.",
+			color: "error",
+		});
+	}
+
+	seatSelectionModalOpen.value = false;
 };
 
 const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
@@ -62,6 +83,10 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 			/>
 
 			<p>{{ label }}</p>
+
+			<p class="text-sm text-gray-500">
+				Ukupno slobodnih mesta: {{ totalFreeSeats }}
+			</p>
 
 			<UModal
 				v-if="orphans.length > 0"
@@ -94,6 +119,7 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 							</div>
 
 							<UModal
+								:open="seatSelectionModalOpen"
 								title="Autobus"
 								description="Izaberite novo sedište."
 							>
@@ -103,6 +129,7 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 									icon="material-symbols:add-circle-outline"
 									size="sm"
 									class="cursor-pointer"
+									@click="seatSelectionModalOpen = true"
 								/>
 
 								<template #body>
@@ -115,7 +142,9 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 											}"
 										>
 											<template #content="{ item }">
-												<div class="flex flex-col gap-5">
+												<div
+													class="flex flex-col gap-5"
+												>
 													<AppBusSeatLayout
 														:disabled="false"
 														:selected-seats="getSelectedSeatsForBus(selectedSeats, item.value as number)"

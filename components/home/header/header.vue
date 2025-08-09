@@ -29,7 +29,7 @@ const emit = defineEmits<{
 			:items="locations ?? []"
 			class="min-w-48 py-2"
 			color="neutral"
-			:filter-fields="['name']"
+			:filter-fields="['searchableName']"
 			@update:model-value="emit('data-selected', startValue, $event)"
 		>
 			<template #default="{ modelValue }">

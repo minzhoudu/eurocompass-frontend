@@ -62,12 +62,12 @@ const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
 				class="grid grid-cols-1 lg:grid-cols-2 w-full lg:justify-around gap-x-5 lg:gap-x-0 gap-y-10 lg:gap-y-30 lg:justify-items-center"
 			>
 				<div
-					v-for="route in routesWithRides"
-					:key="route.id"
+					v-for="routeWithRide in routesWithRides"
+					:key="routeWithRide.id"
 				>
 					<UTree
 						v-model:expanded="expandedRoutes"
-						:items="getTreeItems(route)"
+						:items="getTreeItems(routeWithRide)"
 						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>

@@ -1,3 +1,4 @@
+import type { DateValue } from "@internationalized/date";
 import type { TreeItem } from "@nuxt/ui";
 import type { Bus, Ride } from "~/components/home/reservations/types";
 
@@ -70,13 +71,15 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 	});
 };
 
-export const useAdminDashboardTreeView = async () => {
+export const useAdminDashboardTreeView = async (from: Ref<DateValue | undefined>, to: Ref<DateValue | undefined>) => {
+	const body = computed(() => ({
+		from: from.value?.toString() || null,
+		to: to.value?.toString() || null,
+	}));
+
 	const { data: routesWithRides, error: getRidesError, pending: getRidesLoading, refresh: refetchGetRides } = await useLazyFetch("/apis/admin/getRides", {
 		method: "post",
-		body: {
-			from: null,
-			to: null,
-		},
+		body,
 		transform: (data: Routes) => data.routes,
 	});
 

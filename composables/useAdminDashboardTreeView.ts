@@ -18,6 +18,7 @@ export type ExtendedBus = Omit<Bus, "id"> & {
 export type ExtendedRide = Ride & {
 	buses: ExtendedBus[];
 	orphans: Orphan[];
+	totalFreeSeats: number;
 };
 
 type Timetable = {
@@ -55,6 +56,7 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 				orphans: ride.orphans,
 				rideId: ride.id,
 				buses: ride.buses,
+				totalFreeSeats: ride.totalFreeSeats,
 				children: [...ride.buses.map(bus => ({
 					rideId: ride.id,
 					bus,

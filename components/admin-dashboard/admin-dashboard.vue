@@ -39,7 +39,7 @@ const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
 				</h1>
 			</div>
 
-			<div class="flex gap-5">
+			<div class="flex sm:gap-5">
 				<AppDatePicker
 					v-model="from"
 					placeholder="Od"

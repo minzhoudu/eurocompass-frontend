@@ -2,6 +2,7 @@
 import { DateFormatter, getLocalTimeZone, type DateValue } from "@internationalized/date";
 
 type DatePickerProps = {
+	enableAllDates?: boolean;
 	modelValue?: DateValue;
 	placeholder?: string;
 };
@@ -14,6 +15,7 @@ const isDateUnavailable = (date: DateValue) => {
 
 const props = withDefaults(defineProps<DatePickerProps>(), {
 	placeholder: "Izaberite datum",
+	enableAllDates: false,
 });
 
 const emit = defineEmits<{
@@ -57,7 +59,7 @@ const dateValue = computed({
 					headCell: 'text-warning-300',
 					cellTrigger: 'data-today:not-data-[selected]:text-warning-300 data-[selected]:bg-warning-300',
 				}"
-				:is-date-unavailable="isDateUnavailable"
+				:is-date-unavailable="enableAllDates ? () => false : isDateUnavailable"
 			/>
 		</template>
 	</UPopover>

@@ -1,13 +1,28 @@
 <script setup lang="ts">
+import { parseDate, today, type DateValue } from "@internationalized/date";
+import { getLocalTimeZone } from "@internationalized/date";
 import type { BaseBusInfo } from "../buses/types";
 import type { Bus } from "../home/reservations/types";
 import type { ExtendedBus, Orphan } from "~/composables/useAdminDashboardTreeView";
 
-const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView();
+const router = useRouter();
+const route = useRoute();
+
+const from = ref<DateValue>();
+const to = ref<DateValue>();
+
+from.value = route.query.from ? parseDate(route.query.from as string) : today(getLocalTimeZone());
+to.value = route.query.to ? parseDate(route.query.to as string) : today(getLocalTimeZone()).add({ days: 5 });
+
+const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView(from, to);
 
 const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
 
 const expandedRoutes = ref<string[]>([]);
+
+const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
+	router.push({ query: { ...route.query, [key]: date?.toString() || null } });
+};
 </script>
 
 <template>
@@ -17,11 +32,27 @@ const expandedRoutes = ref<string[]>([]);
 	/>
 
 	<template v-else>
-		<div class="flex items-center flex-col gap-10 lg:gap-30 w-full">
+		<div class="flex items-center flex-col gap-10 lg:gap-20 w-full">
 			<div class="bg-warning-300 px-5 py-2 rounded-lg">
 				<h1 class="text-2xl font-bold">
 					Podešavanje linija
 				</h1>
+			</div>
+
+			<div class="flex gap-5">
+				<AppDatePicker
+					v-model="from"
+					placeholder="Od"
+					enable-all-dates
+					@update:model-value="(date) => updateQuery(date, 'from')"
+				/>
+
+				<AppDatePicker
+					v-model="to"
+					placeholder="Do"
+					enable-all-dates
+					@update:model-value="(date) => updateQuery(date, 'to')"
+				/>
 			</div>
 
 			<AdminDashboardLoading v-if="busesLoading || getRidesLoading" />

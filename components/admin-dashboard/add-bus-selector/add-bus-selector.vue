@@ -9,8 +9,6 @@ const props = defineProps<{
 }>();
 
 const busItems = computed(() => {
-	console.log(props.selectedBuses);
-	console.log(props.buses);
 	return props.buses
 		.filter(bus => !props.selectedBuses.some(selBus => selBus.busId === bus.id))
 		.map(bus => ({

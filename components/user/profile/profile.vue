@@ -36,7 +36,7 @@ const handleCancel = () => {
 };
 
 const hasChanges = computed(() => {
-	return state.name !== authStore.user?.name || state.lastName !== authStore.user?.lastName || state.phone !== authStore.user?.phone;
+	return state.name?.trim() !== authStore.user?.name?.trim() || state.lastName?.trim() !== authStore.user?.lastName?.trim() || state.phone?.trim() !== authStore.user?.phone?.trim();
 });
 </script>
 
@@ -127,6 +127,7 @@ const hasChanges = computed(() => {
 						<UButton
 							type="submit"
 							class="cursor-pointer"
+							:disabled="!hasChanges"
 						>
 							Sačuvaj promene
 						</UButton>

@@ -34,6 +34,10 @@ const handleCancel = () => {
 	state.lastName = authStore.user?.lastName;
 	state.phone = authStore.user?.phone;
 };
+
+const hasChanges = computed(() => {
+	return state.name !== authStore.user?.name || state.lastName !== authStore.user?.lastName || state.phone !== authStore.user?.phone;
+});
 </script>
 
 <template>
@@ -128,6 +132,7 @@ const handleCancel = () => {
 						</UButton>
 
 						<UButton
+							v-if="hasChanges"
 							color="error"
 							variant="outline"
 							class="cursor-pointer"

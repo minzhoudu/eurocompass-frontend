@@ -149,10 +149,11 @@ const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
 							/>
 						</template>
 
-						<template #add-bus-item="{ item }: { item: { rideId: string } }">
+						<template #add-bus-item="{ item }: { item: { rideId: string, selectedBuses: ExtendedBus[] } }">
 							<AdminDashboardAddBusSelector
 								v-if="buses"
 								:buses="buses"
+								:selected-buses="item.selectedBuses"
 								:buses-loading="busesLoading"
 								:ride-id="item.rideId"
 								@bus-added="refetchGetRides"

@@ -24,7 +24,13 @@ const isNameValid = computed(() => schema.shape.name.safeParse(state.name).succe
 const isLastNameValid = computed(() => schema.shape.lastName.safeParse(state.lastName).success);
 const isPhoneValid = computed(() => schema.shape.phone.safeParse(state.phone).success);
 
+const hasChanges = computed(() => {
+	return state.name?.trim() !== authStore.user?.name?.trim() || state.lastName?.trim() !== authStore.user?.lastName?.trim() || state.phone?.trim() !== authStore.user?.phone?.trim();
+});
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+	if (!hasChanges.value) return;
+
 	await authStore.updateUser(event.data);
 	isMissingInformationAlertOpen.value = false;
 }
@@ -34,10 +40,6 @@ const handleCancel = () => {
 	state.lastName = authStore.user?.lastName;
 	state.phone = authStore.user?.phone;
 };
-
-const hasChanges = computed(() => {
-	return state.name?.trim() !== authStore.user?.name?.trim() || state.lastName?.trim() !== authStore.user?.lastName?.trim() || state.phone?.trim() !== authStore.user?.phone?.trim();
-});
 </script>
 
 <template>

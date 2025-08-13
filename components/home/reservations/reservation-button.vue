@@ -23,7 +23,7 @@ const tabItems = computed<TabsItem[]>(() => {
 const isReservationDisabled = computed(() => {
 	const totalSelectedSeats = getTotalSelectedSeats(selectedSeats.value, props.ride.buses, authStore.user?.id);
 
-	return totalSelectedSeats === 0 || totalSelectedSeats >= MAX_SELECTED_SEATS || !authStore.user || !authStore.user.phone;
+	return totalSelectedSeats === 0 || totalSelectedSeats > MAX_SELECTED_SEATS || !authStore.user || !authStore.user.phone;
 });
 
 const emit = defineEmits<{

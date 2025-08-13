@@ -20,8 +20,20 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 
 const expandedRoutes = ref<string[]>([]);
 
-const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
-	router.push({ query: { ...route.query, [key]: date?.toString() || "all" } });
+type UpdateQueryParams = {
+	date?: DateValue;
+	key?: "from" | "to";
+	all?: boolean;
+};
+
+const updateQuery = ({ date, key, all }: UpdateQueryParams) => {
+	if (all) {
+		router.push({ query: { ...route.query, from: "all", to: "all" } });
+	}
+
+	if (key) {
+		router.push({ query: { ...route.query, [key]: date?.toString() } });
+	}
 };
 </script>
 
@@ -44,14 +56,30 @@ const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
 					v-model="from"
 					placeholder="Od"
 					enable-all-dates
-					@update:model-value="(date) => updateQuery(date, 'from')"
+					@update:model-value="(date) => updateQuery({ date, key: 'from' })"
+				/>
+
+				<UButton
+					label="Sve linije"
+					class="cursor-pointer"
+					@click="() => {
+						from = undefined
+						to = undefined
+						updateQuery({ all: true })
+					}"
+				/>
+
+				<UButton
+					label="Osveži podatke"
+					class="cursor-pointer"
+					@click="() => refetchGetRides()"
 				/>
 
 				<AppDatePicker
 					v-model="to"
 					placeholder="Do"
 					enable-all-dates
-					@update:model-value="(date) => updateQuery(date, 'to')"
+					@update:model-value="(date) => updateQuery({ date, key: 'to' })"
 				/>
 			</div>
 

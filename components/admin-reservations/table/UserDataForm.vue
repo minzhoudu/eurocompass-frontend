@@ -52,7 +52,6 @@ watch(
 const { data: users, status } = await useLazyFetch<SearchUser[]>("/apis/admin/search", {
 	query: searchQuery,
 	immediate: false,
-	server: false,
 	default: () => [],
 });
 

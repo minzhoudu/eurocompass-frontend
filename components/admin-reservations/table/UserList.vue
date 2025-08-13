@@ -13,7 +13,7 @@ const emit = defineEmits<{
 
 <template>
 	<div
-		class="flex flex-col gap-5 max-h-[250px] min-w-[250px] overflow-auto"
+		class="flex flex-col gap-5 max-h-[260px] min-w-[250px] overflow-auto"
 	>
 		<div
 			v-if="pending"

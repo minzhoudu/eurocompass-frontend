@@ -98,7 +98,6 @@ const columns = ref<TableColumn<Reservation>[]>([
 				"label": cell.getValue(),
 				"ride": currentRide,
 				"onReservation:success": () => {
-					console.log("sas");
 					refreshRides();
 				},
 			});

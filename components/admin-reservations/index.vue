@@ -35,11 +35,9 @@ watchEffect(() => {
 			:error="!!error"
 		/>
 
-		<!-- TODO Create new component for admin reservations (this one is not compatible for reservation on behalf of other users) -->
 		<Transition>
-			<HomeReservations
+			<AdminReservationsTable
 				v-if="selectedDate && selectedLocation"
-				:disable-seat-limit="true"
 				:selected-date="selectedDate"
 				:selected-location="selectedLocation"
 			/>

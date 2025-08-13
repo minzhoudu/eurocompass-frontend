@@ -12,7 +12,7 @@ const from = ref<DateValue>();
 const to = ref<DateValue>();
 
 from.value = route.query.from === "all" ? undefined : route.query.from ? parseDate(route.query.from as string) : today(getLocalTimeZone());
-to.value = route.query.to === "all" ? undefined : route.query.to ? parseDate(route.query.to as string) : today(getLocalTimeZone()).add({ days: 5 });
+to.value = route.query.to === "all" ? undefined : route.query.to ? parseDate(route.query.to as string) : today(getLocalTimeZone()).add({ days: 15 });
 
 const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView(from, to);
 

@@ -14,6 +14,7 @@ export type ExtendedBus = Omit<Bus, "id"> & {
 	freeSeats: number;
 	name: string;
 	registration: string;
+	totalSeats: number;
 };
 
 export type ExtendedRide = Ride & {

@@ -123,14 +123,21 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 								title="Autobus"
 								description="Izaberite novo sedište."
 							>
-								<UButton
-									label="Dodeli novo sedište"
-									color="secondary"
-									icon="material-symbols:add-circle-outline"
-									size="sm"
-									class="cursor-pointer"
-									@click="seatSelectionModalOpen = true"
-								/>
+								<UTooltip
+									text="Ne postoji ni jedan autobus na liniji"
+									:delay-duration="0"
+									:disabled="buses.length > 0"
+								>
+									<UButton
+										label="Dodeli novo sedište"
+										color="secondary"
+										icon="material-symbols:add-circle-outline"
+										size="sm"
+										class="cursor-pointer"
+										:disabled="buses.length === 0"
+										@click="seatSelectionModalOpen = true"
+									/>
+								</UTooltip>
 
 								<template #body>
 									<div class="flex flex-col gap-2">

@@ -8,6 +8,11 @@ export const useAdminNavItems = () => {
 			to: "/admin",
 		},
 		{
+			label: "Rezervacije",
+			icon: "i-lucide-calendar-days",
+			to: "/admin/reservations",
+		},
+		{
 			label: "Autobusi",
 			icon: "i-lucide-bus",
 			to: "/admin/buses",

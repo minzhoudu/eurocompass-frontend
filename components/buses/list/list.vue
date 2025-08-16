@@ -1,7 +1,13 @@
 <script lang="ts" setup>
 import type { BaseBusInfo } from "../types";
 
-const { data: buses, pending, refresh } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
+const { data: buses, pending, refresh } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info", {
+	transform: (data) => {
+		if (!data) return [];
+
+		return data;
+	},
+});
 
 const handleBusDeleted = () => {
 	refresh();
@@ -10,7 +16,7 @@ const handleBusDeleted = () => {
 
 <template>
 	<div class="mb-5">
-		<template v-if="buses && !pending">
+		<template v-if="!pending">
 			<div
 				class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-11/12 mx-auto sm:w-full"
 			>

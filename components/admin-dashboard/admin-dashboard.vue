@@ -11,8 +11,8 @@ const route = useRoute();
 const from = ref<DateValue>();
 const to = ref<DateValue>();
 
-from.value = route.query.from ? parseDate(route.query.from as string) : today(getLocalTimeZone());
-to.value = route.query.to ? parseDate(route.query.to as string) : today(getLocalTimeZone()).add({ days: 5 });
+from.value = route.query.from === "all" ? undefined : route.query.from ? parseDate(route.query.from as string) : today(getLocalTimeZone());
+to.value = route.query.to === "all" ? undefined : route.query.to ? parseDate(route.query.to as string) : today(getLocalTimeZone()).add({ days: 15 });
 
 const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView(from, to);
 
@@ -20,8 +20,20 @@ const { data: buses, pending: busesLoading, error: busInfoError } = await useLaz
 
 const expandedRoutes = ref<string[]>([]);
 
-const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
-	router.push({ query: { ...route.query, [key]: date?.toString() || null } });
+type UpdateQueryParams = {
+	date?: DateValue;
+	key?: "from" | "to";
+	all?: boolean;
+};
+
+const updateQuery = ({ date, key, all }: UpdateQueryParams) => {
+	if (all) {
+		router.push({ query: { ...route.query, from: "all", to: "all" } });
+	}
+
+	if (key) {
+		router.push({ query: { ...route.query, [key]: date?.toString() } });
+	}
 };
 </script>
 
@@ -44,14 +56,30 @@ const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
 					v-model="from"
 					placeholder="Od"
 					enable-all-dates
-					@update:model-value="(date) => updateQuery(date, 'from')"
+					@update:model-value="(date) => updateQuery({ date, key: 'from' })"
+				/>
+
+				<UButton
+					label="Sve linije"
+					class="cursor-pointer"
+					@click="() => {
+						from = undefined
+						to = undefined
+						updateQuery({ all: true })
+					}"
+				/>
+
+				<UButton
+					label="Osveži podatke"
+					class="cursor-pointer"
+					@click="() => refetchGetRides()"
 				/>
 
 				<AppDatePicker
 					v-model="to"
 					placeholder="Do"
 					enable-all-dates
-					@update:model-value="(date) => updateQuery(date, 'to')"
+					@update:model-value="(date) => updateQuery({ date, key: 'to' })"
 				/>
 			</div>
 
@@ -149,10 +177,11 @@ const updateQuery = (date: DateValue | undefined, key: "from" | "to") => {
 							/>
 						</template>
 
-						<template #add-bus-item="{ item }: { item: { rideId: string } }">
+						<template #add-bus-item="{ item }: { item: { rideId: string, selectedBuses: ExtendedBus[] } }">
 							<AdminDashboardAddBusSelector
 								v-if="buses"
 								:buses="buses"
+								:selected-buses="item.selectedBuses"
 								:buses-loading="busesLoading"
 								:ride-id="item.rideId"
 								@bus-added="refetchGetRides"

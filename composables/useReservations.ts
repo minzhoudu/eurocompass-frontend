@@ -68,7 +68,8 @@ export const useReservations = (rideId: string) => {
 
 		if (seats.length + otherBusesTotalSeats > MAX_SELECTED_SEATS) {
 			toast.add({
-				title: "Maksimalan broj rezervacija je 2",
+				title: "Maksimalan broj rezervacija",
+				description: `Možete ukupno rezervisati ${MAX_SELECTED_SEATS} sedišta po liniji. Izaberite drugo vreme ili datum.`,
 				color: "error",
 			});
 			return;

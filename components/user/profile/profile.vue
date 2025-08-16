@@ -24,7 +24,13 @@ const isNameValid = computed(() => schema.shape.name.safeParse(state.name).succe
 const isLastNameValid = computed(() => schema.shape.lastName.safeParse(state.lastName).success);
 const isPhoneValid = computed(() => schema.shape.phone.safeParse(state.phone).success);
 
+const hasChanges = computed(() => {
+	return state.name?.trim() !== authStore.user?.name?.trim() || state.lastName?.trim() !== authStore.user?.lastName?.trim() || state.phone?.trim() !== authStore.user?.phone?.trim();
+});
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+	if (!hasChanges.value) return;
+
 	await authStore.updateUser(event.data);
 	isMissingInformationAlertOpen.value = false;
 }
@@ -123,11 +129,13 @@ const handleCancel = () => {
 						<UButton
 							type="submit"
 							class="cursor-pointer"
+							:disabled="!hasChanges"
 						>
 							Sačuvaj promene
 						</UButton>
 
 						<UButton
+							v-if="hasChanges"
 							color="error"
 							variant="outline"
 							class="cursor-pointer"

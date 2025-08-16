@@ -64,6 +64,7 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 					slot: "bus-item",
 				})), {
 					rideId: ride.id,
+					selectedBuses: ride.buses,
 					slot: "add-bus-item",
 				}],
 			})),

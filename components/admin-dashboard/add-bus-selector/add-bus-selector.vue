@@ -3,15 +3,18 @@ import type { BaseBusInfo } from "~/components/buses/types";
 
 const props = defineProps<{
 	buses: BaseBusInfo[];
+	selectedBuses: ExtendedBus[];
 	busesLoading: boolean;
 	rideId: string;
 }>();
 
 const busItems = computed(() => {
-	return props.buses.map(bus => ({
-		label: bus.name,
-		value: bus.id,
-	}));
+	return props.buses
+		.filter(bus => !props.selectedBuses.some(selBus => selBus.busId === bus.id))
+		.map(bus => ({
+			label: bus.name,
+			value: bus.id,
+		}));
 });
 
 const selectedBus = ref<{ label: string; value: string }>();

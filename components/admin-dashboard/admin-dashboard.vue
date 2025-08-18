@@ -51,7 +51,7 @@ const updateQuery = ({ date, key, all }: UpdateQueryParams) => {
 				</h1>
 			</div>
 
-			<div class="flex sm:gap-5">
+			<div class="flex flex-col sm:flex-row gap-5">
 				<AppDatePicker
 					v-model="from"
 					placeholder="Od"
@@ -59,21 +59,23 @@ const updateQuery = ({ date, key, all }: UpdateQueryParams) => {
 					@update:model-value="(date) => updateQuery({ date, key: 'from' })"
 				/>
 
-				<UButton
-					label="Sve linije"
-					class="cursor-pointer"
-					@click="() => {
-						from = undefined
-						to = undefined
-						updateQuery({ all: true })
-					}"
-				/>
+				<div class="flex gap-3">
+					<UButton
+						label="Sve linije"
+						class="cursor-pointer flex-1 flex items-center justify-center"
+						@click="() => {
+							from = undefined
+							to = undefined
+							updateQuery({ all: true })
+						}"
+					/>
 
-				<UButton
-					label="Osveži podatke"
-					class="cursor-pointer"
-					@click="() => refetchGetRides()"
-				/>
+					<UButton
+						label="Osveži podatke"
+						class="cursor-pointer flex-1 flex items-center justify-center"
+						@click="() => refetchGetRides()"
+					/>
+				</div>
 
 				<AppDatePicker
 					v-model="to"

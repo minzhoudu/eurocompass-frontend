@@ -53,6 +53,13 @@ const { data: users, status } = await useLazyFetch<SearchUser[]>("/apis/admin/se
 	query: searchQuery,
 	immediate: false,
 	default: () => [],
+	transform: (data) => {
+		if (state.value.name.trim() === "" && state.value.lastName.trim() === "" && state.value.phone.trim() === "") {
+			return [];
+		}
+
+		return data;
+	},
 });
 
 const isPending = computed(() => status.value === "pending");

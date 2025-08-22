@@ -122,6 +122,7 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 								:open="seatSelectionModalOpen"
 								title="Autobus"
 								description="Izaberite novo sedište."
+								:close="false"
 							>
 								<UTooltip
 									text="Ne postoji ni jedan autobus na liniji"
@@ -160,13 +161,22 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 														@update:selected-seats="(seats) => selectSeat(seats, item.value as number)"
 													/>
 
-													<UButton
-														label="Potvrdi sedište"
-														color="success"
-														icon="material-symbols:check-circle-outline"
-														class="cursor-pointer self-center"
-														@click="reserveSeat(item.value as number, orphan)"
-													/>
+													<div class="flex justify-center gap-2">
+														<UButton
+															label="Otkaži"
+															color="error"
+															icon="lucide:x"
+															class="cursor-pointer self-center"
+															@click="seatSelectionModalOpen = false"
+														/>
+														<UButton
+															label="Potvrdi sedište"
+															color="success"
+															icon="material-symbols:check-circle-outline"
+															class="cursor-pointer self-center"
+															@click="reserveSeat(item.value as number, orphan)"
+														/>
+													</div>
 												</div>
 											</template>
 										</UTabs>

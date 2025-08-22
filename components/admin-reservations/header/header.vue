@@ -12,12 +12,12 @@ const startDateValue = defineModel<DateValue>("selected-date");
 </script>
 
 <template>
-	<div class="bg-warning-300 py-2 rounded-md flex justify-center gap-5 w-full">
+	<div class="bg-warning-300 py-2 rounded-md flex justify-center sm:gap-5 w-full">
 		<USelectMenu
 			v-if="!error && locations?.length"
 			v-model="selectedLocation"
 			:items="locations ?? []"
-			class="min-w-48 py-2"
+			class="sm:min-w-48 py-2 text-sm"
 			color="neutral"
 			:filter-fields="['searchableName']"
 		>

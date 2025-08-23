@@ -56,12 +56,18 @@ const changeBus = async () => {
 		description="Izaberite novi autobus za ovu liniju"
 		:loading="isLoading"
 	>
-		<UButton
-			size="xs"
-			class="py-0.5 cursor-pointer text-white hover:text-success border"
-			variant="solid"
-			icon="tabler:switch-2"
-		/>
+		<UTooltip
+			text="Zameni autobus"
+			:delay-duration="0"
+			:content="{ side: 'top' }"
+		>
+			<UButton
+				size="xs"
+				class="py-0.5 cursor-pointer text-white hover:text-success border"
+				variant="solid"
+				icon="tabler:switch-2"
+			/>
+		</UTooltip>
 
 		<template #body>
 			<div class="flex gap-2 w-full">

@@ -104,64 +104,59 @@ const updateQuery = ({ date, key, all }: UpdateQueryParams) => {
 						<template
 							#bus-item="{ item }: { item: { bus: ExtendedBus, rideId: string } }"
 						>
-							<UTooltip
-								:content="{ side: 'top' }"
-								:delay-duration="0"
-								:ui="{
-									content: 'bg-primary',
-								}"
-							>
-								<div class="flex flex-col gap-2 w-full">
-									<div
-										class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-4 font-bold flex-wrap md:flex-nowrap"
+							<div class="flex flex-col gap-2 w-full">
+								<div
+									class="bg-primary text-white/90 p-2 rounded flex justify-between items-center lg:gap-4 font-bold flex-wrap md:flex-nowrap"
+								>
+									<UModal
+										title="Rezervacije na autobusu"
+										description="Provera rezervacija na sedištima autobusa na trenutnoj vožnji."
 									>
-										<Icon
-											name="lucide:bus"
-											size="20"
+										<UButton class="py-0.5 px-1 cursor-pointer border hover:text-info">
+											<Icon
+												name="lucide:bus"
+												size="18"
+											/>
+										</UButton>
+
+										<template #body>
+											<AppBusSeatLayout
+												:disabled="false"
+												:selected-seats="[]"
+												:rows="item.bus.reservationSeatsRows ?? []"
+												:max-seats-reached="false"
+												is-admin-dashboard
+											/>
+										</template>
+									</UModal>
+
+									<p>
+										{{ item.bus.name }}
+									</p>
+									<p>
+										Slobodnih mesta - {{
+											item.bus.freeSeats }}
+									</p>
+
+									<div
+										v-if="buses && item.bus && item.bus.busId"
+										class="flex gap-1"
+									>
+										<AdminDashboardChangeBusSelector
+											:buses="buses"
+											:current-bus="item.bus"
+											:ride-id="item.rideId"
+											@bus-changed="refetchGetRides"
 										/>
 
-										<p>
-											{{ item.bus.name }}
-										</p>
-										<p>
-											Slobodnih mesta - {{
-												item.bus.freeSeats }}
-										</p>
-
-										<div
-											v-if="buses && item.bus && item.bus.busId"
-											class="flex gap-1"
-										>
-											<AdminDashboardChangeBusSelector
-												:buses="buses"
-												:current-bus="item.bus"
-												:ride-id="item.rideId"
-												@bus-changed="refetchGetRides"
-											/>
-
-											<AdminDashboardRemoveBusModal
-												:bus-id="item.bus.busId"
-												:ride-id="item.rideId"
-												@bus-removed="refetchGetRides"
-											/>
-										</div>
+										<AdminDashboardRemoveBusModal
+											:bus-id="item.bus.busId"
+											:ride-id="item.rideId"
+											@bus-removed="refetchGetRides"
+										/>
 									</div>
 								</div>
-
-								<template #content>
-									<div
-										class="flex flex-col gap-2 text-white/90 px-2 py-1 rounded"
-									>
-										<p>
-											Registracija: <span
-												class="font-bold"
-											>{{
-												item.bus.registration
-											}}</span>
-										</p>
-									</div>
-								</template>
-							</UTooltip>
+							</div>
 						</template>
 
 						<template

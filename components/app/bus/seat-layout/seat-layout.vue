@@ -5,11 +5,12 @@ import { isDisabled, isSelected } from "~/utils/bus/seat-layout";
 
 const authStore = useAuthStore();
 
-const { rows, selectedSeats, maxSeatsReached, disabled } = defineProps<{
+const { rows, selectedSeats, maxSeatsReached, disabled, isAdminDashboard } = defineProps<{
 	rows: ReservationSeatsRow[];
 	selectedSeats: number[];
 	maxSeatsReached: boolean;
 	disabled: boolean;
+	isAdminDashboard?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -62,20 +63,56 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
 				</div>
 
-				<div
-					v-else-if="seat.type === 'OCCUPIED'"
-					class="relative flex items-center justify-center"
-				>
-					<Icon
-						name="ic:round-event-seat"
-						class="cursor-not-allowed flex items-center justify-center w-12 h-12 rounded text-white scale-95"
-						:class="{
-							'bg-secondary-500': authStore.user?.id && seat.reservationData?.userId === authStore.user?.id,
-							'bg-red-300': !authStore.user?.id || seat.reservationData?.userId !== authStore.user?.id,
-						}"
-					/>
+				<div v-else-if="seat.type === 'OCCUPIED'">
+					<USlideover
+						v-if="isAdminDashboard"
+						title="Korisničke informacije"
+						description="Informacije o korisničkoj rezervaciji na izabranom sedištu."
+					>
+						<div
+							class="relative flex items-center justify-center"
+						>
+							<Icon
+								name="ic:round-event-seat"
+								class="flex items-center justify-center w-12 h-12 rounded text-white scale-95"
+								:class="{
+									'bg-secondary-500': authStore.user?.id && seat.reservationData?.userId === authStore.user?.id,
+									'bg-red-300': !authStore.user?.id || seat.reservationData?.userId !== authStore.user?.id,
+									'cursor-not-allowed': !isAdminDashboard,
+									'cursor-pointer': isAdminDashboard,
+								}"
+							/>
 
-					<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
+							<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
+						</div>
+
+						<template #body>
+							<div class="flex flex-col gap-5 font-bold">
+								<div>Ime: <span class="bg-warning-300 rounded-xl text-primary py-0.5 px-2">{{ seat.reservationData?.name }}</span></div>
+								<div>Prezime: <span class="bg-warning-300 rounded-xl text-primary py-0.5 px-2">{{ seat.reservationData?.lastName }}</span></div>
+								<div>Broj telefona: <span class="bg-warning-300 rounded-xl text-primary py-0.5 px-2">{{ seat.reservationData?.phone }}</span></div>
+								<div>Broj sedišta: <span class="bg-warning-300 rounded-xl text-primary py-0.5 px-2">{{ seat.number }}</span></div>
+							</div>
+						</template>
+					</USlideover>
+
+					<div
+						v-else
+						class="relative flex items-center justify-center"
+					>
+						<Icon
+							name="ic:round-event-seat"
+							class="flex items-center justify-center w-12 h-12 rounded text-white scale-95"
+							:class="{
+								'bg-secondary-500': authStore.user?.id && seat.reservationData?.userId === authStore.user?.id,
+								'bg-red-300': !authStore.user?.id || seat.reservationData?.userId !== authStore.user?.id,
+								'cursor-not-allowed': !isAdminDashboard,
+								'cursor-pointer': isAdminDashboard,
+							}"
+						/>
+
+						<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
+					</div>
 				</div>
 
 				<div

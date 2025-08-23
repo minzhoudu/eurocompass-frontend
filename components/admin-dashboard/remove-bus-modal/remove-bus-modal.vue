@@ -52,12 +52,18 @@ const removeBusFromRide = async () => {
 			body: 'p-2 sm:p-3',
 		}"
 	>
-		<UButton
-			size="xs"
-			class="py-0.5 cursor-pointer text-white hover:text-error border"
-			variant="solid"
-			icon="material-symbols:delete-outline"
-		/>
+		<UTooltip
+			text="Obriši autobus"
+			:delay-duration="0"
+			:content="{ side: 'top' }"
+		>
+			<UButton
+				size="xs"
+				class="py-0.5 cursor-pointer text-white hover:text-error border"
+				variant="solid"
+				icon="material-symbols:delete-outline"
+			/>
+		</UTooltip>
 
 		<template #body>
 			<div class="flex justify-end">

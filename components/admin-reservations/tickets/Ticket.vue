@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import TicketRow from './TicketRow.vue';
+import TicketRow from "./TicketRow.vue";
+
 export interface Ticket {
 	id: string;
 	name: string;
@@ -16,12 +17,12 @@ export interface RouteInfo {
 }
 
 const props = defineProps<{
-	routeId: string;
+	routeId?: string;
 }>();
 
-const { data: routes, error } = await useFetch<RouteInfo>("/apis/routes/info", {
+const { data: routes } = await useFetch<RouteInfo[]>("/apis/routes/info", {
 	method: "GET",
-	query: { "id": props.routeId }, // ako ne stavis nista vraca sve
+	query: { id: props.routeId },
 	onRequestError: (error) => {
 		console.error({
 			message: error.error.message,
@@ -29,62 +30,78 @@ const { data: routes, error } = await useFetch<RouteInfo>("/apis/routes/info", {
 			cause: error.error.cause,
 		});
 	},
+	transform: (input: RouteInfo[]) => {
+		if (!Array.isArray(input)) {
+			return [input];
+		}
+
+		return input;
+	},
 });
 
 const ticket = computed(() => {
-	if (!routes.value?.tickets) return null;
+	if (!routes.value) return null;
 
-	return routes.value.tickets[0]
+	return routes.value[0].tickets[0];
 });
-
 </script>
 
 <template>
-	<div v-if="ticket != null" style="width:750px" class="flex flex-col gap-19">
-		<TicketRow :left="{
-			title: 'AUTOBUSKA KARTA',
-			ticket: {
-				relation1: ticket.relation1,
-				price: 1,
-				date: '21.6.2025',
-				time: '07-00',
-				seat: 59,
-				platform: 8,
-				note: 'U cenu karte je uracunat osvezavajuci napitak'
-			}
-		}" :right="{
-			title: 'KUPON',
-			ticket: {
-				relation1: ticket.relation1,
-				price: 1,
-				date: '21.6.2025',
-				time: '07-00',
-				seat: 59,
-				platform: 8
-			}
-		}" />
+	<div
+		v-if="ticket != null"
+		style="width:750px"
+		class="flex flex-col gap-48 mt-48 ml-5"
+	>
+		<TicketRow
+			:left="{
+				title: 'AUTOBUSKA KARTA',
+				ticket: {
+					relation1: ticket.relation1,
+					price: 1,
+					date: '21.6.2025',
+					time: '07-00',
+					seat: 59,
+					platform: 8,
+					note: 'U cenu karte je uracunat osvezavajuci napitak',
+				},
+			}"
+			:right="{
+				title: 'KUPON',
+				ticket: {
+					relation1: ticket.relation1,
+					price: 1,
+					date: '21.6.2025',
+					time: '07-00',
+					seat: 59,
+					platform: 8,
+				},
+			}"
+		/>
 
-		<TicketRow :left="{
-			title: 'AUTOBUSKA KARTA',
-			ticket: {
-				relation1: ticket.relation2,
-				price: ticket.price - 1,
-				date: '21.6.2025',
-				time: '07-00',
-				seat: 59,
-				platform: 8,
-				note: 'U cenu karte je uracunat osvezavajuci napitak'
-			}
-		}" :right="{
-			title: 'KUPON',
-			ticket: {
-				relation1: ticket.relation2,
-				price: ticket.price - 1,
-				date: '21.6.2025',
-				time: '07-00',
-				seat: 59,
-				platform: 8
-			}
-		}" />
+		<TicketRow
+			:left="{
+				title: 'AUTOBUSKA KARTA',
+				ticket: {
+					relation1: ticket.relation2,
+					price: ticket.price - 1,
+					date: '21.6.2025',
+					time: '07-00',
+					seat: 59,
+					platform: 8,
+					note: 'U cenu karte je uracunat osvezavajuci napitak',
+				},
+			}"
+			:right="{
+				title: 'KUPON',
+				ticket: {
+					relation1: ticket.relation2,
+					price: ticket.price - 1,
+					date: '21.6.2025',
+					time: '07-00',
+					seat: 59,
+					platform: 8,
+				},
+			}"
+		/>
 	</div>
 </template>

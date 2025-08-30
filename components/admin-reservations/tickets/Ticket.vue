@@ -1,55 +1,31 @@
 <script setup lang="ts">
 import TicketRow from "./TicketRow.vue";
+import { useTicketsStore, type RouteInfo } from "~/stores/tickets";
 
-export interface Ticket {
-	id: string;
-	name: string;
-	price: number;
-	relation1: string;
-	relation2: string;
-}
-
-export interface RouteInfo {
-	id: string;
-	from: string;
-	to: string;
-	tickets: Ticket[];
-}
+const store = useTicketsStore();
+const route = ref<RouteInfo | undefined>();
 
 const props = defineProps<{
-	routeId?: string;
+	routeId: string;
+	seat?: number;
+	busNumber?: number;
+	platform?: number;
 }>();
 
-const { data: routes } = await useFetch<RouteInfo[]>("/apis/routes/info", {
-	method: "GET",
-	query: { id: props.routeId },
-	onRequestError: (error) => {
-		console.error({
-			message: error.error.message,
-			response: error.response,
-			cause: error.error.cause,
-		});
-	},
-	transform: (input: RouteInfo[]) => {
-		if (!Array.isArray(input)) {
-			return [input];
-		}
-
-		return input;
-	},
+const ticket = computed(() => {
+	if (!route.value) return null;
+	return route.value.tickets[0];
 });
 
-const ticket = computed(() => {
-	if (!routes.value) return null;
-
-	return routes.value[0].tickets[0];
+onMounted(async () => {
+	route.value = await store.getRoute(props.routeId);
 });
 </script>
 
 <template>
 	<div
 		v-if="ticket != null"
-		style="width:750px"
+		style="width:750px; page-break-after:always;"
 		class="flex flex-col gap-48 mt-48 ml-5"
 	>
 		<TicketRow
@@ -60,8 +36,8 @@ const ticket = computed(() => {
 					price: 1,
 					date: '21.6.2025',
 					time: '07-00',
-					seat: 59,
-					platform: 8,
+					seat: props.seat,
+					platform: props.platform,
 					note: 'U cenu karte je uracunat osvezavajuci napitak',
 				},
 			}"
@@ -72,8 +48,8 @@ const ticket = computed(() => {
 					price: 1,
 					date: '21.6.2025',
 					time: '07-00',
-					seat: 59,
-					platform: 8,
+					seat: props.seat,
+					platform: props.platform,
 				},
 			}"
 		/>
@@ -86,8 +62,8 @@ const ticket = computed(() => {
 					price: ticket.price - 1,
 					date: '21.6.2025',
 					time: '07-00',
-					seat: 59,
-					platform: 8,
+					seat: props.seat,
+					platform: props.platform,
 					note: 'U cenu karte je uracunat osvezavajuci napitak',
 				},
 			}"
@@ -98,8 +74,8 @@ const ticket = computed(() => {
 					price: ticket.price - 1,
 					date: '21.6.2025',
 					time: '07-00',
-					seat: 59,
-					platform: 8,
+					seat: props.seat,
+					platform: props.platform,
 				},
 			}"
 		/>

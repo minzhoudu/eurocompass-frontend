@@ -1,8 +1,48 @@
 <script setup lang="ts">
-defineProps<{
+const { busNumber, seat, rideId } = defineProps<{
 	busNumber: number;
 	seat: number;
+	rideId: string;
 }>();
+
+const toast = useToast();
+
+const emit = defineEmits<{
+	(e: "cancelReservation"): void;
+}>();
+
+const handleCancelReservation = async () => {
+	try {
+		await $fetch("/apis/users/cancelReservations", {
+			method: "DELETE",
+			body: {
+				reservations: [
+					{
+						busNumber,
+						seats: [seat],
+					},
+				],
+				rideId,
+			},
+		});
+
+		emit("cancelReservation");
+
+		toast.add({
+			title: "Rezervacija je uspešno otkazana!",
+			description: `Uspešno ste otkazali rezervaciju na sedištu broj ${seat} za autobus ${busNumber}`,
+			color: "success",
+		});
+	}
+	catch (error) {
+		console.error(error);
+		toast.add({
+			title: "Greška prilikom otkazivanja rezervacije!",
+			description: "Došlo je do greške prilikom otkazivanja vaše rezervacije, molimo pokušajte ponovo.",
+			color: "error",
+		});
+	}
+};
 </script>
 
 <template>
@@ -14,6 +54,7 @@ defineProps<{
 			label="Otkazi rezervaciju"
 			color="error"
 			class="mt-4 cursor-pointer"
+			@click="handleCancelReservation"
 		/>
 	</div>
 </template>

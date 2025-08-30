@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { DateValue } from "@internationalized/date";
 import type { TableColumn } from "@nuxt/ui";
-import dayjs from "dayjs";
+import dayjs from "@/utils/dayjs";
 import type { Location } from "~/components/home/header/types";
 import type { Reservation, Ride } from "~/components/home/reservations/types";
 
@@ -76,7 +76,7 @@ const columns = ref<TableColumn<Reservation>[]>([
 			});
 		},
 		cell: ({ cell }) => {
-			const time = dayjs(cell.getValue() as Date, { utc: true }).format("HH:mm");
+			const time = dayjs.utc(cell.getValue() as Date).format("HH:mm");
 
 			return h(Cell, {
 				label: time,

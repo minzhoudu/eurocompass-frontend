@@ -1,6 +1,6 @@
 import type { DateValue } from "@internationalized/date";
 import type { TreeItem } from "@nuxt/ui";
-import dayjs from "dayjs";
+import dayjs from "@/utils/dayjs";
 import type { Bus, Ride } from "~/components/home/reservations/types";
 
 export type Orphan = {
@@ -51,7 +51,7 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 			icon: "material-symbols:calendar-month-rounded",
 			children: table.rides.map(ride => ({
 				value: ride.id,
-				label: dayjs(ride.departure, { utc: true }).format("HH:mm"),
+				label: dayjs.utc(ride.departure).format("HH:mm"),
 				class: "font-semibold border-t border-black/30 py-3",
 				icon: "material-symbols:alarm",
 				slot: "ride-item",

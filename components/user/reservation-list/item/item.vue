@@ -30,7 +30,7 @@ const handleCancelReservation = async () => {
 
 		toast.add({
 			title: "Rezervacija je uspešno otkazana!",
-			description: `Uspešno ste otkazali rezervaciju na sedištu broj ${seat} za autobus ${busNumber}`,
+			description: `Uspešno ste otkazali rezervaciju na sedištu broj ${seat}`,
 			color: "success",
 		});
 	}
@@ -50,11 +50,32 @@ const handleCancelReservation = async () => {
 		<p>Kola: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ busNumber }}</span></p>
 		<p>Sediste: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat }}</span></p>
 
-		<UButton
-			label="Otkazi rezervaciju"
-			color="error"
-			class="mt-4 cursor-pointer"
-			@click="handleCancelReservation"
-		/>
+		<UModal
+			title="Otkazivanje rezervacije"
+			description=""
+		>
+			<UButton
+				label="Otkaži rezervaciju"
+				color="error"
+				class="mt-4 cursor-pointer"
+			/>
+
+			<template #body>
+				<p class="text-sm text-center">
+					Da li ste sigurni da želite da otkažete rezervaciju za sedište broj <span class="font-bold">{{ seat }}</span>?
+				</p>
+			</template>
+
+			<template #footer>
+				<div class="flex w-full justify-end">
+					<UButton
+						label="Otkaži rezervaciju"
+						color="error"
+						class="cursor-pointer"
+						@click="handleCancelReservation"
+					/>
+				</div>
+			</template>
+		</UModal>
 	</div>
 </template>

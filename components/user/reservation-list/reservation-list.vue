@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import type { AccordionItem } from "@nuxt/ui";
 
-const authStore = useAuthStore();
+type UserReservation = {
+	rideId: string;
+	busNumber: number;
+	seat: number;
+};
+
+const { data, refresh: refetchReservations } = await useFetch<UserReservation[]>("/apis/users/reservations");
 
 const reservations = computed<AccordionItem[]>(() => {
-	if (!authStore.user?.reservations) return [];
+	if (!data.value) return [];
 
-	return authStore.user?.reservations?.map((reservation) => {
+	return data.value.map((reservation) => {
 		return {
 			label: `Bus ${reservation.busNumber} - Seat ${reservation.seat}`,
 			busNumber: reservation.busNumber,
 			seat: reservation.seat,
-			content: "You have nothing to do, @nuxt/icon will handle it automatically.",
+			rideId: reservation.rideId,
 			slot: "reservation-item",
 			icon: "i-heroicons-ticket-solid",
 		};
@@ -32,6 +38,8 @@ const reservations = computed<AccordionItem[]>(() => {
 					<UserReservationListItem
 						:bus-number="item.busNumber"
 						:seat="item.seat"
+						:ride-id="item.rideId"
+						@cancel-reservation="refetchReservations"
 					/>
 				</template>
 			</UAccordion>

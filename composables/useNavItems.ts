@@ -37,7 +37,12 @@ export const useNavItems = () => {
 										label: "Admin Panel",
 										icon: "i-lucide-shield",
 										to: "/admin",
-										active: route.path.startsWith("/admin"),
+										active: route.path.startsWith("/admin") && !route.path.startsWith("/admin/settings"),
+									},
+									{
+										label: "Settings",
+										icon: "i-lucide-settings",
+										to: "/admin/settings",
 									},
 								]
 							: []),
@@ -45,11 +50,6 @@ export const useNavItems = () => {
 							label: "Profil",
 							icon: "i-lucide-user",
 							to: "/user/profile",
-						},
-						{
-							label: "Settings",
-							icon: "i-lucide-settings",
-						// to: "/settings",
 						},
 						{
 							label: "Odjava",

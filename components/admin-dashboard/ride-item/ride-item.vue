@@ -26,7 +26,7 @@ const tabItems = computed<TabsItem[]>(() => {
 });
 const seatSelectionModalOpen = ref(false);
 
-const { selectedSeats } = useReservations(props.rideId);
+const { selectedSeats } = await useReservations(props.rideId);
 const selectSeat = (seats: number[], busNumber: number) => {
 	const lastSelectedSeat = seats[seats.length - 1];
 

@@ -47,9 +47,12 @@ const onSubmit = async (user: {
 	name: string;
 	lastName: string;
 	phone: string;
+	print: boolean;
 }) => {
 	const body = {
-		...user,
+		name: user.name,
+		lastName: user.lastName,
+		phone: user.phone,
 		reservations: selectedSeats.value,
 		rideId: props.ride.id,
 	};
@@ -64,11 +67,13 @@ const onSubmit = async (user: {
 
 		isModalOpen.value = false;
 
-		store.selectedSeats = selectedSeats.value[0];
-		store.ride = props.ride;
-		router.push({
-			name: "tickets",
-		});
+		if (user.print) {
+			store.selectedSeats = selectedSeats.value[0];
+			store.ride = props.ride;
+			router.push({
+				name: "tickets",
+			});
+		}
 
 		clearSelectedSeats();
 		toast.add({ title: "Success", description: "Rezervacija je uspešno kreirana.", color: "success" });
@@ -85,57 +90,33 @@ const emit = defineEmits<{
 </script>
 
 <template>
-	<UModal
-		v-model:open="isModalOpen"
-		title="Rezervacija"
-		description="Izaberite svoje sedište"
-	>
-		<UButton
-			:label="label"
-			variant="solid"
-			color="neutral"
-			size="sm"
-			class="md:py-2 cursor-pointer"
-			icon="lucide:ticket"
-		/>
+	<UModal v-model:open="isModalOpen" title="Rezervacija" description="Izaberite svoje sedište">
+		<UButton :label="label" variant="solid" color="neutral" size="sm" class="md:py-2 cursor-pointer"
+			icon="lucide:ticket" />
 
 		<template #body>
-			<UTabs
-				:default-value="ride.buses[0].busNumber"
-				:items="tabItems"
-				:ui="{
-					list: tabItems.length > 1 ? '' : 'max-w-1/2',
-				}"
-			>
+			<UTabs :default-value="ride.buses[0].busNumber" :items="tabItems" :ui="{
+				list: tabItems.length > 1 ? '' : 'max-w-1/2',
+			}">
 				<template #content="{ item }">
-					<AppBusSeatLayout
-						:disabled="false"
+					<AppBusSeatLayout :disabled="false"
 						:selected-seats="getSelectedSeatsForBus(selectedSeats, item.value as number)"
 						:rows="ride.buses.find(bus => bus.busNumber === item.value)?.reservationSeatsRows ?? []"
 						:max-seats-reached="false"
-						@update:selected-seats="(seats) => updateSelectedSeatsForBus(item.value as number, seats)"
-					/>
+						@update:selected-seats="(seats) => updateSelectedSeatsForBus(item.value as number, seats)" />
 				</template>
 			</UTabs>
 		</template>
 
 		<template #footer>
 			<div class="flex gap-2 w-full justify-end">
-				<UButton
-					label="Odustani"
-					variant="outline"
-					color="error"
-					class="cursor-pointer"
-					@click="() => {
-						clearSelectedSeats();
-						isModalOpen = false;
-					}"
-				/>
+				<UButton label="Odustani" variant="outline" color="error" class="cursor-pointer" @click="() => {
+					clearSelectedSeats();
+					isModalOpen = false;
+				}" />
 
-				<AdminReservationsTableUserDataForm
-					:submit-disabled="selectedSeats.length === 0"
-					@submit="onSubmit"
-				/>
+				<AdminReservationsTableUserDataForm :submit-disabled="selectedSeats.length === 0"
+					@submit="onSubmit" />
 			</div>
 		</template>
 	</UModal>

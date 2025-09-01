@@ -10,6 +10,7 @@ const schema = z.object({
 	name: z.string().min(1, "Name is required"),
 	lastName: z.string().min(1, "Last name is required"),
 	phone: z.string().min(1, "Phone number is required"),
+	print: z.boolean(),
 });
 
 type Schema = z.output<typeof schema>;
@@ -18,6 +19,7 @@ const state = ref<Schema>({
 	name: "",
 	lastName: "",
 	phone: "",
+	print: false,
 });
 
 export type SearchUser = {
@@ -69,17 +71,16 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		name: event.data.name,
 		lastName: event.data.lastName,
 		phone: event.data.phone,
+		print: event.data.print,
 	};
 
 	emit("submit", user);
 };
 
 const onSelectUser = (user: SearchUser) => {
-	state.value = {
-		name: user.name,
-		lastName: user.lastName,
-		phone: user.phone,
-	};
+	state.value.name = user.name;
+	state.value.lastName = user.lastName;
+	state.value.phone = user.phone;
 };
 
 const resetForm = () => {
@@ -87,6 +88,7 @@ const resetForm = () => {
 		name: "",
 		lastName: "",
 		phone: "",
+		print: false,
 	};
 };
 
@@ -95,86 +97,52 @@ const emit = defineEmits<{
 		name: string;
 		lastName: string;
 		phone: string;
+		print: boolean;
 	}): void;
 }>();
 </script>
 
 <template>
-	<UModal
-		title="Podaci o korisniku"
-		description="Unesite podatke za rezervaciju"
-		:ui="{
-			content: 'max-w-max',
-		}"
-	>
-		<UButton
-			label="Rezerviši"
-			class="cursor-pointer"
-			:disabled="props.submitDisabled"
-		/>
+	<UModal title="Podaci o korisniku" description="Unesite podatke za rezervaciju" :ui="{
+		content: 'max-w-max',
+	}">
+		<UButton label="Rezerviši" class="cursor-pointer" :disabled="props.submitDisabled" />
 
 		<template #body>
 			<div class="flex w-[800px] justify-evenly">
-				<UForm
-					:schema="schema"
-					:state="state"
-					class="space-y-4 flex flex-col items-center"
-					@submit="onSubmit"
-				>
-					<UFormField
-						label="Ime"
-						name="name"
-					>
-						<UInput
-							v-model="state.name"
-							class="w-60"
-						/>
+				<UForm :schema="schema" :state="state" class="space-y-4 flex flex-col items-center"
+					@submit="onSubmit">
+					<UFormField label="Ime" name="name">
+						<UInput v-model="state.name" class="w-60" />
 					</UFormField>
 
-					<UFormField
-						label="Prezime"
-						name="lastName"
-					>
-						<UInput
-							v-model="state.lastName"
-							class="w-60"
-						/>
+					<UFormField label="Prezime" name="lastName">
+						<UInput v-model="state.lastName" class="w-60" />
 					</UFormField>
 
-					<UFormField
-						label="Broj telefona"
-						name="phone"
-					>
-						<UInput
-							v-model="state.phone"
-							class="w-60"
-						/>
+					<UFormField label="Broj telefona" name="phone">
+						<UInput v-model="state.phone" class="w-60" />
+					</UFormField>
+
+					<UFormField label="Stampaj" name="print">
+						<UCheckbox v-model="state.print" class="w-60" />
 					</UFormField>
 
 					<div class="flex gap-4 w-full">
-						<UButton
-							class="flex justify-center font-bold cursor-pointer flex-1"
-							color="error"
-							variant="outline"
-							@click="resetForm"
-						>
+						<UButton class="flex justify-center font-bold cursor-pointer flex-1"
+							color="error" variant="outline" @click="resetForm">
 							Resetuj
 						</UButton>
-						<UButton
-							type="submit"
+						<UButton type="submit"
 							class="flex justify-center font-bold cursor-pointer flex-1"
-							:disabled="!schema.safeParse(state).success"
-						>
+							:disabled="!schema.safeParse(state).success">
 							Rezerviši
 						</UButton>
 					</div>
 				</UForm>
 
-				<AdminReservationsTableUserList
-					:users="users"
-					:pending="isPending"
-					@select="onSelectUser"
-				/>
+				<AdminReservationsTableUserList :users="users" :pending="isPending"
+					@select="onSelectUser" />
 			</div>
 		</template>
 	</UModal>

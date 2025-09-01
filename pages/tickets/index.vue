@@ -24,9 +24,13 @@ const afterPrint = () => {
 			</button>
 		</div>
 		<div id="tickets-section">
-			<AdminReservationsTicketsTicket v-for="(ticket, i) in selectedSeats.seats" :key="i"
+			<AdminReservationsTicketsTicket
+				v-for="(ticket, i) in selectedSeats.seats"
+				:key="i"
 				:route-id="ride?.routeId ?? ''"
-				:class="{ 'break-after-page': i !== selectedSeats.seats.length - 1 }" :seat="ticket" />
+				:class="{ 'break-after-page': i !== selectedSeats.seats.length - 1 }"
+				:seat="ticket"
+			/>
 		</div>
 	</div>
 	<div v-else>

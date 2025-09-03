@@ -1,51 +1,16 @@
 <script setup lang="ts">
 import SettingsActions from "./settings-actions.vue";
-import type { Settings } from "./settings.types";
 
-const { data: settings, refresh: refetchSettings } = await useFetch<Settings>("/apis/settings");
+const settingsStore = useSettingsStore();
 
-const userSeatLimit = ref(settings?.value?.userSeatLimit);
-
-const isPendingSubmit = ref(false);
-
-const toast = useToast();
-
-const updateSettings = async () => {
-	try {
-		isPendingSubmit.value = true;
-		await $fetch("/apis/settings", {
-			method: "POST",
-			body: {
-				userSeatLimit: userSeatLimit.value,
-			},
-		});
-
-		toast.add({
-			title: "Uspešno sačuvani podaci",
-			color: "success",
-		});
-
-		refetchSettings();
-	}
-	catch (error) {
-		console.error(error);
-
-		toast.add({
-			title: "Greška prilikom sačuvanja podataka",
-			color: "error",
-		});
-	}
-	finally {
-		isPendingSubmit.value = false;
-	}
-};
+const userSeatLimit = ref(settingsStore.settings?.userSeatLimit);
 
 const resetSettings = () => {
-	userSeatLimit.value = settings?.value?.userSeatLimit;
+	userSeatLimit.value = settingsStore.settings?.userSeatLimit;
 };
 
 const isSaveDisabled = computed(() => {
-	return userSeatLimit.value === settings?.value?.userSeatLimit;
+	return userSeatLimit.value === settingsStore.settings?.userSeatLimit;
 });
 </script>
 
@@ -63,8 +28,8 @@ const isSaveDisabled = computed(() => {
 			<template #footer>
 				<SettingsActions
 					:is-save-disabled="isSaveDisabled"
-					:is-pending="isPendingSubmit"
-					@save="updateSettings"
+					:is-pending="settingsStore.isPendingUpdate"
+					@save="() => settingsStore.updateSettings({ userSeatLimit })"
 					@cancel="resetSettings"
 				/>
 			</template>

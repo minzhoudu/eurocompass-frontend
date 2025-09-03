@@ -5,7 +5,8 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: "save" | "cancel"): void;
+	(e: "save"): Promise<void>;
+	(e: "cancel"): void;
 }>();
 </script>
 

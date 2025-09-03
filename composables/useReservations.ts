@@ -1,11 +1,10 @@
 import type { Bus, SelectedSeats } from "~/components/home/reservations/types";
-import type { Settings } from "~/components/settings/settings.types";
 import { getTotalSelectedSeats } from "~/utils/bus/reservation";
 
 export const useReservations = async (rideId: string) => {
-	const { data: settings } = await useFetch<Settings>("/apis/settings");
+	const settingsStore = useSettingsStore();
 
-	const MAX_SELECTED_SEATS = settings.value?.userSeatLimit || 2;
+	const MAX_SELECTED_SEATS = settingsStore.settings?.userSeatLimit || 2;
 
 	const isModalOpen = ref(false);
 	const selectedSeats = ref<SelectedSeats[]>([]);

@@ -25,6 +25,7 @@ const emit = defineEmits<{
 		<UButton
 			color="error"
 			class="cursor-pointer"
+			:disabled="isSaveDisabled"
 			@click="emit('cancel')"
 		>
 			Otkaži

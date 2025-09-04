@@ -1,8 +1,10 @@
 <script setup lang="ts">
-const { busNumber, seat, rideId } = defineProps<{
-	busNumber: number;
-	seat: number;
+import type { Seat } from "../reservation-list.vue";
+
+const { seat, rideId } = defineProps<{
+	seat: Seat;
 	rideId: string;
+	expired: boolean;
 }>();
 
 const toast = useToast();
@@ -18,8 +20,8 @@ const handleCancelReservation = async () => {
 			body: {
 				reservations: [
 					{
-						busNumber,
-						seats: [seat],
+						busNumber: seat.busNumber,
+						seats: [seat.seat],
 					},
 				],
 				rideId,
@@ -30,7 +32,7 @@ const handleCancelReservation = async () => {
 
 		toast.add({
 			title: "Rezervacija je uspešno otkazana!",
-			description: `Uspešno ste otkazali rezervaciju na sedištu broj ${seat}`,
+			description: `Uspešno ste otkazali rezervaciju na sedištu broj ${seat.seat}`,
 			color: "success",
 		});
 	}
@@ -47,10 +49,11 @@ const handleCancelReservation = async () => {
 
 <template>
 	<div class="bg-slate-200 p-4 rounded-lg text-primary font-bold">
-		<p>Kola: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ busNumber }}</span></p>
-		<p>Sediste: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat }}</span></p>
+		<p>Kola: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.busNumber }}</span></p>
+		<p>Sediste: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.seat }}</span></p>
 
 		<UModal
+			v-if="!expired"
 			title="Otkazivanje rezervacije"
 			description=""
 		>
@@ -62,7 +65,7 @@ const handleCancelReservation = async () => {
 
 			<template #body>
 				<p class="text-sm text-center">
-					Da li ste sigurni da želite da otkažete rezervaciju za sedište broj <span class="font-bold">{{ seat }}</span>?
+					Da li ste sigurni da želite da otkažete rezervaciju za sedište broj <span class="font-bold">{{ seat.seat }}</span>?
 				</p>
 			</template>
 

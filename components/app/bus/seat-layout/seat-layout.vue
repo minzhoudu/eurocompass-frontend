@@ -15,6 +15,7 @@ const { rows, selectedSeats, maxSeatsReached, disabled, isAdminDashboard } = def
 
 const emit = defineEmits<{
 	"update:selectedSeats": [value: number[]];
+	"admin:cancelReservation": [];
 }>();
 
 const handleSelectSeat = (seat: ReservationSlot) => {
@@ -81,6 +82,7 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 									'cursor-not-allowed': !isAdminDashboard,
 									'cursor-pointer': isAdminDashboard,
 								}"
+								@click="$router.push({ query: { seat: seat.number } })"
 							/>
 
 							<span class="absolute flex z-10 w-full h-full justify-center text-xs top-2 font-bold text-white pointer-events-none">{{ seat.number }}</span>
@@ -92,6 +94,16 @@ const handleSelectSeat = (seat: ReservationSlot) => {
 								<div>Prezime: <span class="bg-warning-300 rounded-xl text-primary py-0.5 px-2">{{ seat.reservationData?.lastName }}</span></div>
 								<div>Broj telefona: <span class="bg-warning-300 rounded-xl text-primary py-0.5 px-2">{{ seat.reservationData?.phone }}</span></div>
 								<div>Broj sedišta: <span class="bg-warning-300 rounded-xl text-primary py-0.5 px-2">{{ seat.number }}</span></div>
+							</div>
+
+							<div class="flex justify-end">
+								<UButton
+									label="Otkazi rezervaciju"
+									color="error"
+									icon="lucide:x"
+									class="cursor-pointer self-center"
+									@click="emit('admin:cancelReservation')"
+								/>
 							</div>
 						</template>
 					</USlideover>

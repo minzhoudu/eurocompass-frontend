@@ -35,6 +35,51 @@ const updateQuery = ({ date, key, all }: UpdateQueryParams) => {
 		router.push({ query: { ...route.query, [key]: date?.toString() } });
 	}
 };
+
+const seat = computed(() => {
+	return Number(route.query.seat);
+});
+
+const toast = useToast();
+const isPendingCancelReservation = ref(false);
+const handleCancelReservation = async (busNumber: number, rideId: string) => {
+	isPendingCancelReservation.value = true;
+	try {
+		await $fetch("/apis/admin/cancelReservations", {
+			method: "DELETE",
+			body: {
+				reservations: [
+					{
+						busNumber,
+						seats: [
+							seat.value,
+						],
+					},
+				],
+				rideId,
+			},
+		});
+
+		toast.add({
+			title: "Rezervacija je uspešno otkazana",
+			color: "success",
+		});
+
+		router.push({ query: { ...route.query, seat: undefined } });
+		await refetchGetRides();
+	}
+	catch (error) {
+		console.error(error);
+
+		toast.add({
+			title: "Greška prilikom otkazivanja rezervacije",
+			color: "error",
+		});
+	}
+	finally {
+		isPendingCancelReservation.value = false;
+	}
+};
 </script>
 
 <template>
@@ -126,6 +171,7 @@ const updateQuery = ({ date, key, all }: UpdateQueryParams) => {
 												:rows="item.bus.reservationSeatsRows ?? []"
 												:max-seats-reached="false"
 												is-admin-dashboard
+												@admin:cancel-reservation="() => handleCancelReservation(item.bus.busNumber, item.rideId)"
 											/>
 										</template>
 									</UModal>

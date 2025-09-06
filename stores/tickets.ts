@@ -15,9 +15,18 @@ export interface RouteInfo {
 export interface Ticket {
 	id: string;
 	name: string;
-	price: number;
-	relation1: string;
-	relation2: string;
+	price: TicketPrice;
+	relations: TicketRelation[];
+}
+export interface TicketRelation {
+	name: string;
+	coupon1: string;
+	coupon2?: string;
+}
+export interface TicketPrice {
+	id: string;
+	name: string;
+	amount: number;
 }
 
 export const useTicketsStore = defineStore("tickets", {

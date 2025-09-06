@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TicketRow from "./TicketRow.vue";
+import TicketCard from "./TicketCard";
 import { useTicketsStore, type RouteInfo } from "~/stores/tickets";
 
 const store = useTicketsStore();
@@ -28,56 +28,46 @@ onMounted(async () => {
 		style="width:750px; page-break-after:always;"
 		class="flex flex-col gap-48 mt-48 ml-5"
 	>
-		<TicketRow
-			:left="{
-				title: 'AUTOBUSKA KARTA',
-				ticket: {
-					relation1: ticket.relation1,
-					price: 1,
+		<div
+			v-for="(relation, i) in ticket.relations"
+			:key="i"
+			class="flex gap-10"
+		>
+			<TicketCard
+				title=" AUTOBUSKA KARTA"
+				:ticket="{
+					relation1: relation.name,
+					price: ticket.relations.length - 1 == i ? ticket.price.amount - 1 : 1,
 					date: '21.6.2025',
 					time: '07-00',
 					seat: props.seat,
 					platform: props.platform,
 					note: 'U cenu karte je uracunat osvezavajuci napitak',
-				},
-			}"
-			:right="{
-				title: 'KUPON',
-				ticket: {
-					relation1: ticket.relation1,
-					price: 1,
+				}"
+			/>
+			<TicketCard
+				v-if="relation.coupon2"
+				title="KUPON"
+				:ticket="{
+					relation1: relation.coupon2,
+					price: 'OVERA',
 					date: '21.6.2025',
 					time: '07-00',
 					seat: props.seat,
 					platform: props.platform,
-				},
-			}"
-		/>
-
-		<TicketRow
-			:left="{
-				title: 'AUTOBUSKA KARTA',
-				ticket: {
-					relation1: ticket.relation2,
-					price: ticket.price - 1,
+				}"
+			/>
+			<TicketCard
+				title="KUPON"
+				:ticket="{
+					relation1: relation.coupon1,
+					price: ticket.relations.length - 1 == i ? ticket.price.amount - 1 : 1,
 					date: '21.6.2025',
 					time: '07-00',
 					seat: props.seat,
 					platform: props.platform,
-					note: 'U cenu karte je uracunat osvezavajuci napitak',
-				},
-			}"
-			:right="{
-				title: 'KUPON',
-				ticket: {
-					relation1: ticket.relation2,
-					price: ticket.price - 1,
-					date: '21.6.2025',
-					time: '07-00',
-					seat: props.seat,
-					platform: props.platform,
-				},
-			}"
-		/>
+				}"
+			/>
+		</div>
 	</div>
 </template>

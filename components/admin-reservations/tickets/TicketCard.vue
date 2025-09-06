@@ -4,7 +4,7 @@ import TicketBox from "./TicketBox.vue";
 export type TicketData = {
 	relation1: string;
 	date?: string;
-	price: number;
+	price: number | string;
 	time?: string;
 	seat?: number;
 	platform?: number;

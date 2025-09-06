@@ -103,46 +103,91 @@ const emit = defineEmits<{
 </script>
 
 <template>
-	<UModal title="Podaci o korisniku" description="Unesite podatke za rezervaciju" :ui="{
-		content: 'max-w-max',
-	}">
-		<UButton label="Rezerviši" class="cursor-pointer" :disabled="props.submitDisabled" />
+	<UModal
+		title="Podaci o korisniku"
+		description="Unesite podatke za rezervaciju"
+		:ui="{
+			content: 'max-w-max',
+		}"
+	>
+		<UButton
+			label="Rezerviši"
+			class="cursor-pointer"
+			:disabled="props.submitDisabled"
+		/>
 
 		<template #body>
 			<div class="flex w-[800px] justify-evenly">
-				<UForm :schema="schema" :state="state" class="space-y-4 flex flex-col items-center"
-					@submit="onSubmit">
-					<UFormField label="Ime" name="name">
-						<UInput v-model="state.name" class="w-60" />
+				<UForm
+					:schema="schema"
+					:state="state"
+					class="space-y-4 flex flex-col items-center"
+					@submit="onSubmit"
+				>
+					<UFormField
+						label="Ime"
+						name="name"
+					>
+						<UInput
+							v-model="state.name"
+							class="w-60"
+						/>
 					</UFormField>
 
-					<UFormField label="Prezime" name="lastName">
-						<UInput v-model="state.lastName" class="w-60" />
+					<UFormField
+						label="Prezime"
+						name="lastName"
+					>
+						<UInput
+							v-model="state.lastName"
+							class="w-60"
+						/>
 					</UFormField>
 
-					<UFormField label="Broj telefona" name="phone">
-						<UInput v-model="state.phone" class="w-60" />
+					<UFormField
+						label="Broj telefona"
+						name="phone"
+					>
+						<UInput
+							v-model="state.phone"
+							class="w-60"
+						/>
 					</UFormField>
 
-					<UFormField label="Stampaj" name="print">
-						<UCheckbox v-model="state.print" class="w-60" />
+					<UFormField
+						label="Stampaj"
+						name="print"
+					>
+						<UCheckbox
+							v-model="state.print"
+							class="w-60"
+						/>
 					</UFormField>
 
 					<div class="flex gap-4 w-full">
-						<UButton class="flex justify-center font-bold cursor-pointer flex-1"
-							color="error" variant="outline" @click="resetForm">
+						<UButton
+							class="flex justify-center font-bold cursor-pointer flex-1"
+							color="error"
+							variant="outline"
+							@click="resetForm"
+						>
 							Resetuj
 						</UButton>
-						<UButton type="submit"
+						<UButton
+							type="submit"
 							class="flex justify-center font-bold cursor-pointer flex-1"
-							:disabled="!schema.safeParse(state).success">
+							:disabled="!schema.safeParse(state).success"
+						>
 							Rezerviši
 						</UButton>
 					</div>
 				</UForm>
 
-				<AdminReservationsTableUserList :users="users" :pending="isPending"
-					@select="onSelectUser" />
+				<AdminReservationsTableUserList
+					:users="users"
+					:pending="isPending"
+					@select="onSelectUser"
+				/>
 			</div>
 		</template>
 	</UModal>

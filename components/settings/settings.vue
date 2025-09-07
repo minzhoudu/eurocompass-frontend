@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SettingsActions from "./settings-actions.vue";
+import TicketPriceRow from "./ticket-price-row.vue";
 
 const settingsStore = useSettingsStore();
 
@@ -15,11 +16,24 @@ const isSaveDisabled = computed(() => {
 </script>
 
 <template>
-	<div class="flex justify-center">
+	<div class="flex flex-col items-center justify-center">
 		<UCard class="w-full max-w-2xl">
 			<template #header>
 				<div class="text-2xl font-bold text-center">
-					Settings
+					Cene Karata
+				</div>
+			</template>
+			<TicketPriceRow
+				v-for="ticket in settingsStore.ticketPrices"
+				:key="ticket.Id"
+				:ticket="ticket"
+			/>
+		</UCard>
+
+		<UCard class="w-full max-w-2xl">
+			<template #header>
+				<div class="text-2xl font-bold text-center">
+					Podešavanja
 				</div>
 			</template>
 

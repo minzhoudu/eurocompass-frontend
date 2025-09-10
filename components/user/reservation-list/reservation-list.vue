@@ -4,6 +4,7 @@ import type { AccordionItem } from "@nuxt/ui";
 export type Seat = {
 	busNumber: number;
 	seat: number;
+	platform: number | undefined;
 };
 
 type UserReservation = {
@@ -48,7 +49,7 @@ const reservations = computed<AccordionItem[]>(() => {
 							:datetime="item.departure"
 							date-style="full"
 							time-style="short"
-							locale="sr-RS"
+							locale="sr-Latn-RS"
 						/>
 					</div>
 				</template>
@@ -72,14 +73,8 @@ const reservations = computed<AccordionItem[]>(() => {
 			v-else-if="pending"
 			class="flex flex-col gap-2"
 		>
-			<USkeleton
-
-				class="h-12 w-full"
-			/>
-			<USkeleton
-
-				class="h-12 w-full"
-			/>
+			<USkeleton class="h-12 w-full" />
+			<USkeleton class="h-12 w-full" />
 		</div>
 
 		<div v-else>

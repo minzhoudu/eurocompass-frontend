@@ -22,7 +22,7 @@ const emit = defineEmits<{
 	(e: "update:modelValue", value: DateValue | undefined): void;
 }>();
 
-const df = new DateFormatter("sr-RS", {
+const df = new DateFormatter("sr-Latn-RS", {
 	dateStyle: "full",
 });
 
@@ -38,9 +38,7 @@ const dateValue = computed({
 </script>
 
 <template>
-	<UPopover
-		v-model:open="isPopoverOpen"
-	>
+	<UPopover v-model:open="isPopoverOpen">
 		<UButton
 			color="neutral"
 			class="bg-white font-bold cursor-pointer md:py-2 md:px-4 min-w-48 justify-center"

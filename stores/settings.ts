@@ -57,10 +57,16 @@ export const useSettingsStore = defineStore("settings", () => {
 		isPendingUpdate.value = true;
 
 		try {
-			await $fetch<TicketPrice>("/apis/tickets/prices", {
+			const newPrice = await $fetch<TicketPrice>("/apis/tickets/prices", {
 				method: "POST",
 				body: data,
 			});
+
+			for (const price of ticketPrices.value) {
+				if (newPrice.id === price.id) {
+					price.amount = newPrice.amount;
+				}
+			}
 
 			toast.add({
 				title: "Podaci su uspešno ažurirani",

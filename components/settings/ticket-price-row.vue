@@ -6,8 +6,9 @@ const settingsStore = useSettingsStore();
 const { ticket } = defineProps<{
 	ticket: TicketPrice;
 }>();
+
 const value = ref(ticket.amount);
-const startValue = ref(ticket.amount);
+const startValue = computed(() => ticket.amount);
 
 const hasValueChanged = computed(() => startValue.value == value.value);
 function onBlur() {

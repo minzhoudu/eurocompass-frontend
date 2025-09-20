@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TicketCard from "./TicketCard";
-import { useTicketsStore, type RouteInfo } from "~/stores/tickets";
+import TicketCard from "./TicketCard.vue";
+import { useTicketsStore, type RouteInfo, type Ticket } from "~/stores/tickets";
 
 const store = useTicketsStore();
 const route = ref<RouteInfo | undefined>();
@@ -10,12 +10,8 @@ const props = defineProps<{
 	seat?: number;
 	busNumber?: number;
 	platform?: number;
+	ticket: Ticket;
 }>();
-
-const ticket = computed(() => {
-	if (!route.value) return null;
-	return route.value.tickets[0];
-});
 
 onMounted(async () => {
 	route.value = await store.getRoute(props.routeId);

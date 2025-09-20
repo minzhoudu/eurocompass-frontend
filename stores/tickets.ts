@@ -1,9 +1,10 @@
 import type { Ride, SelectedSeats } from "~/components/home/reservations/types";
 
-type state = {
+type State = {
 	selectedSeats: SelectedSeats | null;
 	ride: Ride | null;
 	routes: Record<string, RouteInfo>;
+	loading: boolean;
 };
 
 export interface RouteInfo {
@@ -30,11 +31,12 @@ export interface TicketPrice {
 }
 
 export const useTicketsStore = defineStore("tickets", {
-	state: (): state => {
+	state: (): State => {
 		return {
 			selectedSeats: null,
 			ride: null,
 			routes: {},
+			loading: false,
 		};
 	},
 	actions: {
@@ -45,10 +47,9 @@ export const useTicketsStore = defineStore("tickets", {
 			return this.routes[routeId];
 		},
 		async fetchAllRoutes(): Promise<void> {
+			this.loading = true;
 			try {
-				const routes = await $fetch<RouteInfo[]>("/apis/routes/info", {
-					method: "GET",
-				});
+				const routes = await $fetch<RouteInfo[]>("/apis/routes/info");
 
 				routes.forEach((r) => {
 					this.routes[r.id] = r;
@@ -57,6 +58,9 @@ export const useTicketsStore = defineStore("tickets", {
 			catch (err) {
 				console.error("Failed to fetch all routes:", err);
 				throw err;
+			}
+			finally {
+				this.loading = false;
 			}
 		},
 	},

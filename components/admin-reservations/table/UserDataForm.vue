@@ -155,12 +155,13 @@ const emit = defineEmits<{
 					</UFormField>
 
 					<UFormField
-						label="Stampaj"
+						label="Štampaj kartu"
 						name="print"
+						class="flex items-center w-full gap-5 text-lg"
 					>
 						<UCheckbox
 							v-model="state.print"
-							class="w-60"
+							size="xl"
 						/>
 					</UFormField>
 

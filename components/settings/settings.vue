@@ -25,7 +25,7 @@ const isSaveDisabled = computed(() => {
 			</template>
 			<TicketPriceRow
 				v-for="ticket in settingsStore.ticketPrices"
-				:key="ticket.Id"
+				:key="ticket.id"
 				:ticket="ticket"
 			/>
 		</UCard>

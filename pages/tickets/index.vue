@@ -14,22 +14,61 @@ const printTickets = () => {
 const afterPrint = () => {
 	router.back();
 };
+
+const ticketList = computed(() => {
+	if (!ride?.routeId) return [];
+
+	const route = store.routes[ride.routeId];
+
+	if (!route) return [];
+
+	return route.tickets.map(ticket => ({
+		label: ticket.name,
+		ticket,
+	}));
+});
+
+const selectedValue = ref();
+
+watchEffect(() => {
+	selectedValue.value = ticketList.value[0]?.ticket;
+});
 </script>
 
 <template>
 	<div v-if="selectedSeats">
-		<div id="print-controls">
-			<button @click="printTickets">
-				Stampaj
-			</button>
+		<div
+			id="print-controls"
+			class="fixed flex flex-col gap-5 bottom-10 left-[50%] -translate-x-[50%]"
+		>
+			<USelect
+				v-model="selectedValue"
+				:loading="store.loading"
+				:content="{
+					align: 'center',
+					side: 'top',
+					sideOffset: 8,
+				}"
+				:items="ticketList"
+				value-key="ticket"
+				class="w-48"
+			/>
+
+			<UButton
+				class="text-3xl cursor-pointer"
+				@click="printTickets"
+			>
+				Štampaj kartu
+			</UButton>
 		</div>
 		<div id="tickets-section">
 			<AdminReservationsTicketsTicket
-				v-for="(ticket, i) in selectedSeats.seats"
+				v-for="(seat, i) in selectedSeats.seats"
 				:key="i"
+				:ticket="selectedValue"
 				:route-id="ride?.routeId ?? ''"
 				:class="{ 'break-after-page': i !== selectedSeats.seats.length - 1 }"
-				:seat="ticket"
+				:seat="seat"
 			/>
 		</div>
 	</div>

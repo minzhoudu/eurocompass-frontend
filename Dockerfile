@@ -3,11 +3,6 @@ WORKDIR /app
 
 RUN corepack enable
 
-ENV NODE_OPTIONS="--max-old-space-size=2048"
-
-# Install pnpm globally
-#RUN npm install -g pnpm
-
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm i
 COPY . ./

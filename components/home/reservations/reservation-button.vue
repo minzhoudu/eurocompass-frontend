@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const authStore = useAuthStore();
 
-const { isModalOpen, selectedSeats, reserveSeats, handleCancelReservation, MAX_SELECTED_SEATS, updateSelectedSeatsForBus } = useReservations(props.ride.id);
+const { isModalOpen, selectedSeats, reserveSeats, handleCancelReservation, MAX_SELECTED_SEATS, updateSelectedSeatsForBus } = await useReservations(props.ride.id);
 
 const tabItems = computed<TabsItem[]>(() => {
 	return props.ride.buses.map(bus => ({

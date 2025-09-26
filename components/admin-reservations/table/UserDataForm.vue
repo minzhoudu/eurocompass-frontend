@@ -10,6 +10,7 @@ const schema = z.object({
 	name: z.string().min(1, "Name is required"),
 	lastName: z.string().min(1, "Last name is required"),
 	phone: z.string().min(1, "Phone number is required"),
+	print: z.boolean(),
 });
 
 type Schema = z.output<typeof schema>;
@@ -18,6 +19,7 @@ const state = ref<Schema>({
 	name: "",
 	lastName: "",
 	phone: "",
+	print: false,
 });
 
 export type SearchUser = {
@@ -69,17 +71,16 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		name: event.data.name,
 		lastName: event.data.lastName,
 		phone: event.data.phone,
+		print: event.data.print,
 	};
 
 	emit("submit", user);
 };
 
 const onSelectUser = (user: SearchUser) => {
-	state.value = {
-		name: user.name,
-		lastName: user.lastName,
-		phone: user.phone,
-	};
+	state.value.name = user.name;
+	state.value.lastName = user.lastName;
+	state.value.phone = user.phone;
 };
 
 const resetForm = () => {
@@ -87,6 +88,7 @@ const resetForm = () => {
 		name: "",
 		lastName: "",
 		phone: "",
+		print: false,
 	};
 };
 
@@ -95,6 +97,7 @@ const emit = defineEmits<{
 		name: string;
 		lastName: string;
 		phone: string;
+		print: boolean;
 	}): void;
 }>();
 </script>
@@ -148,6 +151,17 @@ const emit = defineEmits<{
 						<UInput
 							v-model="state.phone"
 							class="w-60"
+						/>
+					</UFormField>
+
+					<UFormField
+						label="Štampaj kartu"
+						name="print"
+						class="flex items-center w-full gap-5 text-lg"
+					>
+						<UCheckbox
+							v-model="state.print"
+							size="xl"
 						/>
 					</UFormField>
 

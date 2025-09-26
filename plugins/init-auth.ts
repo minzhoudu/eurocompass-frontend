@@ -4,4 +4,12 @@ export default defineNuxtPlugin(async () => {
 	if (!authStore.user) {
 		await authStore.fetchUser();
 	}
+
+	const settingsStore = useSettingsStore();
+
+	if (!settingsStore.settings) {
+		callOnce(async () => {
+			await settingsStore.fetchSettings();
+		});
+	}
 });

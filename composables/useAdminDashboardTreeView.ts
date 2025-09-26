@@ -49,6 +49,8 @@ const mapTimetable = (timetable: Timetable[] | null, routeId: string): TreeItem[
 			label: table.date,
 			class: "font-bold py-4",
 			icon: "material-symbols:calendar-month-rounded",
+			hasOrphans: table.rides.some(ride => ride.orphans.length > 0),
+			slot: "ride-date",
 			children: table.rides.map(ride => ({
 				value: ride.id,
 				label: dayjs.utc(ride.departure).format("HH:mm"),

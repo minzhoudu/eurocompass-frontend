@@ -1,22 +1,39 @@
 <script setup lang="ts">
 import type { AccordionItem } from "@nuxt/ui";
 
-type UserReservation = {
-	rideId: string;
+export type Seat = {
 	busNumber: number;
 	seat: number;
+	platform: number | undefined;
 };
 
-const { data, refresh: refetchReservations } = await useFetch<UserReservation[]>("/apis/users/reservations");
+type UserReservation = {
+	rideId: string;
+	route: string;
+	departure: string;
+	seats: Seat[];
+	expired: boolean;
+};
+
+const { data, refresh: refetchReservations, pending } = await useFetch<UserReservation[]>("/apis/users/reservations", {
+	transform: (data) => {
+		data.sort(
+			(d1, d2) =>
+				new Date(d1.departure).getTime() - new Date(d2.departure).getTime(),
+		);
+
+		return data;
+	},
+});
 
 const reservations = computed<AccordionItem[]>(() => {
 	if (!data.value) return [];
 
 	return data.value.map((reservation) => {
 		return {
-			label: `Bus ${reservation.busNumber} - Seat ${reservation.seat}`,
-			busNumber: reservation.busNumber,
-			seat: reservation.seat,
+			departure: reservation.departure,
+			route: reservation.route,
+			seats: reservation.seats,
 			rideId: reservation.rideId,
 			slot: "reservation-item",
 			icon: "i-heroicons-ticket-solid",
@@ -34,15 +51,39 @@ const reservations = computed<AccordionItem[]>(() => {
 				}"
 				:items="reservations"
 			>
-				<template #reservation-item="{ item }: { item: AccordionItem }">
-					<UserReservationListItem
-						:bus-number="item.busNumber"
-						:seat="item.seat"
-						:ride-id="item.rideId"
-						@cancel-reservation="refetchReservations"
-					/>
+				<template #default="{ item }: { item: AccordionItem }">
+					<div class="flex gap-10">
+						<span>{{ item.route.split(" ").join(" -> ") }}</span>
+						<NuxtTime
+							:datetime="item.departure"
+							date-style="full"
+							time-style="short"
+							locale="sr-Latn-RS"
+						/>
+					</div>
+				</template>
+
+				<template #reservation-item="{ item }: { item: UserReservation }">
+					<div class="grid grid-cols-2 gap-2">
+						<UserReservationListItem
+							v-for="seat in item.seats"
+							:key="seat.seat"
+							:ride-id="item.rideId"
+							:seat="seat"
+							:expired="!!item.expired"
+							@cancel-reservation="refetchReservations"
+						/>
+					</div>
 				</template>
 			</UAccordion>
+		</div>
+
+		<div
+			v-else-if="pending"
+			class="flex flex-col gap-2"
+		>
+			<USkeleton class="h-12 w-full" />
+			<USkeleton class="h-12 w-full" />
 		</div>
 
 		<div v-else>

@@ -2,7 +2,10 @@
 import type { TabsItem } from "@nuxt/ui";
 import type { Ride, SelectedSeats } from "~/components/home/reservations/types";
 import { getSelectedSeatsForBus } from "~/utils/bus/reservation";
+import { useTicketsStore } from "@/stores/tickets";
 
+const store = useTicketsStore();
+const router = useRouter();
 const props = defineProps<{
 	label: string;
 	ride: Ride;
@@ -44,9 +47,12 @@ const onSubmit = async (user: {
 	name: string;
 	lastName: string;
 	phone: string;
+	print: boolean;
 }) => {
 	const body = {
-		...user,
+		name: user.name,
+		lastName: user.lastName,
+		phone: user.phone,
 		reservations: selectedSeats.value,
 		rideId: props.ride.id,
 	};
@@ -60,9 +66,19 @@ const onSubmit = async (user: {
 		emit("reservation:success");
 
 		isModalOpen.value = false;
-		clearSelectedSeats();
 
-		toast.add({ title: "Success", description: "Rezervacija je uspešno kreirana.", color: "success" });
+		if (user.print) {
+			store.selectedSeats = selectedSeats.value[0];
+			store.ride = props.ride;
+			router.push({
+				name: "tickets",
+			});
+		}
+
+		clearSelectedSeats();
+		if (!user.print) {
+			toast.add({ title: "Success", description: "Rezervacija je uspešno kreirana.", color: "success", id: "no-print-toast" });
+		}
 	}
 	catch (error) {
 		toast.add({ title: "Error", description: "Greška prilikom rezervacije.", color: "error" });
@@ -110,9 +126,7 @@ const emit = defineEmits<{
 			</UTabs>
 		</template>
 
-		<template
-			#footer
-		>
+		<template #footer>
 			<div class="flex gap-2 w-full justify-end">
 				<UButton
 					label="Odustani"

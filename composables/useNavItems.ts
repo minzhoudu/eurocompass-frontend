@@ -23,47 +23,47 @@ export const useNavItems = () => {
 
 		const userMenu: NavigationMenuItem[] = isLoggedIn.value
 			? [{
-				label: authStore.user?.name || "Profil",
-				icon: "i-lucide-user",
-				avatar: {
-					src: authStore.user?.picture,
-					size: "sm",
+					label: authStore.user?.name || "Profil",
 					icon: "i-lucide-user",
-				},
-				children: [
-					...(isAdmin.value
-						? [
-							{
-								label: "Admin Panel",
-								icon: "i-lucide-shield",
-								to: "/admin",
-								active: route.path.startsWith("/admin") && !route.path.startsWith("/admin/settings"),
-							},
-							{
-								label: "Podešavanja",
-								icon: "i-lucide-settings",
-								to: "/admin/settings",
-							},
-						]
-						: []),
-					{
-						label: "Profil",
+					avatar: {
+						src: authStore.user?.picture,
+						size: "sm",
 						icon: "i-lucide-user",
-						to: "/user/profile",
 					},
-					{
-						label: "Odjava",
-						icon: "i-lucide-log-out",
-						onSelect: authStore.logOut,
-						class: "cursor-pointer",
-					},
-				],
-			}]
+					children: [
+						...(isAdmin.value
+							? [
+									{
+										label: "Admin Panel",
+										icon: "i-lucide-shield",
+										to: "/admin",
+										active: route.path.startsWith("/admin") && !route.path.startsWith("/admin/settings"),
+									},
+									{
+										label: "Podešavanja",
+										icon: "i-lucide-settings",
+										to: "/admin/settings",
+									},
+								]
+							: []),
+						{
+							label: "Profil",
+							icon: "i-lucide-user",
+							to: "/user/profile",
+						},
+						{
+							label: "Odjava",
+							icon: "i-lucide-log-out",
+							onSelect: authStore.logOut,
+							class: "cursor-pointer",
+						},
+					],
+				}]
 			: [{
-				label: "Prijavi se",
-				icon: "i-lucide-log-in",
-				to: "/login",
-			}];
+					label: "Prijavi se",
+					icon: "i-lucide-log-in",
+					to: "/login",
+				}];
 
 		return [mainMenu, userMenu];
 	});

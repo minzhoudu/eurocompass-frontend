@@ -146,6 +146,35 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>
+						<template #ride-date="{ item }: {item: { hasOrphans: boolean, label: string }}">
+							<div class="flex items-center w-full justify-between">
+								<div class="flex items-center gap-4">
+									<Icon
+										name="material-symbols:calendar-month-rounded"
+										size="18"
+									/>
+									<span>{{ item.label }}</span>
+
+									<div
+										v-if="item.hasOrphans"
+										class="flex"
+									>
+										<Icon
+											name="material-symbols:warning-rounded"
+											size="24"
+											class="text-error"
+										/>
+									</div>
+								</div>
+
+								<Icon
+									name="lucide:chevron-down"
+									size="20"
+									class=""
+								/>
+							</div>
+						</template>
+
 						<template
 							#bus-item="{ item }: { item: { bus: ExtendedBus, rideId: string } }"
 						>

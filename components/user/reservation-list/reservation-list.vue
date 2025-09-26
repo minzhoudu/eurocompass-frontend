@@ -15,7 +15,16 @@ type UserReservation = {
 	expired: boolean;
 };
 
-const { data, refresh: refetchReservations, pending } = await useFetch<UserReservation[]>("/apis/users/reservations");
+const { data, refresh: refetchReservations, pending } = await useFetch<UserReservation[]>("/apis/users/reservations", {
+	transform: (data) => {
+		data.sort(
+			(d1, d2) =>
+				new Date(d1.departure).getTime() - new Date(d2.departure).getTime(),
+		);
+
+		return data;
+	},
+});
 
 const reservations = computed<AccordionItem[]>(() => {
 	if (!data.value) return [];
@@ -61,7 +70,7 @@ const reservations = computed<AccordionItem[]>(() => {
 							:key="seat.seat"
 							:ride-id="item.rideId"
 							:seat="seat"
-							:expired="item.expired"
+							:expired="!!item.expired"
 							@cancel-reservation="refetchReservations"
 						/>
 					</div>

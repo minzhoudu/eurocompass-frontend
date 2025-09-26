@@ -30,6 +30,8 @@ const { selectedSeats } = await useReservations(props.rideId);
 const selectSeat = (seats: number[], busNumber: number) => {
 	const lastSelectedSeat = seats[seats.length - 1];
 
+	if (!lastSelectedSeat) return;
+
 	selectedSeats.value = [{
 		seats: [lastSelectedSeat],
 		busNumber,
@@ -143,7 +145,7 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 								<template #body>
 									<div class="flex flex-col gap-2">
 										<UTabs
-											:default-value="buses[0].busNumber"
+											:default-value="buses[0]?.busNumber"
 											:items="tabItems"
 											:ui="{
 												list: tabItems.length > 1 ? '' : 'max-w-1/2',

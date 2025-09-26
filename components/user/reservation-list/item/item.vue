@@ -49,12 +49,14 @@ const handleCancelReservation = async () => {
 
 <template>
 	<div class="bg-slate-200 p-4 rounded-lg text-primary font-bold">
-		<p>Kola: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.busNumber }}</span></p>
-		<p>
-			Peron: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ !seat.platform ? "Proverite kasnije"
-				: seat.platform }}</span>
-		</p>
-		<p>Sedište: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.seat }}</span></p>
+		<div class="flex flex-col gap-2">
+			<p>Kola: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.busNumber }}</span></p>
+			<p>
+				Peron: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ !seat.platform ? "Proverite kasnije"
+					: seat.platform }}</span>
+			</p>
+			<p>Sedište: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.seat }}</span></p>
+		</div>
 
 		<UModal
 			v-if="!expired"

@@ -19,7 +19,7 @@ const toast = useToast();
 const changeBus = async () => {
 	try {
 		isLoading.value = true;
-		await $fetch("/apis/rides/changeBus", {
+		await $api("rides/changeBus", {
 			method: "post",
 			body: {
 				newBusId: selectedBus.value.value,

@@ -5,13 +5,16 @@ import dayjs from "@/utils/dayjs";
 import type { Location } from "~/components/home/header/types";
 import type { Reservation, Ride } from "~/components/home/reservations/types";
 
+const config = useRuntimeConfig()
+
 const props = defineProps<{
 	selectedDate: DateValue;
 	selectedLocation: Location;
 }>();
 
-const { data: rides, pending, refresh: refreshRides } = await useFetch<Ride[]>("/apis/rides/getride", {
+const { data: rides, pending, refresh: refreshRides } = await useFetch<Ride[]>("/rides/getride", {
 	method: "POST",
+	baseURL: config.public.apiHost,
 	body: computed(() => ({
 		date: props.selectedDate.toString(),
 		routeId: props.selectedLocation.id,

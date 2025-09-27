@@ -14,6 +14,7 @@ export type User = {
 	reservations: UserReservation[] | null;
 };
 
+
 export const useAuthStore = defineStore("user", () => {
 	const config = useRuntimeConfig();
 
@@ -24,13 +25,13 @@ export const useAuthStore = defineStore("user", () => {
 	const fetchUser = async () => {
 		try {
 			if (import.meta.server) {
-				const { data } = await useFetch<User>("/apis/users/me", { credentials: "include" });
+				const { data } = await useFetch<User>("/users/me", { credentials: "include", baseURL: config.public.apiHost, });
 				user.value = data.value;
 
 				return;
 			}
 
-			const data = await $fetch<User>("/apis/users/me", { credentials: "include" });
+			const data = await $api<User>("/users/me", { credentials: "include" });
 			user.value = data;
 		}
 		catch {
@@ -44,7 +45,7 @@ export const useAuthStore = defineStore("user", () => {
 
 	const logOut = async () => {
 		try {
-			await $fetch("/apis/auth/logout", { credentials: "include" });
+			await $api("auth/logout", { credentials: "include" });
 			user.value = null;
 			navigateTo("/login");
 		}
@@ -55,7 +56,7 @@ export const useAuthStore = defineStore("user", () => {
 
 	const updateUser = async (data: Partial<User>) => {
 		try {
-			await $fetch("/apis/users/updateInfo", { credentials: "include", method: "POST", body: data });
+			await $api("users/updateInfo", { credentials: "include", method: "POST", body: data });
 
 			await fetchUser();
 

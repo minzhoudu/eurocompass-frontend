@@ -1,5 +1,4 @@
 import type { Settings, TicketPrice } from "~/components/settings/settings.types";
-
 export const useSettingsStore = defineStore("settings", () => {
 	const toast = useToast();
 
@@ -10,8 +9,8 @@ export const useSettingsStore = defineStore("settings", () => {
 
 	const fetchSettings = async () => {
 		const [settingsResult, pricesResult] = await Promise.all([
-			useFetch<Settings>("/apis/settings"),
-			useFetch<TicketPrice[]>("/apis/tickets/prices"),
+			useFetch<Settings>("/settings", {baseURL: config.public.apiHost,}),
+			useFetch<TicketPrice[]>("/tickets/prices", {baseURL: config.public.apiHost,}),
 		]);
 
 		if (!settingsResult.error.value && settingsResult.data.value) {
@@ -26,7 +25,7 @@ export const useSettingsStore = defineStore("settings", () => {
 		isPendingUpdate.value = true;
 
 		try {
-			const updatedData = await $fetch<Settings>("/apis/settings", {
+			const updatedData = await $api<Settings>("/settings", {
 				method: "POST",
 				body: data,
 			});
@@ -49,7 +48,7 @@ export const useSettingsStore = defineStore("settings", () => {
 			isPendingUpdate.value = false;
 		}
 	};
-
+	const config = useRuntimeConfig()
 	const updatePrice = async (data: {
 		newValue: number;
 		priceId: string;
@@ -57,7 +56,8 @@ export const useSettingsStore = defineStore("settings", () => {
 		isPendingUpdate.value = true;
 
 		try {
-			const newPrice = await $fetch<TicketPrice>("/apis/tickets/prices", {
+			const newPrice = await $fetch<TicketPrice>("/tickets/prices", {
+				baseURL: config.public.apiHost,
 				method: "POST",
 				body: data,
 			});

@@ -29,7 +29,7 @@ const emit = defineEmits<{
 const handleAddBus = async () => {
 	try {
 		loadingAddBus.value = true;
-		await $fetch("/apis/rides/addBus", {
+		await $api("rides/addBus", {
 			method: "post",
 			body: {
 				rideId: props.rideId,

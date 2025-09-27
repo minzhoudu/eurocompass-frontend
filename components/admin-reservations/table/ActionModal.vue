@@ -58,7 +58,7 @@ const onSubmit = async (user: {
 	};
 
 	try {
-		await $fetch("/apis/admin/reserve", {
+		await $api("admin/reserve", {
 			method: "POST",
 			body,
 		});

@@ -13,7 +13,7 @@ const removeBusFromRide = async () => {
 	isLoading.value = true;
 
 	try {
-		await $fetch("/apis/rides/cancelBus", {
+		await $api("rides/cancelBus", {
 			method: "post",
 			body: {
 				busId: props.busId,

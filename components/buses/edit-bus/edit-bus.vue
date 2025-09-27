@@ -42,7 +42,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 	};
 
 	try {
-		await $fetch(`/apis/buses/edit`, {
+		await $api(`buses/edit`, {
 			method: "POST",
 			body: payload,
 		});

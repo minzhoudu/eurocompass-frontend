@@ -3,6 +3,8 @@ import type { TreeItem } from "@nuxt/ui";
 import dayjs from "@/utils/dayjs";
 import type { Bus, Ride } from "~/components/home/reservations/types";
 
+const config = useRuntimeConfig()
+
 export type Orphan = {
 	userId: string;
 	name: string;
@@ -81,7 +83,8 @@ export const useAdminDashboardTreeView = async (from: Ref<DateValue | undefined>
 		to: to.value?.toString() || null,
 	}));
 
-	const { data: routesWithRides, error: getRidesError, pending: getRidesLoading, refresh: refetchGetRides } = await useLazyFetch("/apis/admin/getRides", {
+	const { data: routesWithRides, error: getRidesError, pending: getRidesLoading, refresh: refetchGetRides } = await useLazyFetch("/admin/getRides", {
+ 		baseURL: config.public.apiHost,
 		method: "post",
 		body,
 		transform: (data: Routes) => data.routes,

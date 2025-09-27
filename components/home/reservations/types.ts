@@ -31,6 +31,7 @@ export type ReservationSeatsRow = {
 export type Bus = {
 	id: string;
 	busNumber: number;
+	platform: number | undefined;
 	reservationSeatsRows: ReservationSeatsRow[];
 };
 

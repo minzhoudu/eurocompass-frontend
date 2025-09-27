@@ -25,7 +25,7 @@ const actionItems: DropdownMenuItem[] = [
 
 const handleDeleteBus = async () => {
 	try {
-		await $fetch(`/apis/buses/${props.busId}`, {
+		await $api(`buses/${props.busId}`, {
 			method: "DELETE",
 		});
 

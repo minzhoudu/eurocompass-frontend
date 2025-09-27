@@ -2,9 +2,11 @@
 import type { DateValue } from "@internationalized/date";
 import type { Location } from "./types";
 
+const config = useRuntimeConfig()
 const startValue = ref<DateValue>();
 
-const { data: locations, error } = await useFetch<Location[]>("/apis/routes", {
+const { data: locations, error } = await useFetch<Location[]>("/routes", {
+	baseURL: config.public.apiHost,
 	onRequestError: (error) => {
 		console.error({
 			message: error.error.message,

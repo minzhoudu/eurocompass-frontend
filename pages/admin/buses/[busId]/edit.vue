@@ -4,8 +4,9 @@ import type { BreadcrumbItem } from "@nuxt/ui";
 import type { ExtendedBusInfo } from "~/components/buses/types";
 
 const route = useRoute();
+const config = useRuntimeConfig()
 
-const { data: bus, pending } = await useLazyFetch<ExtendedBusInfo>(`/apis/buses/${route.params.busId}`);
+const { data: bus, pending } = await useLazyFetch<ExtendedBusInfo>(`/buses/${route.params.busId}`, {baseURL: config.public.apiHost});
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 	return [

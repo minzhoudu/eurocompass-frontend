@@ -20,7 +20,7 @@ const emit = defineEmits<{
 
 const tabItems = computed<TabsItem[]>(() => {
 	return props.buses.map(bus => ({
-		label: `Kola ${bus.busNumber}`,
+		label: `Kola ${bus.busNumber} Peron ${!bus.platform ? bus.platform : "/"}`,
 		value: bus.busNumber,
 	}));
 });
@@ -51,7 +51,7 @@ const reserveSeat = async (busNumber: number, orphan: Orphan) => {
 	};
 
 	try {
-		await $fetch("/apis/admin/assignOrphan", {
+		await $api("admin/assignOrphan", {
 			method: "post",
 			body: reservation,
 		});
@@ -163,7 +163,9 @@ const isExpanded = computed(() => props.expandedRoutes.includes(props.rideId));
 														@update:selected-seats="(seats) => selectSeat(seats, item.value as number)"
 													/>
 
-													<div class="flex justify-center gap-2">
+													<div
+														class="flex justify-center gap-2"
+													>
 														<UButton
 															label="Otkaži"
 															color="error"

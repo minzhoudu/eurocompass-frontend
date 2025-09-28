@@ -2,7 +2,6 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
 
-const config = useRuntimeConfig()
 const props = defineProps<{
 	submitDisabled: boolean;
 }>();
@@ -52,8 +51,7 @@ watch(
 	{ deep: true },
 );
 
-const { data: users, status } = await useLazyFetch<SearchUser[]>("/admin/search", {
-	baseURL: config.public.apiHost,
+const { data: users, status } = await useLazyFetch<SearchUser[]>("/apis/admin/search", {
 	query: searchQuery,
 	immediate: false,
 	default: () => [],

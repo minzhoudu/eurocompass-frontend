@@ -5,8 +5,6 @@ import type { BaseBusInfo } from "../buses/types";
 import type { Bus } from "../home/reservations/types";
 import type { ExtendedBus, Orphan } from "~/composables/useAdminDashboardTreeView";
 
-const config = useRuntimeConfig()
-
 const router = useRouter();
 const route = useRoute();
 
@@ -18,9 +16,7 @@ to.value = route.query.to === "all" ? undefined : route.query.to ? parseDate(rou
 
 const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView(from, to);
 
-const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/buses/info", {
-    baseURL: config.public.apiHost,
-  });
+const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
 
 const expandedRoutes = ref<string[]>([]);
 
@@ -49,7 +45,7 @@ const isPendingCancelReservation = ref(false);
 const handleCancelReservation = async (busNumber: number, rideId: string) => {
 	isPendingCancelReservation.value = true;
 	try {
-		await $api("admin/cancelReservations", {
+		await $fetch("/apis/admin/cancelReservations", {
 			method: "DELETE",
 			body: {
 				reservations: [
@@ -147,7 +143,7 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 					<UTree
 						v-model:expanded="expandedRoutes"
 						:items="getTreeItems(routeWithRide)"
-						class="border rounded-lg w-full lg:min-w-[500px] max-h-96 scroll-bar"
+						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>
 						<template #ride-date="{ item }: {item: { hasOrphans: boolean, label: string }}">
@@ -190,9 +186,7 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 										title="Rezervacije na autobusu"
 										description="Provera rezervacija na sedištima autobusa na trenutnoj vožnji."
 									>
-										<UButton
-											class="py-0.5 px-1 cursor-pointer border hover:text-info"
-										>
+										<UButton class="py-0.5 px-1 cursor-pointer border hover:text-info">
 											<Icon
 												name="lucide:bus"
 												size="18"
@@ -217,10 +211,6 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 									<p>
 										Slobodnih mesta - {{
 											item.bus.freeSeats }}
-									</p>
-									<p>
-										Peron - {{ !item.bus.platform
-											? "/" : item.bus.platform }}
 									</p>
 
 									<div
@@ -259,9 +249,7 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 							/>
 						</template>
 
-						<template
-							#add-bus-item="{ item }: { item: { rideId: string, selectedBuses: ExtendedBus[] } }"
-						>
+						<template #add-bus-item="{ item }: { item: { rideId: string, selectedBuses: ExtendedBus[] } }">
 							<AdminDashboardAddBusSelector
 								v-if="buses"
 								:buses="buses"

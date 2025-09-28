@@ -10,9 +10,7 @@ const props = defineProps<{
 	selectedLocation: Location;
 }>();
 
-const config = useRuntimeConfig()
-const { data: rides, pending, refresh: refreshRides } = await useFetch<Ride[]>("/rides/getride", {
-    baseURL: config.public.apiHost,
+const { data: rides, pending, refresh: refreshRides } = await useFetch<Ride[]>("apis/rides/getride", {
 	method: "POST",
 	body: computed(() => ({
 		date: props.selectedDate.toString(),

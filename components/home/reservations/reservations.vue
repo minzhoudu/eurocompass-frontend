@@ -11,6 +11,7 @@ const props = defineProps<{
 }>();
 
 const { data: rides, pending, refresh: refreshRides } = await useFetch<Ride[]>("apis/rides/getride", {
+	key: `ride-${props.selectedLocation.id}`,
 	method: "POST",
 	body: computed(() => ({
 		date: props.selectedDate.toString(),

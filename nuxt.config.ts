@@ -43,15 +43,19 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		public: {
-			GOOGLE_LOGIN_URL: process.env.PUBLIC_GOOGLE_LOGIN_URL,
+			// NUXT_PUBLIC_API_HOST
+			apiHost: "",
+			// NUXT_PUBLIC_GOOGLE_LOGIN_URL
+			googleLoginUrl: "",
 		},
 	},
 
 	routeRules: {
 		"/apis/**": {
-			proxy: process.env.PUBLIC_API_HOST,
+			proxy: { to: `${process.env.NUXT_PUBLIC_API_HOST}/**` },
 		},
 	},
+
 	compatibilityDate: "2025-05-15",
 
 	vite: {

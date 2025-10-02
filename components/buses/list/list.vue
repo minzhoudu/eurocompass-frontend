@@ -1,10 +1,7 @@
 <script lang="ts" setup>
 import type { BaseBusInfo } from "../types";
 
-const config = useRuntimeConfig()
-
-const { data: buses, pending, refresh } = await useLazyFetch<BaseBusInfo[]>("/buses/info", {
-	baseURL: config.public.apiHost,
+const { data: buses, pending, refresh } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info", {
 	transform: (data) => {
 		if (!data) return [];
 

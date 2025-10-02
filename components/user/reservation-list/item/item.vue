@@ -15,7 +15,7 @@ const emit = defineEmits<{
 
 const handleCancelReservation = async () => {
 	try {
-		await $api("users/cancelReservations", {
+		await $fetch("/apis/users/cancelReservations", {
 			method: "DELETE",
 			body: {
 				reservations: [

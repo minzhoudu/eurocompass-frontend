@@ -29,7 +29,7 @@ export const useReservations = async (rideId: string) => {
 		}
 
 		try {
-			await $api("users/reserve", {
+			await $fetch("/apis/users/reserve", {
 				method: "POST",
 				body: {
 					reservations: selectedSeats.value,

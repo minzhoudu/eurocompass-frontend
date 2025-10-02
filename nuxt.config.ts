@@ -44,10 +44,14 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			GOOGLE_LOGIN_URL: process.env.PUBLIC_GOOGLE_LOGIN_URL,
-			apiHost: process.env.PUBLIC_API_HOST as string,
 		},
 	},
 
+	routeRules: {
+		"/apis/**": {
+			proxy: process.env.PUBLIC_API_HOST,
+		},
+	},
 	compatibilityDate: "2025-05-15",
 
 	vite: {

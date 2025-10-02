@@ -15,9 +15,7 @@ type UserReservation = {
 	expired: boolean;
 };
 
-const config = useRuntimeConfig()
 const { data, refresh: refetchReservations, pending } = await useFetch<UserReservation[]>("/apis/users/reservations", {
-	baseURL: config.public.apiHost,
 	transform: (data) => {
 		data.sort(
 			(d1, d2) =>

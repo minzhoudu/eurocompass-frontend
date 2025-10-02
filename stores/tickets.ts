@@ -49,7 +49,7 @@ export const useTicketsStore = defineStore("tickets", {
 		async fetchAllRoutes(): Promise<void> {
 			this.loading = true;
 			try {
-				const routes = await $api<RouteInfo[]>("/routes/info");
+				const routes = await $fetch<RouteInfo[]>("/apis/routes/info");
 
 				routes.forEach((r) => {
 					this.routes[r.id] = r;

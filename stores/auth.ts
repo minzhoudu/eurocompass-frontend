@@ -17,6 +17,8 @@ export type User = {
 export const useAuthStore = defineStore("user", () => {
 	const config = useRuntimeConfig();
 
+	const { apiFetch } = useApiFetch();
+
 	const toast = useToast();
 
 	const user = ref<User | null>(null);
@@ -24,13 +26,13 @@ export const useAuthStore = defineStore("user", () => {
 	const fetchUser = async () => {
 		try {
 			if (import.meta.server) {
-				const { data } = await useFetch<User>("/apis/users/me", { credentials: "include" });
+				const { data } = await useFetchCustom<User>("/users/me");
 				user.value = data.value;
 
 				return;
 			}
 
-			const data = await $fetch<User>("/apis/users/me", { credentials: "include" });
+			const data = await apiFetch<User>("/users/me");
 			user.value = data;
 		}
 		catch {
@@ -39,12 +41,12 @@ export const useAuthStore = defineStore("user", () => {
 	};
 
 	const googleLogin = () => {
-		window.location.href = config.public.GOOGLE_LOGIN_URL;
+		window.location.href = config.public.apiHost;
 	};
 
 	const logOut = async () => {
 		try {
-			await $fetch("/apis/auth/logout", { credentials: "include" });
+			await apiFetch("/auth/logout");
 			user.value = null;
 			navigateTo("/login");
 		}
@@ -55,7 +57,7 @@ export const useAuthStore = defineStore("user", () => {
 
 	const updateUser = async (data: Partial<User>) => {
 		try {
-			await $fetch("/apis/users/updateInfo", { credentials: "include", method: "POST", body: data });
+			await apiFetch("/users/updateInfo", { method: "POST", body: data });
 
 			await fetchUser();
 

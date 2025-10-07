@@ -16,6 +16,8 @@ export const useReservations = async (rideId: string) => {
 		selectedSeats.value = [];
 	};
 
+	const { apiFetch } = useApiFetch();
+
 	const reserveSeats = async () => {
 		const seatsNotChosen = selectedSeats.value.length === 0;
 
@@ -29,7 +31,7 @@ export const useReservations = async (rideId: string) => {
 		}
 
 		try {
-			await $fetch("/apis/users/reserve", {
+			await apiFetch("/users/reserve", {
 				method: "POST",
 				body: {
 					reservations: selectedSeats.value,
@@ -65,7 +67,7 @@ export const useReservations = async (rideId: string) => {
 
 	const updateSelectedSeatsForBus = (buses: Bus[], busNumber: number, seats: number[], userId?: string) => {
 		const existingIndex = selectedSeats.value.findIndex(item => item.busNumber === busNumber);
-		const currentBusSeats = existingIndex !== -1 ? selectedSeats.value[existingIndex].seats : [];
+		const currentBusSeats = existingIndex !== -1 && selectedSeats.value[existingIndex] ? selectedSeats.value[existingIndex].seats : [];
 		const otherBusesTotalSeats = getTotalSelectedSeats(selectedSeats.value, buses, userId) - currentBusSeats.length;
 
 		if (seats.length + otherBusesTotalSeats > MAX_SELECTED_SEATS) {
@@ -82,7 +84,9 @@ export const useReservations = async (rideId: string) => {
 				selectedSeats.value.splice(existingIndex, 1);
 			}
 			else {
-				selectedSeats.value[existingIndex].seats = seats;
+				if (selectedSeats.value[existingIndex]) {
+					selectedSeats.value[existingIndex].seats = seats;
+				}
 			}
 		}
 		else if (seats.length > 0) {

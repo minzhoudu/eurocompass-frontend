@@ -5,7 +5,7 @@ import type { ExtendedBusInfo } from "~/components/buses/types";
 
 const route = useRoute();
 
-const { data: bus, pending } = await useLazyFetch<ExtendedBusInfo>(`/apis/buses/${route.params.busId}`);
+const { data: bus, pending } = await useFetchCustom<ExtendedBusInfo>(`/buses/${route.params.busId}`, { lazy: true });
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 	return [

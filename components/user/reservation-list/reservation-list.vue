@@ -15,7 +15,7 @@ type UserReservation = {
 	expired: boolean;
 };
 
-const { data, refresh: refetchReservations, pending } = await useFetch<UserReservation[]>("/apis/users/reservations", {
+const { data, refresh: refetchReservations, pending } = await useFetchCustom<UserReservation[]>("	/users/reservations", {
 	transform: (data) => {
 		data.sort(
 			(d1, d2) =>

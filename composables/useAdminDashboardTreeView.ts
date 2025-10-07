@@ -81,7 +81,8 @@ export const useAdminDashboardTreeView = async (from: Ref<DateValue | undefined>
 		to: to.value?.toString() || null,
 	}));
 
-	const { data: routesWithRides, error: getRidesError, pending: getRidesLoading, refresh: refetchGetRides } = await useLazyFetch("/apis/admin/getRides", {
+	const { data: routesWithRides, error: getRidesError, pending: getRidesLoading, refresh: refetchGetRides } = await useFetchCustom("/admin/getRides", {
+		lazy: true,
 		method: "post",
 		body,
 		transform: (data: Routes) => data.routes,

@@ -21,7 +21,7 @@ export const useAuthStore = defineStore("user", () => {
 
 	const toast = useToast();
 
-	const user = ref<User | null>(null);
+	const user = ref<User | undefined>(undefined);
 
 	const fetchUser = async () => {
 		try {
@@ -36,18 +36,18 @@ export const useAuthStore = defineStore("user", () => {
 			user.value = data;
 		}
 		catch {
-			user.value = null;
+			user.value = undefined;
 		}
 	};
 
 	const googleLogin = () => {
-		window.location.href = config.public.apiHost;
+		window.location.href = config.public.googleLoginUrl;
 	};
 
 	const logOut = async () => {
 		try {
 			await apiFetch("/auth/logout");
-			user.value = null;
+			user.value = undefined;
 			navigateTo("/login");
 		}
 		catch (error) {

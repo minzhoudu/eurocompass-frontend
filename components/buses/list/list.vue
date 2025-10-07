@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import type { BaseBusInfo } from "../types";
 
-const { data: buses, pending, refresh } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info", {
+const { data: buses, pending, refresh } = await useFetchCustom<BaseBusInfo[]>("/buses/info", {
+	lazy: true,
 	transform: (data) => {
 		if (!data) return [];
 

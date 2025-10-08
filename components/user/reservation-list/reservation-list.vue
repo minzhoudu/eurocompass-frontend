@@ -62,28 +62,22 @@ const scrollToBottom = () => {
 	}
 };
 
-onMounted(() => {
-	nextTick(() => {
-		if (accordionRef.value) {
-			accordionRef.value.addEventListener("scroll", checkScroll);
-			checkScroll();
-		}
-	});
-});
+watch(accordionRef, (newRef, oldRef) => {
+	if (oldRef) {
+		oldRef.removeEventListener("scroll", checkScroll);
+	}
+
+	if (newRef) {
+		newRef.addEventListener("scroll", checkScroll);
+		checkScroll();
+	}
+}, { immediate: true });
 
 onUnmounted(() => {
 	if (accordionRef.value) {
 		accordionRef.value.removeEventListener("scroll", checkScroll);
 	}
 });
-
-watch(accordionRef, (newRef) => {
-	if (newRef) {
-		newRef.addEventListener("scroll", checkScroll);
-
-		checkScroll();
-	}
-}, { immediate: true });
 
 watch(reservations, () => {
 	nextTick(() => checkScroll());

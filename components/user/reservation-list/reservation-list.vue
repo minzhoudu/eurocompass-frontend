@@ -35,47 +35,117 @@ const reservations = computed<AccordionItem[]>(() => {
 			route: reservation.route,
 			seats: reservation.seats,
 			rideId: reservation.rideId,
+			expired: reservation.expired,
 			slot: "reservation-item",
 			icon: "i-heroicons-ticket-solid",
 		};
 	});
 });
+
+const accordionRef = ref<HTMLElement>();
+const showBottomArrow = ref(false);
+
+const checkScroll = () => {
+	if (accordionRef.value) {
+		const { scrollTop, scrollHeight, clientHeight } = accordionRef.value;
+		showBottomArrow.value = scrollTop + clientHeight < scrollHeight - 20;
+	}
+};
+
+const scrollToBottom = () => {
+	if (accordionRef.value) {
+		accordionRef.value.scrollTo({
+			top: accordionRef.value.scrollHeight,
+			behavior: "smooth",
+		});
+		setTimeout(checkScroll, 500);
+	}
+};
+
+onMounted(() => {
+	nextTick(() => {
+		if (accordionRef.value) {
+			accordionRef.value.addEventListener("scroll", checkScroll);
+			checkScroll();
+		}
+	});
+});
+
+onUnmounted(() => {
+	if (accordionRef.value) {
+		accordionRef.value.removeEventListener("scroll", checkScroll);
+	}
+});
+
+watch(accordionRef, (newRef) => {
+	if (newRef) {
+		newRef.addEventListener("scroll", checkScroll);
+
+		checkScroll();
+	}
+}, { immediate: true });
+
+watch(reservations, () => {
+	nextTick(() => checkScroll());
+}, { deep: true });
 </script>
 
 <template>
 	<div class="mt-10 px-4 lg:w-1/2 mx-auto">
-		<div v-if="reservations.length > 0">
-			<UAccordion
-				:ui="{
-					label: 'text-xl',
-				}"
-				:items="reservations"
+		<div
+			v-if="reservations.length > 0"
+			class="relative"
+		>
+			<div
+				ref="accordionRef"
+				class="max-h-[500px] overflow-auto"
 			>
-				<template #default="{ item }: { item: AccordionItem }">
-					<div class="flex gap-10">
-						<span>{{ item.route.split(" ").join(" -> ") }}</span>
-						<NuxtTime
-							:datetime="item.departure"
-							date-style="full"
-							time-style="short"
-							locale="sr-Latn-RS"
-						/>
-					</div>
-				</template>
+				<UAccordion
+					type="multiple"
+					:ui="{
+						label: 'text-xl',
+					}"
+					:items="reservations"
+				>
+					<template #default="{ item }: { item: AccordionItem }">
+						<div class="flex gap-10">
+							<span>{{ item.route.split(" ").join(" -> ") }}</span>
+							<NuxtTime
+								:datetime="item.departure"
+								date-style="full"
+								time-style="short"
+								locale="sr-Latn-RS"
+							/>
+						</div>
+					</template>
 
-				<template #reservation-item="{ item }: { item: UserReservation }">
-					<div class="grid grid-cols-2 gap-2">
-						<UserReservationListItem
-							v-for="seat in item.seats"
-							:key="seat.seat"
-							:ride-id="item.rideId"
-							:seat="seat"
-							:expired="!!item.expired"
-							@cancel-reservation="refetchReservations"
-						/>
-					</div>
-				</template>
-			</UAccordion>
+					<template #reservation-item="{ item }: { item: UserReservation }">
+						<div class="grid grid-cols-2 gap-2">
+							<UserReservationListItem
+								v-for="seat in item.seats"
+								:key="seat.seat"
+								:ride-id="item.rideId"
+								:seat="seat"
+								:expired="!!item.expired"
+								@cancel-reservation="refetchReservations"
+							/>
+						</div>
+					</template>
+				</UAccordion>
+			</div>
+
+			<!-- Bottom scroll indicator -->
+
+			<div
+				v-if="showBottomArrow"
+				class="absolute bottom-0 left-1/2 flex justify-center items-center transform -translate-x-1/2 translate-y-16 bg-white dark:bg-gray-900 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:scale-110 transition-transform duration-200"
+				@click="scrollToBottom"
+			>
+				<UIcon
+					name="i-heroicons-chevron-down"
+					class="w-5 h-5 text-gray-600 dark:text-gray-400"
+				/>
+			</div>
 		</div>
 
 		<div

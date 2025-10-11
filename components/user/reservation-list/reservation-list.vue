@@ -114,7 +114,7 @@ watch(reservations, () => {
 					</template>
 
 					<template #reservation-item="{ item }: { item: UserReservation }">
-						<div class="grid grid-cols-2 gap-2">
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
 							<UserReservationListItem
 								v-for="seat in item.seats"
 								:key="seat.seat"

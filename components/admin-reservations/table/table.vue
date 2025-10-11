@@ -10,7 +10,7 @@ const props = defineProps<{
 	selectedLocation: Location;
 }>();
 
-const { data: rides, pending, refresh: refreshRides } = await useFetch<Ride[]>("/apis/rides/getride", {
+const { data: rides, pending, refresh: refreshRides } = await useFetchCustom<Ride[]>("/rides/getride", {
 	key: `ride-${props.selectedLocation.id}`,
 	method: "POST",
 	body: computed(() => ({

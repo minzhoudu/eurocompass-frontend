@@ -26,10 +26,12 @@ const emit = defineEmits<{
 	(e: "busAdded"): void;
 }>();
 
+const { apiFetch } = useApiFetch();
+
 const handleAddBus = async () => {
 	try {
 		loadingAddBus.value = true;
-		await $fetch("/apis/rides/addBus", {
+		await apiFetch("/rides/addBus", {
 			method: "post",
 			body: {
 				rideId: props.rideId,

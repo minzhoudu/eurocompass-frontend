@@ -50,12 +50,6 @@ export default defineNuxtConfig({
 		},
 	},
 
-	routeRules: {
-		"/apis/**": {
-			proxy: { to: `${process.env.NUXT_PUBLIC_API_HOST}/**` },
-		},
-	},
-
 	compatibilityDate: "2025-05-15",
 
 	vite: {

@@ -16,10 +16,12 @@ const emit = defineEmits<{
 const isLoading = ref(false);
 const toast = useToast();
 
+const { apiFetch } = useApiFetch();
+
 const changeBus = async () => {
 	try {
 		isLoading.value = true;
-		await $fetch("/apis/rides/changeBus", {
+		await apiFetch("/rides/changeBus", {
 			method: "post",
 			body: {
 				newBusId: selectedBus.value.value,

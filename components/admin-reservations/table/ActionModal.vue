@@ -29,7 +29,9 @@ const updateSelectedSeatsForBus = (busNumber: number, seats: number[]) => {
 			selectedSeats.value.splice(existingIndex, 1);
 		}
 		else {
-			selectedSeats.value[existingIndex].seats = seats;
+			if (selectedSeats.value[existingIndex]) {
+				selectedSeats.value[existingIndex].seats = seats;
+			}
 		}
 	}
 	else if (seats.length > 0) {
@@ -42,6 +44,8 @@ const clearSelectedSeats = () => {
 };
 
 const toast = useToast();
+
+const { apiFetch } = useApiFetch();
 
 const onSubmit = async (user: {
 	name: string;
@@ -58,7 +62,7 @@ const onSubmit = async (user: {
 	};
 
 	try {
-		await $fetch("/apis/admin/reserve", {
+		await apiFetch("/admin/reserve", {
 			method: "POST",
 			body,
 		});
@@ -67,7 +71,7 @@ const onSubmit = async (user: {
 
 		isModalOpen.value = false;
 
-		if (user.print) {
+		if (user.print && selectedSeats.value[0]) {
 			store.selectedSeats = selectedSeats.value[0];
 			store.ride = props.ride;
 			router.push({
@@ -108,7 +112,7 @@ const emit = defineEmits<{
 
 		<template #body>
 			<UTabs
-				:default-value="ride.buses[0].busNumber"
+				:default-value="ride.buses[0]?.busNumber"
 				:items="tabItems"
 				:ui="{
 					list: tabItems.length > 1 ? '' : 'max-w-1/2',

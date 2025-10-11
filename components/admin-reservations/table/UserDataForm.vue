@@ -51,7 +51,8 @@ watch(
 	{ deep: true },
 );
 
-const { data: users, status } = await useLazyFetch<SearchUser[]>("/apis/admin/search", {
+const { data: users, status } = await useFetchCustom<SearchUser[]>("/admin/search", {
+	lazy: true,
 	query: searchQuery,
 	immediate: false,
 	default: () => [],

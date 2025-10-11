@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Seat } from "../reservation-list.vue";
 
-const { seat, rideId } = defineProps<{
+const { seat, rideId, expired } = defineProps<{
 	seat: Seat;
 	rideId: string;
 	expired: boolean;
@@ -13,9 +13,13 @@ const emit = defineEmits<{
 	(e: "cancelReservation"): void;
 }>();
 
+const { apiFetch } = useApiFetch();
+
 const handleCancelReservation = async () => {
+	if (expired) return;
+
 	try {
-		await $fetch("/apis/users/cancelReservations", {
+		await apiFetch("/users/cancelReservations", {
 			method: "DELETE",
 			body: {
 				reservations: [

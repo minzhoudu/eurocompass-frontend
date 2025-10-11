@@ -2,7 +2,7 @@
 import type { DateValue } from "@internationalized/date";
 import type { Location } from "../home/header/types";
 
-const { data: locations, error } = await useFetch<Location[]>("/apis/routes", {
+const { data: locations, error } = await useFetchCustom<Location[]>("/routes", {
 	onRequestError: (error) => {
 		console.error({
 			message: error.error.message,

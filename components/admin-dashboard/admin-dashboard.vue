@@ -16,7 +16,7 @@ to.value = route.query.to === "all" ? undefined : route.query.to ? parseDate(rou
 
 const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesLoading } = await useAdminDashboardTreeView(from, to);
 
-const { data: buses, pending: busesLoading, error: busInfoError } = await useLazyFetch<BaseBusInfo[]>("/apis/buses/info");
+const { data: buses, pending: busesLoading, error: busInfoError } = await useFetchCustom<BaseBusInfo[]>("/buses/info", { lazy: true });
 
 const expandedRoutes = ref<string[]>([]);
 
@@ -40,12 +40,14 @@ const seat = computed(() => {
 	return Number(route.query.seat);
 });
 
+const { apiFetch } = useApiFetch();
+
 const toast = useToast();
 const isPendingCancelReservation = ref(false);
 const handleCancelReservation = async (busNumber: number, rideId: string) => {
 	isPendingCancelReservation.value = true;
 	try {
-		await $fetch("/apis/admin/cancelReservations", {
+		await apiFetch("/admin/cancelReservations", {
 			method: "DELETE",
 			body: {
 				reservations: [

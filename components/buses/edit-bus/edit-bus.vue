@@ -26,6 +26,8 @@ const toast = useToast();
 
 const isPendingSubmit = ref(false);
 
+const { apiFetch } = useApiFetch();
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
 	isPendingSubmit.value = true;
 
@@ -42,7 +44,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 	};
 
 	try {
-		await $fetch(`/apis/buses/edit`, {
+		await apiFetch(`/buses/edit`, {
 			method: "POST",
 			body: payload,
 		});
@@ -71,11 +73,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 const isLastRowDivider = computed(() => {
-	return rows.value[rows.value.length - 1].dividerText !== undefined;
+	return rows.value[rows.value.length - 1]?.dividerText !== undefined;
 });
 
 const isFirstRowDivider = computed(() => {
-	return rows.value[0].dividerText !== undefined;
+	return rows.value[0]?.dividerText !== undefined;
 });
 
 const removeDevider = (dividerIndex: number) => {

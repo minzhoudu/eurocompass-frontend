@@ -9,11 +9,13 @@ const emit = defineEmits<{
 	(e: "bus-removed"): void;
 }>();
 
+const { apiFetch } = useApiFetch();
+
 const removeBusFromRide = async () => {
 	isLoading.value = true;
 
 	try {
-		await $fetch("/apis/rides/cancelBus", {
+		await apiFetch("/rides/cancelBus", {
 			method: "post",
 			body: {
 				busId: props.busId,

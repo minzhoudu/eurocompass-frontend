@@ -8,10 +8,12 @@ export const useSettingsStore = defineStore("settings", () => {
 
 	const isPendingUpdate = ref(false);
 
+	const { apiFetch } = useApiFetch();
+
 	const fetchSettings = async () => {
 		const [settingsResult, pricesResult] = await Promise.all([
-			useFetch<Settings>("/apis/settings"),
-			useFetch<TicketPrice[]>("/apis/tickets/prices"),
+			useFetchCustom<Settings>("/settings"),
+			useFetchCustom<TicketPrice[]>("/tickets/prices"),
 		]);
 
 		if (!settingsResult.error.value && settingsResult.data.value) {
@@ -26,7 +28,7 @@ export const useSettingsStore = defineStore("settings", () => {
 		isPendingUpdate.value = true;
 
 		try {
-			const updatedData = await $fetch<Settings>("/apis/settings", {
+			const updatedData = await apiFetch<Settings>("/settings", {
 				method: "POST",
 				body: data,
 			});
@@ -57,7 +59,7 @@ export const useSettingsStore = defineStore("settings", () => {
 		isPendingUpdate.value = true;
 
 		try {
-			const newPrice = await $fetch<TicketPrice>("/apis/tickets/prices", {
+			const newPrice = await apiFetch<TicketPrice>("/tickets/prices", {
 				method: "POST",
 				body: data,
 			});

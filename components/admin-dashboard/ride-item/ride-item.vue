@@ -40,6 +40,8 @@ const selectSeat = (seats: number[], busNumber: number) => {
 
 const toast = useToast();
 
+const { apiFetch } = useApiFetch();
+
 const reserveSeat = async (busNumber: number, orphan: Orphan) => {
 	const seatNumber = selectedSeats.value.find(seat => seat.busNumber === busNumber)?.seats[0];
 
@@ -51,7 +53,7 @@ const reserveSeat = async (busNumber: number, orphan: Orphan) => {
 	};
 
 	try {
-		await $fetch("/apis/admin/assignOrphan", {
+		await apiFetch("/admin/assignOrphan", {
 			method: "post",
 			body: reservation,
 		});

@@ -4,15 +4,7 @@ import type { Location } from "./types";
 
 const startValue = ref<DateValue>();
 
-const { data: locations, error } = await useFetch<Location[]>("/apis/routes", {
-	onRequestError: (error) => {
-		console.error({
-			message: error.error.message,
-			response: error.response,
-			cause: error.error.cause,
-		});
-	},
-});
+const { data: locations, error } = await useFetchCustom<Location[]>("/routes");
 
 const selectedLocation = ref<Location | undefined>(locations.value?.[0]);
 

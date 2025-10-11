@@ -7,3 +7,9 @@ export type TicketPrice = {
 	name: string;
 	amount: number;
 };
+
+export type DefaultPlatform = {
+	id: string;
+	route: string;
+	platform: number;
+};

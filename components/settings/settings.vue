@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SettingsActions from "./settings-actions.vue";
 import TicketPriceRow from "./ticket-price-row.vue";
+import PlatformRow from "./platform-row.vue";
 
 const settingsStore = useSettingsStore();
 
@@ -17,7 +18,7 @@ const isSaveDisabled = computed(() => {
 
 <template>
 	<div class="flex flex-col items-center justify-center">
-		<UCard class="w-full max-w-2xl">
+		<UCard class="w-full max-w-2xl mb-3">
 			<template #header>
 				<div class="text-2xl font-bold text-center">
 					Cene Karata
@@ -27,6 +28,19 @@ const isSaveDisabled = computed(() => {
 				v-for="ticket in settingsStore.ticketPrices"
 				:key="ticket.id"
 				:ticket="ticket"
+			/>
+		</UCard>
+
+		<UCard class="w-full max-w-2xl mb-3">
+			<template #header>
+				<div class="text-2xl font-bold text-center">
+					Peroni
+				</div>
+			</template>
+			<PlatformRow
+				v-for="platform in settingsStore.defaultPlatforms"
+				:key="platform.id"
+				:platform="platform"
 			/>
 		</UCard>
 

@@ -1,31 +1,43 @@
-import type { Settings, TicketPrice, DefaultPlatform } from "~/components/settings/settings.types";
+import type { Settings, DefaultPlatform } from "~/components/settings/settings.types";
+import type { TicketPrice, TicketText, CreateTicketRequest } from "~/components/admin-tickets/ticketPrices.types";
 
 export const useSettingsStore = defineStore("settings", () => {
 	const toast = useToast();
 
 	const settings = ref<Settings | null>(null);
-	const ticketPrices = ref<TicketPrice[]>([]);
 	const defaultPlatforms = ref<DefaultPlatform[]>([]);
+
+	const ticketPrices = ref<TicketPrice[]>([]);
+	const ticketTexts = ref<TicketText[]>([]);
 
 	const isPendingUpdate = ref(false);
 
 	const { apiFetch } = useApiFetch();
 
 	const fetchSettings = async () => {
-		const [settingsResult, pricesResult, platformsResult] = await Promise.all([
+		const [settingsResult, platformsResult] = await Promise.all([
 			useFetchCustom<Settings>("/settings"),
-			useFetchCustom<TicketPrice[]>("/tickets/prices"),
 			useFetchCustom<DefaultPlatform[]>("/routes/platforms"),
 		]);
 
 		if (!settingsResult.error.value && settingsResult.data.value) {
 			settings.value = settingsResult.data.value;
 		}
+		if (!platformsResult.error.value && platformsResult.data.value) {
+			defaultPlatforms.value = platformsResult.data.value;
+		}
+	};
+	const fetchTickets = async () => {
+		const [pricesResult, textsResult] = await Promise.all([
+			useFetchCustom<TicketPrice[]>("/tickets/prices"),
+			useFetchCustom<TicketText[]>("/tickets/texts"),
+		]);
+
 		if (!pricesResult.error.value && pricesResult.data.value) {
 			ticketPrices.value = pricesResult.data.value;
 		}
-		if (!platformsResult.error.value && platformsResult.data.value) {
-			defaultPlatforms.value = platformsResult.data.value;
+		if (!textsResult.error.value && textsResult.data.value) {
+			ticketTexts.value = textsResult.data.value;
 		}
 	};
 
@@ -39,6 +51,32 @@ export const useSettingsStore = defineStore("settings", () => {
 			});
 
 			settings.value = updatedData;
+
+			toast.add({
+				title: "Podaci su uspešno ažurirani",
+				color: "success",
+			});
+		}
+		catch (error) {
+			console.error(error);
+			toast.add({
+				title: "Greška prilikom ažuriranja podataka",
+				color: "error",
+			});
+		}
+		finally {
+			isPendingUpdate.value = false;
+		}
+	};
+
+	const createTicket = async (data: CreateTicketRequest) => {
+		try {
+			const response = await apiFetch("/tickets/create", {
+				method: "POST",
+				body: data,
+			});
+
+			console.log(response);
 
 			toast.add({
 				title: "Podaci su uspešno ažurirani",
@@ -130,12 +168,15 @@ export const useSettingsStore = defineStore("settings", () => {
 	return {
 		settings,
 		defaultPlatforms,
-		ticketPrices,
-
 		isPendingUpdate,
 		fetchSettings,
 		updateSettings,
-		updatePrice,
 		updateDefaultPlatform,
+
+		ticketPrices,
+		ticketTexts,
+		fetchTickets,
+		updatePrice,
+		createTicket,
 	};
 });

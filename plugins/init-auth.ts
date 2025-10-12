@@ -9,7 +9,10 @@ export default defineNuxtPlugin(async () => {
 
 	if (!settingsStore.settings) {
 		callOnce(async () => {
-			await settingsStore.fetchSettings();
+			await Promise.all([
+				settingsStore.fetchSettings(),
+				settingsStore.fetchTickets(),
+			]);
 		});
 	}
 });

@@ -19,7 +19,7 @@ const { data, refresh: refetchReservations, pending } = await useFetchCustom<Use
 	transform: (data) => {
 		data.sort(
 			(d1, d2) =>
-				new Date(d1.departure).getTime() - new Date(d2.departure).getTime(),
+				new Date(d2.departure).getTime() - new Date(d1.departure).getTime(),
 		);
 
 		return data;

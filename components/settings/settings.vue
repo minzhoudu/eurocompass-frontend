@@ -1,19 +1,8 @@
 <script setup lang="ts">
-import SettingsActions from "./settings-actions.vue";
 import TicketPriceRow from "./ticket-price-row.vue";
 import PlatformRow from "./platform-row.vue";
 
 const settingsStore = useSettingsStore();
-
-const userSeatLimit = ref(settingsStore.settings?.userSeatLimit);
-
-const resetSettings = () => {
-	userSeatLimit.value = settingsStore.settings?.userSeatLimit;
-};
-
-const isSaveDisabled = computed(() => {
-	return userSeatLimit.value === settingsStore.settings?.userSeatLimit;
-});
 </script>
 
 <template>
@@ -24,11 +13,14 @@ const isSaveDisabled = computed(() => {
 					Cene Karata
 				</div>
 			</template>
-			<TicketPriceRow
-				v-for="ticket in settingsStore.ticketPrices"
-				:key="ticket.id"
-				:ticket="ticket"
-			/>
+
+			<div class="flex flex-col gap-2">
+				<TicketPriceRow
+					v-for="ticket in settingsStore.ticketPrices"
+					:key="ticket.id"
+					:ticket="ticket"
+				/>
+			</div>
 		</UCard>
 
 		<UCard class="w-full max-w-2xl mb-3">
@@ -37,11 +29,14 @@ const isSaveDisabled = computed(() => {
 					Peroni
 				</div>
 			</template>
-			<PlatformRow
-				v-for="platform in settingsStore.defaultPlatforms"
-				:key="platform.id"
-				:platform="platform"
-			/>
+
+			<div class="flex flex-col gap-2">
+				<PlatformRow
+					v-for="platform in settingsStore.defaultPlatforms"
+					:key="platform.id"
+					:platform="platform"
+				/>
+			</div>
 		</UCard>
 
 		<UCard class="w-full max-w-2xl">
@@ -51,16 +46,7 @@ const isSaveDisabled = computed(() => {
 				</div>
 			</template>
 
-			<SettingsFields v-model:user-seat-limit="userSeatLimit" />
-
-			<template #footer>
-				<SettingsActions
-					:is-save-disabled="isSaveDisabled"
-					:is-pending="settingsStore.isPendingUpdate"
-					@save="() => settingsStore.updateSettings({ userSeatLimit })"
-					@cancel="resetSettings"
-				/>
-			</template>
+			<SettingsFields />
 		</UCard>
 	</div>
 </template>

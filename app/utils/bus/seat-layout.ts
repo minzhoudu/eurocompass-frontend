@@ -32,8 +32,9 @@ export const handleUpdateDivider = (rows: SeatRow[], dividerText: string, option
 };
 
 const createRow = (seatsPerRow = 5) => ({
-	slots: Array.from({ length: seatsPerRow }, () => ({
-		type: Type.FREE,
+	
+	slots: Array.from({ length: seatsPerRow }, (_, idx) => ({
+		type: idx === 2 ? Type.NOT : Type.FREE,
 		number: 1,
 	})),
 });

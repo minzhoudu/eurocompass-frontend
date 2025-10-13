@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DateValue } from "@internationalized/date";
-import type { Location } from "~/components/home/header/types";
+import type { Location } from "../components/home/header/types";
 
 useHead({
 	titleTemplate: (titleChunk) => {

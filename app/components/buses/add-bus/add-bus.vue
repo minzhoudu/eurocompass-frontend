@@ -16,7 +16,7 @@ const rows = ref<SeatRow[]>([
 				number: 2,
 			},
 			{
-				type: Type.FREE,
+				type: Type.NOT,
 				number: 3,
 			},
 			{

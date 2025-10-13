@@ -36,6 +36,7 @@ function onBlur() {
 			>
 				<template #trailing>
 					<UButton
+						class="cursor-pointer"
 						:disabled="hasValueChanged"
 						:color="hasValueChanged ? 'neutral' : 'success'"
 						variant="link"

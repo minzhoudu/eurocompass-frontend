@@ -23,6 +23,7 @@ const isSaveDisabled = computed(() => {
 			>
 				<template #trailing>
 					<UButton
+						class="cursor-pointer"
 						:disabled="isSaveDisabled"
 						:color="isSaveDisabled ? 'neutral' : 'success'"
 						variant="link"

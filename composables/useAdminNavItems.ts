@@ -13,6 +13,11 @@ export const useAdminNavItems = () => {
 			to: "/admin/reservations",
 		},
 		{
+			label: "Podešavanja Karata",
+			icon: "i-lucide-ticket",
+			to: "/admin/tickets",
+		},
+		{
 			label: "Autobusi",
 			icon: "i-lucide-bus",
 			to: "/admin/buses",

@@ -37,6 +37,17 @@ watchEffect(() => {
 
 <template>
 	<div v-if="selectedSeats">
+		<div id="tickets-section">
+			<AdminReservationsTicketsTicket
+				v-for="(seat, i) in selectedSeats.seats"
+				:key="i"
+				:ticket="selectedValue"
+				:route-id="ride?.routeId ?? ''"
+				:ride="ride"
+				:class="{ 'break-after-page': i !== selectedSeats.seats.length - 1 }"
+				:seat="seat"
+			/>
+		</div>
 		<div
 			id="print-controls"
 			class="fixed flex flex-col gap-5 bottom-10 left-[50%] -translate-x-[50%]"
@@ -61,19 +72,6 @@ watchEffect(() => {
 				Štampaj kartu
 			</UButton>
 		</div>
-		<div id="tickets-section">
-			<AdminReservationsTicketsTicket
-				v-for="(seat, i) in selectedSeats.seats"
-				:key="i"
-				:ticket="selectedValue"
-				:route-id="ride?.routeId ?? ''"
-				:class="{ 'break-after-page': i !== selectedSeats.seats.length - 1 }"
-				:seat="seat"
-			/>
-		</div>
-	</div>
-	<div v-else>
-		TODO
 	</div>
 </template>
 

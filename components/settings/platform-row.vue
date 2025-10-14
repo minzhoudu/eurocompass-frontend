@@ -14,10 +14,10 @@ const hasValueChanged = computed(() => startValue.value == value.value);
 function onBlur() {
 	const n = Number(value.value);
 	if (!Number.isFinite(n)) {
-		value.value = 0;
+		value.value = 1;
 		return;
 	}
-	value.value = Math.max(0, n);
+	value.value = Math.max(1, n);
 }
 </script>
 

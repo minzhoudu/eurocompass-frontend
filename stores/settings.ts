@@ -71,12 +71,11 @@ export const useSettingsStore = defineStore("settings", () => {
 
 	const createTicket = async (data: CreateTicketRequest) => {
 		try {
-			const response = await apiFetch("/tickets/create", {
+			await apiFetch("/tickets/create", {
 				method: "POST",
 				body: data,
 			});
-
-			console.log(response);
+			await fetchTickets();
 
 			toast.add({
 				title: "Podaci su uspešno ažurirani",

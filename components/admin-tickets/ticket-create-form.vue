@@ -6,56 +6,52 @@ const settingsStore = useSettingsStore();
 
 // form state
 const ticketName = ref<string>("");
-const ticketPrice = ref<number>();
+const priceName = ref<string>("");
+const priceAmount = ref<number>();
 const selectedTex = ref<TicketTextItem[]>([]);
+const priceId = ref<string | undefined>();
 const loading = ref(false);
-const error = ref<string | null>(null);
-const success = ref<string | null>(null);
 
 // validation
 const isNameValid = computed(() => ticketName.value.trim().length > 0);
-const isPriceValid = computed(() => ticketPrice.value !== undefined && !Number.isNaN(ticketPrice.value) && ticketPrice.value > 0);
-const isSelectValid = computed(() => selectedTex.value !== undefined && selectedTex.value !== "");
-const isFormValid = computed(() => isNameValid.value && isPriceValid.value && isSelectValid.value);
+const isPriceNameValid = computed(() => priceName.value.trim().length > 0);
+const isPriceValid = computed(() => priceAmount.value !== undefined && !Number.isNaN(priceAmount.value) && priceAmount.value > 0);
+const isSelectValid = computed(() => selectedTex.value !== undefined);
+const isFormValid = computed(() => {
+	if (!ticketName.value || !isSelectValid.value) return false;
+	if (priceId.value == undefined) {
+		return isPriceNameValid.value && isPriceValid.value;
+	}
 
-const selectItems = computed(() => {
-	return (settingsStore.ticketTexts ?? []).map((t: TicketText) => ({
+	return true;
+});
+
+const textTypesItems = computed(() => {
+	return settingsStore.ticketTexts.map((t: TicketText) => ({
 		label: t.name,
 		value: t.data,
 	}));
 });
 
+const priceIdsItems = computed(() => {
+	return settingsStore.ticketPrices.map(t => ({
+		label: t.name,
+		value: t.id,
+	}));
+});
+
 async function submit() {
-	error.value = null;
-	success.value = null;
+	const payload: CreateTicketRequest = {
+		name: ticketName.value.trim(),
+		priceName: priceName.value.trim(),
+		priceAmount: priceAmount.value,
+		text: selectedTex.value,
+	};
+	settingsStore.createTicket(payload);
 
-	if (!isFormValid.value) {
-		error.value = "Popunite sva polja ispravno.";
-		return;
-	}
-
-	loading.value = true;
-	try {
-		const payload: CreateTicketRequest = {
-			priceName: ticketName.value.trim(),
-			priceAmount: ticketPrice.value,
-			text: selectedTex.value,
-		};
-		settingsStore.createTicket(payload);
-
-		console.log(payload);
-
-		success.value = "Karta uspešno kreirana.";
-		ticketName.value = "";
-		ticketPrice.value = undefined;
-		selectedTex.value = [];
-	}
-	catch (e: any) {
-		error.value = e?.message || "Greška pri slanju zahteva.";
-	}
-	finally {
-		loading.value = false;
-	}
+	ticketName.value = "";
+	priceAmount.value = undefined;
+	selectedTex.value = [];
 }
 </script>
 
@@ -68,47 +64,51 @@ async function submit() {
 		</template>
 
 		<div class="p-4 space-y-4">
-			<div>
-				<label class="block text-sm font-medium mb-1">Naziv karte</label>
-				<UInput
-					v-model="ticketName"
-					placeholder="Unesite naziv"
-					:error="!isNameValid && ticketName !== ''"
-				/>
-			</div>
+			<div class="flex justify-evenly">
+				<div>
+					<div>
+						<label class="block text-sm font-medium mb-1">Naziv karte</label>
+						<UInput
+							v-model="ticketName"
+							placeholder="Unesite naziv"
+							:error="!isNameValid && ticketName !== ''"
+						/>
+					</div>
 
-			<div>
-				<label class="block text-sm font-medium mb-1">Cena</label>
-				<UInput
-					v-model="ticketPrice"
-					type="number"
-					placeholder="0.00"
-					inputmode="decimal"
-					:error="!isPriceValid && ticketPrice !== null"
-				/>
-			</div>
+					<div>
+						<label class="block text-sm font-medium mb-1">Tekst karte</label>
+						<USelect
+							v-model="selectedTex"
+							:items="textTypesItems"
+							placeholder="Izaberite…"
+							:clearable="false"
+						/>
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<label class="block text-sm font-medium mb-1">Nova cena</label>
+					<UInput
+						v-model="priceName"
+						class="mb-1"
+						placeholder="Unesite naziv"
+					/>
+					<UInput
+						v-model="priceAmount"
+						class="mb-1"
+						type="number"
+						placeholder="0.00"
+						inputmode="decimal"
+						:error="!isPriceValid && priceAmount !== null"
+					/>
 
-			<div>
-				<label class="block text-sm font-medium mb-1">Tip/tekst karte</label>
-				<USelect
-					v-model="selectedTex"
-					:items="selectItems"
-					placeholder="Izaberite…"
-					:clearable="false"
-				/>
-			</div>
-
-			<div
-				v-if="error"
-				class="text-sm text-red-600"
-			>
-				{{ error }}
-			</div>
-			<div
-				v-if="success"
-				class="text-sm text-green-600"
-			>
-				{{ success }}
+					<label class="block text-sm font-medium mb-1">Postojeća cena</label>
+					<USelect
+						v-model="priceId"
+						:items="priceIdsItems"
+						placeholder="Izaberite…"
+						:clearable="false"
+					/>
+				</div>
 			</div>
 
 			<div class="flex justify-end">
@@ -117,8 +117,7 @@ async function submit() {
 					@click="submit"
 				>
 					<template #default>
-						<span v-if="!loading">Kreiraj</span>
-						<span v-else>Šaljem...</span>
+						<span>Kreiraj</span>
 					</template>
 				</UButton>
 			</div>

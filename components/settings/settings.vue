@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SettingsActions from "./settings-actions.vue";
 import PlatformRow from "./platform-row.vue";
 
 const settingsStore = useSettingsStore();

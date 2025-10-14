@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { TicketPrice } from "~/components/settings/settings.types";
-
 const settingsStore = useSettingsStore();
 
 const { ticket } = defineProps<{

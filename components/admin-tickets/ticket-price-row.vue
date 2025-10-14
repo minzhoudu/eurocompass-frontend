@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { TicketPrice } from "~/components/settings/settings.types";
-
 const settingsStore = useSettingsStore();
 
 const { ticket } = defineProps<{
@@ -23,7 +21,7 @@ function onBlur() {
 
 <template>
 	<div class="flex gap-2 justify-center">
-		<div class="flex gap-5 items-center">
+		<div class="flex gap-5 justify-between w-full mb-1">
 			<h2 class="lg:text-lg font-bold">
 				{{ ticket.name }}
 			</h2>

@@ -44,6 +44,11 @@ export const useNavItems = () => {
 										icon: "i-lucide-settings",
 										to: "/admin/settings",
 									},
+									{
+										label: "Karte",
+										icon: "i-lucide-ticket",
+										to: "/admin/tickets",
+									},
 								]
 							: []),
 						{

@@ -10,14 +10,13 @@ const isSaveDisabled = computed(() => {
 
 <template>
 	<div class="flex gap-2 justify-center">
-		<div class="flex gap-5 items-center">
+		<div class="flex gap-5 justify-between w-full mb-1">
 			<h2 class="lg:text-lg font-bold">
 				Limit sedišta za rezervaciju:
 			</h2>
 
 			<UInput
 				v-model="userSeatLimit"
-				class="max-w-32"
 				:min="1"
 				:ui="{ trailing: 'pe-1' }"
 			>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TicketCard from "./TicketCard.vue";
+import type { Ride } from "~/components/home/reservations/types";
 import { useTicketsStore, type RouteInfo, type Ticket } from "~/stores/tickets";
 
 const store = useTicketsStore();
@@ -11,10 +12,23 @@ const props = defineProps<{
 	busNumber?: number;
 	platform?: number;
 	ticket: Ticket;
+	ride: Ride | null;
 }>();
 
 onMounted(async () => {
 	route.value = await store.getRoute(props.routeId);
+});
+const departureTime = computed(() => {
+	if (props.ride?.departure != null) {
+		return dayjs.utc(props.ride.departure).format("HH:mm");
+	}
+	return "";
+});
+const departureDate = computed(() => {
+	if (props.ride?.departure != null) {
+		return dayjs.utc(props.ride.departure).format("DD.MM.YYYY.");
+	}
+	return "";
 });
 </script>
 
@@ -34,8 +48,8 @@ onMounted(async () => {
 				:ticket="{
 					relation1: relation.name,
 					price: ticket.relations.length - 1 == i ? ticket.price.amount - 1 : 1,
-					date: '21.6.2025',
-					time: '07-00',
+					date: departureDate,
+					time: departureTime,
 					seat: props.seat,
 					platform: props.platform,
 					note: 'U cenu karte je uracunat osvezavajuci napitak',
@@ -47,8 +61,8 @@ onMounted(async () => {
 				:ticket="{
 					relation1: relation.coupon2,
 					price: 'OVERA',
-					date: '21.6.2025',
-					time: '07-00',
+					date: departureDate,
+					time: departureTime,
 					seat: props.seat,
 					platform: props.platform,
 				}"
@@ -58,8 +72,8 @@ onMounted(async () => {
 				:ticket="{
 					relation1: relation.coupon1,
 					price: ticket.relations.length - 1 == i ? ticket.price.amount - 1 : 1,
-					date: '21.6.2025',
-					time: '07-00',
+					date: departureDate,
+					time: departureTime,
 					seat: props.seat,
 					platform: props.platform,
 				}"

@@ -13,6 +13,8 @@ export type Orphan = {
 export type ExtendedBus = Omit<Bus, "id"> & {
 	busId: string | null;
 	freeSeats: number;
+	totalSeats: number;
+	platform: number;
 	name: string;
 	registration: string;
 };

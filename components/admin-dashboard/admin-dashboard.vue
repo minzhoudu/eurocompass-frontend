@@ -146,7 +146,7 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 					<UTree
 						v-model:expanded="expandedRoutes"
 						:items="getTreeItems(routeWithRide)"
-						class="border rounded-lg w-full max-h-96 scroll-bar"
+						class="border rounded-lg w-full max-h-[55vh] scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>
 						<template #ride-date="{ item }: {item: { hasOrphans: boolean, label: string }}">
@@ -216,10 +216,33 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 											item.bus.freeSeats }}
 									</p>
 
+									<div class="flex gap-2">
+										<p>
+											Peron
+										</p>
+										<span>-</span>
+										<div class="flex items-center">
+											<span v-if="item.bus.platform">{{ item.bus.platform }}</span>
+											<Icon
+												v-else
+												class="text-error"
+												size="20"
+												name="subway:error"
+											/>
+										</div>
+									</div>
+
 									<div
 										v-if="buses && item.bus && item.bus.busId"
 										class="flex gap-1"
 									>
+										<AdminDashboardChangeBusPlatform
+											:bus-platform="item.bus.platform"
+											:bus-number="item.bus.busNumber"
+											:ride-id="item.rideId"
+											@platform-changed="refetchGetRides"
+										/>
+
 										<AdminDashboardChangeBusSelector
 											:buses="buses"
 											:current-bus="item.bus"

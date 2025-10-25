@@ -11,7 +11,7 @@ const props = defineProps<{
 	seat?: number;
 	busNumber?: number;
 	platform?: number;
-	ticket: Ticket;
+	ticket?: Ticket;
 	ride: Ride | null;
 }>();
 

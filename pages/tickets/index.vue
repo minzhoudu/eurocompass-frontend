@@ -33,6 +33,10 @@ const selectedValue = ref();
 watchEffect(() => {
 	selectedValue.value = ticketList.value[0]?.ticket;
 });
+
+if (!selectedSeats) {
+	navigateTo("/admin/reservations", { replace: true });
+}
 </script>
 
 <template>
@@ -50,7 +54,7 @@ watchEffect(() => {
 		</div>
 		<div
 			id="print-controls"
-			class="fixed flex flex-col gap-5 bottom-10 left-[50%] -translate-x-[50%]"
+			class="sticky flex flex-col gap-5 bottom-10 left-1/2 -translate-x-1/2 w-1/4"
 		>
 			<USelect
 				v-model="selectedValue"
@@ -62,11 +66,11 @@ watchEffect(() => {
 				}"
 				:items="ticketList"
 				value-key="ticket"
-				class="w-48"
+				class="w-48 mx-auto"
 			/>
 
 			<UButton
-				class="text-3xl cursor-pointer"
+				class="text-3xl cursor-pointer mx-auto"
 				@click="printTickets"
 			>
 				Štampaj kartu

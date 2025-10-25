@@ -25,7 +25,7 @@ function onBlur() {
 	<div class="flex gap-2 justify-center">
 		<div class="flex gap-5  justify-between w-full mb-1">
 			<h2 class="lg:text-lg font-bold">
-				{{ platform.route }}
+				{{ platform.route.split(" ").join(" - ") }}
 			</h2>
 			<UInput
 				v-model="value"

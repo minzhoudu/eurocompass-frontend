@@ -16,13 +16,7 @@ const afterPrint = () => {
 };
 
 const ticketList = computed(() => {
-	if (!ride?.routeId) return [];
-
-	const route = store.routes[ride.routeId];
-
-	if (!route) return [];
-
-	return route.tickets.map(ticket => ({
+	return store.tickets.map(ticket => ({
 		label: ticket.name,
 		ticket,
 	}));

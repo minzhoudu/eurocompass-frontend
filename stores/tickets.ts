@@ -5,6 +5,7 @@ type State = {
 	ride: Ride | null;
 	routes: Record<string, RouteInfo>;
 	loading: boolean;
+	tickets: Ticket[];
 };
 
 export interface RouteInfo {
@@ -37,6 +38,7 @@ export const useTicketsStore = defineStore("tickets", {
 			ride: null,
 			routes: {},
 			loading: false,
+			tickets: [],
 		};
 	},
 	actions: {
@@ -58,6 +60,21 @@ export const useTicketsStore = defineStore("tickets", {
 			}
 			catch (err) {
 				console.error("Failed to fetch all routes:", err);
+				throw err;
+			}
+			finally {
+				this.loading = false;
+			}
+		},
+		async fetchAllTickets(): Promise<void> {
+			const { apiFetch } = useApiFetch();
+			this.loading = true;
+			try {
+				const tickets = await apiFetch<Ticket[]>("/tickets/all");
+				this.tickets = tickets;
+			}
+			catch (err) {
+				console.error("Failed to fetch all tickets:", err);
 				throw err;
 			}
 			finally {

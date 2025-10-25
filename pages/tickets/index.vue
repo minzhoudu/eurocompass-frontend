@@ -54,7 +54,7 @@ if (!selectedSeats) {
 		</div>
 		<div
 			id="print-controls"
-			class="sticky flex flex-col gap-5 bottom-10 left-1/2 -translate-x-1/2 w-1/4"
+			class="sticky flex flex-col gap-5 bottom-10 left-2/3 -translate-x-1/2 w-1/4"
 		>
 			<USelect
 				v-model="selectedValue"

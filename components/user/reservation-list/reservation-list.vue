@@ -15,11 +15,11 @@ type UserReservation = {
 	expired: boolean;
 };
 
-const { data, refresh: refetchReservations, pending } = await useFetchCustom<UserReservation[]>("	/users/reservations", {
+const { data, refresh: refetchReservations, pending } = await useFetchCustom<UserReservation[]>("/users/reservations", {
 	transform: (data) => {
 		data.sort(
 			(d1, d2) =>
-				new Date(d1.departure).getTime() - new Date(d2.departure).getTime(),
+				new Date(d2.departure).getTime() - new Date(d1.departure).getTime(),
 		);
 
 		return data;
@@ -98,12 +98,13 @@ watch(reservations, () => {
 					type="multiple"
 					:ui="{
 						label: 'text-xl',
+						leadingIcon: 'hidden md:block',
 					}"
 					:items="reservations"
 				>
 					<template #default="{ item }: { item: AccordionItem }">
-						<div class="flex gap-10">
-							<span>{{ item.route.split(" ").join(" -> ") }}</span>
+						<div class="flex gap-3 md:gap-10 text-sm md:text-xl flex-wrap">
+							<span>{{ item.route.split(" ").join(" - ") }}</span>
 							<NuxtTime
 								:datetime="item.departure"
 								date-style="full"
@@ -114,7 +115,7 @@ watch(reservations, () => {
 					</template>
 
 					<template #reservation-item="{ item }: { item: UserReservation }">
-						<div class="grid grid-cols-2 gap-2">
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
 							<UserReservationListItem
 								v-for="seat in item.seats"
 								:key="seat.seat"

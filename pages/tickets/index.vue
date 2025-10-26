@@ -16,13 +16,7 @@ const afterPrint = () => {
 };
 
 const ticketList = computed(() => {
-	if (!ride?.routeId) return [];
-
-	const route = store.routes[ride.routeId];
-
-	if (!route) return [];
-
-	return route.tickets.map(ticket => ({
+	return store.tickets.map(ticket => ({
 		label: ticket.name,
 		ticket,
 	}));
@@ -33,13 +27,28 @@ const selectedValue = ref();
 watchEffect(() => {
 	selectedValue.value = ticketList.value[0]?.ticket;
 });
+
+if (!selectedSeats) {
+	navigateTo("/admin/reservations", { replace: true });
+}
 </script>
 
 <template>
 	<div v-if="selectedSeats">
+		<div id="tickets-section">
+			<AdminReservationsTicketsTicket
+				v-for="(seat, i) in selectedSeats.seats"
+				:key="i"
+				:ticket="selectedValue"
+				:route-id="ride?.routeId ?? ''"
+				:ride="ride"
+				:class="{ 'break-after-page': i !== selectedSeats.seats.length - 1 }"
+				:seat="seat"
+			/>
+		</div>
 		<div
 			id="print-controls"
-			class="fixed flex flex-col gap-5 bottom-10 left-[50%] -translate-x-[50%]"
+			class="sticky flex flex-col gap-5 bottom-10 left-2/3 -translate-x-1/2 w-1/4"
 		>
 			<USelect
 				v-model="selectedValue"
@@ -51,29 +60,16 @@ watchEffect(() => {
 				}"
 				:items="ticketList"
 				value-key="ticket"
-				class="w-48"
+				class="w-48 mx-auto"
 			/>
 
 			<UButton
-				class="text-3xl cursor-pointer"
+				class="text-3xl cursor-pointer mx-auto"
 				@click="printTickets"
 			>
 				Štampaj kartu
 			</UButton>
 		</div>
-		<div id="tickets-section">
-			<AdminReservationsTicketsTicket
-				v-for="(seat, i) in selectedSeats.seats"
-				:key="i"
-				:ticket="selectedValue"
-				:route-id="ride?.routeId ?? ''"
-				:class="{ 'break-after-page': i !== selectedSeats.seats.length - 1 }"
-				:seat="seat"
-			/>
-		</div>
-	</div>
-	<div v-else>
-		TODO
 	</div>
 </template>
 

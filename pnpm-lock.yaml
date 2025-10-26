@@ -77,6 +77,9 @@ importers:
       '@iconify-json/material-symbols':
         specifier: ^1.2.30
         version: 1.2.30
+      '@iconify-json/mdi':
+        specifier: ^1.2.3
+        version: 1.2.3
       '@iconify-json/mynaui':
         specifier: ^1.2.14
         version: 1.2.14
@@ -694,6 +697,9 @@ packages:
 
   '@iconify-json/material-symbols@1.2.30':
     resolution: {integrity: sha512-3dA1jxkCd8LqEaAWjwQ5tob4pJNKE59Bz604AL1GP3Kyv//pR3un3cIyAUWOFQS1lz0vKKkn0BKOCmcUDi1G8A==}
+
+  '@iconify-json/mdi@1.2.3':
+    resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
 
   '@iconify-json/mynaui@1.2.14':
     resolution: {integrity: sha512-ZbmS9AXndRyYJRt6aAnGzGlFZuE3d/Yh4CcTiVzj4RBtGSRS2eIjvUTduxvhML4QMvAto+OpiAGLMvCWl5poww==}
@@ -5878,6 +5884,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/material-symbols@1.2.30':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/mdi@1.2.3':
     dependencies:
       '@iconify/types': 2.0.0
 

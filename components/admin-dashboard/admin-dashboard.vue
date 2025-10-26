@@ -18,7 +18,7 @@ const { routesWithRides, getTreeItems, refetchGetRides, getRidesError, getRidesL
 
 const { data: buses, pending: busesLoading, error: busInfoError } = await useFetchCustom<BaseBusInfo[]>("/buses/info", { lazy: true });
 
-const expandedRoutes = ref<string[]>([]);
+const expandedRoutes = ref<string[]>(["Krusevac - Beograd", "Beograd - Krusevac"]);
 
 type UpdateQueryParams = {
 	date?: DateValue;
@@ -91,7 +91,7 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 	/>
 
 	<template v-else>
-		<div class="flex items-center flex-col gap-10 lg:gap-20 w-full">
+		<div class="flex items-center flex-col gap-10 w-full">
 			<div class="bg-warning-300 px-5 py-2 rounded-lg">
 				<h1 class="text-2xl font-bold">
 					Podešavanje linija
@@ -141,11 +141,12 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 				<div
 					v-for="routeWithRide in routesWithRides"
 					:key="routeWithRide.id"
+					class="w-full px-5"
 				>
 					<UTree
 						v-model:expanded="expandedRoutes"
 						:items="getTreeItems(routeWithRide)"
-						class="border rounded-lg w-full lg:w-[500px] max-h-96 scroll-bar"
+						class="border rounded-lg w-full max-h-[55vh] scroll-bar"
 						:ui="{ listWithChildren: 'border-warning-300' }"
 					>
 						<template #ride-date="{ item }: {item: { hasOrphans: boolean, label: string }}">
@@ -215,10 +216,33 @@ const handleCancelReservation = async (busNumber: number, rideId: string) => {
 											item.bus.freeSeats }}
 									</p>
 
+									<div class="flex gap-2">
+										<p>
+											Peron
+										</p>
+										<span>-</span>
+										<div class="flex items-center">
+											<span v-if="item.bus.platform">{{ item.bus.platform }}</span>
+											<Icon
+												v-else
+												class="text-error"
+												size="20"
+												name="subway:error"
+											/>
+										</div>
+									</div>
+
 									<div
 										v-if="buses && item.bus && item.bus.busId"
 										class="flex gap-1"
 									>
+										<AdminDashboardChangeBusPlatform
+											:bus-platform="item.bus.platform"
+											:bus-number="item.bus.busNumber"
+											:ride-id="item.rideId"
+											@platform-changed="refetchGetRides"
+										/>
+
 										<AdminDashboardChangeBusSelector
 											:buses="buses"
 											:current-bus="item.bus"

@@ -56,8 +56,9 @@ const handleCancelReservation = async () => {
 		<div class="flex flex-col gap-2">
 			<p>Kola: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.busNumber }}</span></p>
 			<p>
-				Peron: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ !seat.platform ? "Proverite kasnije"
-					: seat.platform }}</span>
+				Peron: <span class="bg-warning-300 px-2 py-1 rounded-md">
+					{{ !seat.platform ? "Proverite kasnije" : seat.platform }}
+				</span>
 			</p>
 			<p>Sedište: <span class="bg-warning-300 px-2 py-1 rounded-md">{{ seat.seat }}</span></p>
 		</div>

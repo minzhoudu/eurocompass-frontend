@@ -1,33 +1,25 @@
 <script setup lang="ts">
-import SettingsActions from "./settings-actions.vue";
-import TicketPriceRow from "./ticket-price-row.vue";
+import PlatformRow from "./platform-row.vue";
 
 const settingsStore = useSettingsStore();
-
-const userSeatLimit = ref(settingsStore.settings?.userSeatLimit);
-
-const resetSettings = () => {
-	userSeatLimit.value = settingsStore.settings?.userSeatLimit;
-};
-
-const isSaveDisabled = computed(() => {
-	return userSeatLimit.value === settingsStore.settings?.userSeatLimit;
-});
 </script>
 
 <template>
 	<div class="flex flex-col items-center justify-center">
-		<UCard class="w-full max-w-2xl">
+		<UCard class="w-full max-w-2xl mb-3">
 			<template #header>
 				<div class="text-2xl font-bold text-center">
-					Cene Karata
+					Peroni
 				</div>
 			</template>
-			<TicketPriceRow
-				v-for="ticket in settingsStore.ticketPrices"
-				:key="ticket.id"
-				:ticket="ticket"
-			/>
+
+			<div class="flex flex-col gap-2">
+				<PlatformRow
+					v-for="platform in settingsStore.defaultPlatforms"
+					:key="platform.id"
+					:platform="platform"
+				/>
+			</div>
 		</UCard>
 
 		<UCard class="w-full max-w-2xl">
@@ -37,16 +29,7 @@ const isSaveDisabled = computed(() => {
 				</div>
 			</template>
 
-			<SettingsFields v-model:user-seat-limit="userSeatLimit" />
-
-			<template #footer>
-				<SettingsActions
-					:is-save-disabled="isSaveDisabled"
-					:is-pending="settingsStore.isPendingUpdate"
-					@save="() => settingsStore.updateSettings({ userSeatLimit })"
-					@cancel="resetSettings"
-				/>
-			</template>
+			<SettingsFields />
 		</UCard>
 	</div>
 </template>

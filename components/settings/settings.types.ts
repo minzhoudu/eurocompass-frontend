@@ -2,8 +2,8 @@ export type Settings = {
 	userSeatLimit: number;
 };
 
-export type TicketPrice = {
+export type DefaultPlatform = {
 	id: string;
-	name: string;
-	amount: number;
+	route: string;
+	platform: number;
 };

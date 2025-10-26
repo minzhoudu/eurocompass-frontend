@@ -77,7 +77,7 @@ const columns = ref<TableColumn<Reservation>[]>([
 			});
 		},
 		cell: ({ cell }) => {
-			const time = dayjs.utc(cell.getValue() as Date).format("HH:mm");
+			const time = dayjs(cell.getValue() as Date).format("HH:mm");
 
 			return h(Cell, {
 				label: time,

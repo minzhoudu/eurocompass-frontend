@@ -33,7 +33,6 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 			/>
 
 			<BusesEditBus
-
 				:bus="bus"
 			/>
 		</div>

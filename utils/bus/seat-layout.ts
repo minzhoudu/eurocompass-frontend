@@ -31,12 +31,14 @@ export const handleUpdateDivider = (rows: SeatRow[], dividerText: string, option
 	rows.push(dividerSlot);
 };
 
-const createRow = (seatsPerRow = 5) => ({
-	slots: Array.from({ length: seatsPerRow }, () => ({
-		type: Type.FREE,
-		number: 1,
-	})),
-});
+const createRow = (seatsPerRow = 5) => {
+	return {
+		slots: Array.from({ length: seatsPerRow }, (_, index) => ({
+			type: index !== 2 ? Type.FREE : Type.NOT,
+			number: 1,
+		})),
+	};
+};
 
 export const handleUpdateTotalRows = (rows: SeatRow[], value: number) => {
 	const currentRowCount = rows.length;

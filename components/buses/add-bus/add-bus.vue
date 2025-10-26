@@ -16,16 +16,15 @@ const rows = ref<SeatRow[]>([
 				number: 2,
 			},
 			{
+				type: Type.NOT,
+			},
+			{
 				type: Type.FREE,
 				number: 3,
 			},
 			{
 				type: Type.FREE,
 				number: 4,
-			},
-			{
-				type: Type.FREE,
-				number: 5,
 			},
 		],
 	},

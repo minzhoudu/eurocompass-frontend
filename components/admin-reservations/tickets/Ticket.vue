@@ -21,13 +21,13 @@ onMounted(async () => {
 });
 const departureTime = computed(() => {
 	if (props.ride?.departure != null) {
-		return dayjs.utc(props.ride.departure).format("HH:mm");
+		return dayjs(props.ride.departure).format("HH:mm");
 	}
 	return "";
 });
 const departureDate = computed(() => {
 	if (props.ride?.departure != null) {
-		return dayjs.utc(props.ride.departure).format("DD.MM.YYYY.");
+		return dayjs(props.ride.departure).format("DD.MM.YYYY.");
 	}
 	return "";
 });

@@ -98,12 +98,13 @@ watch(reservations, () => {
 					type="multiple"
 					:ui="{
 						label: 'text-xl',
+						leadingIcon: 'hidden md:block',
 					}"
 					:items="reservations"
 				>
 					<template #default="{ item }: { item: AccordionItem }">
-						<div class="flex gap-10">
-							<span>{{ item.route.split(" ").join(" -> ") }}</span>
+						<div class="flex gap-3 md:gap-10 text-sm md:text-xl flex-wrap">
+							<span>{{ item.route.split(" ").join(" - ") }}</span>
 							<NuxtTime
 								:datetime="item.departure"
 								date-style="full"

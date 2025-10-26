@@ -16,28 +16,23 @@
 			<div class="flex gap-2">
 				<Icon
 					name="heroicons-solid:star"
-					size="50"
-					class="text-warning-300"
+					class="text-warning-300 text-4xl md:text-5xl"
 				/>
 				<Icon
 					name="heroicons-solid:star"
-					size="50"
-					class="text-warning-300"
+					class="text-warning-300 text-4xl md:text-5xl"
 				/>
 				<Icon
 					name="heroicons-solid:star"
-					size="50"
-					class="text-warning-300"
+					class="text-warning-300 text-4xl md:text-5xl"
 				/>
 				<Icon
 					name="heroicons-solid:star"
-					size="50"
-					class="text-warning-300"
+					class="text-warning-300 text-4xl md:text-5xl"
 				/>
 				<Icon
 					name="heroicons-solid:star"
-					size="50"
-					class="text-warning-300"
+					class="text-warning-300 text-4xl md:text-5xl"
 				/>
 			</div>
 		</div>

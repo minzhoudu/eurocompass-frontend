@@ -5,7 +5,6 @@ export default defineNuxtRouteMiddleware((to) => {
 		return navigateTo("/");
 	}
 
-	// TODO Delete this and move Tickets page under /admin pages
 	if (to.path.startsWith("/tickets") && (!authStore.user || authStore.user.role !== "ADMIN")) {
 		return navigateTo("/");
 	}

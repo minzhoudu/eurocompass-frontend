@@ -60,7 +60,7 @@ if (!selectedSeats) {
 				}"
 				:items="ticketList"
 				value-key="ticket"
-				class="w-48 mx-auto"
+				class="min-w-60 mx-auto"
 			/>
 
 			<UButton
